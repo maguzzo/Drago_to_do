@@ -1,0 +1,2326 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🐉 Dragon To Do List</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F4F2;--bg2:#FFF;--bg3:#FAF9F7;--bg4:#F0EDE8;
+  --border:#E4DFD8;--border2:#CFC8BF;
+  --text:#1C1917;--muted:#78716C;--muted2:#A8A29E;
+  --red:#B91C1C;--red2:#991B1B;--redl:#FEF2F2;
+  --gold:#92400E;--goldl:#FEF3C7;
+  --green:#166534;--greenl:#DCFCE7;
+  --blue:#1D4ED8;--bluel:#DBEAFE;
+  --purple:#6D28D9;--purplel:#EDE9FE;
+  --shadow:0 1px 4px rgba(28,25,23,.08);--shadow2:0 4px 20px rgba(28,25,23,.14);
+  --fh:'Syne',sans-serif;--fm:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+ 
+/* HEADER */
+#header{background:#fff;border-bottom:2px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shado...
+#hlogo{display:flex;align-items:center;gap:9px}
+#hdragon{font-size:26px;filter:drop-shadow(0 2px 4px rgba(185,28,28,.3))}
+#hinfo h1{font-size:14px;font-weight:800;letter-spacing:-.02em}
+#hinfo h1 span{color:var(--red)}
+#hinfo .sub{color:var(--muted2);font-family:var(--fm);font-size:8.5px;margin-top:2px}
+#hbtns{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.hbtn{border:1px solid var(--border);background:#fff;color:var(--muted);padding:5px 9px;border-radius:6px;font-family:var(--fm);font-size:9.5px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.hbtn:hover{border-color:var(--red);color:var(--red);background:var(--redl)}
+.hbtn.on{background:var(--greenl);border-color:#86EFAC;color:var(--green)}
+.hbtn.areas-btn{border-color:var(--red);color:var(--red);background:var(--redl);font-weight:700}
+.hbtn.drive-btn{border-color:#0F9D58;color:#0F9D58;background:#F0FFF4}
+.btn-add{background:var(--red);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(185,28,28,.28)...
+.btn-add:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-meeting{background:var(--purple);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,...
+.btn-meeting:hover{background:#5B21B6;transform:translateY(-1px)}
+ 
+/* SYNC BAR */
+#sync-bar{width:100%;padding:4px 16px;font-family:var(--fm);font-size:10px;display:flex;align-items:center;gap:6px;background:#fff;border-bottom:1px solid var(--border);transition:all .3s}
+#sync-bar.saving{background:#FFFBEB;border-color:#FDE68A}
+#sync-bar.saved{background:#F0FFF4;border-color:#86EFAC}
+#sync-bar.error{background:#FFF1F2;border-color:#FECDD3}
+#sync-bar.offline,#sync-bar.hidden{background:var(--bg3)}
+#sync-bar.hidden{display:none}
+ 
+/* MONTH CLOSE BANNER */
+#close-banner{display:none;background:var(--purplel);border-bottom:2px solid #C4B5FD;padding:10px 16px;align-items:center;gap:10px;flex-wrap:wrap}
+#close-banner p{font-family:var(--fm);font-size:11px;color:var(--purple);flex:1}
+.banner-btn{background:var(--purple);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-family:var(--fh);font-size:10px;font-weight:700;cursor:pointer}
+.banner-btn.secondary{background:none;color:var(--purple);border:1px solid #C4B5FD}
+ 
+/* TOAST */
+#toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:#1C1917;color:#fff;padding:9px 16px;border-radius:8px;font-family:var(--fm);font-size:11px;z-index:400;pointer-events:n...
+#toast.show{opacity:1}
+ 
+/* TABS */
+#tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);padding:0 14px;overflow-x:auto;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 13px;font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;user-select:none}
+.tab.active{color:var(--red);border-bottom-color:var(--red)}
+.tab.stats-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
+.tab:hover:not(.active){color:var(--text)}
+.tc{font-family:var(--fm);font-size:9px;margin-left:4px;background:var(--bg4);padding:1px 5px;border-radius:8px;color:var(--muted)}
+.tab.active .tc{background:var(--redl);color:var(--red)}
+ 
+/* ══ MEETINGS SECTION ══ */
+#meetings-section{padding:12px 13px 4px;border-bottom:2px dashed var(--border)}
+#meetings-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+#meetings-header h3{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--purple)}
+.meetings-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.meetings-scroll::-webkit-scrollbar{height:3px}
+.meetings-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.meeting-card{flex-shrink:0;width:240px;background:#fff;border-radius:10px;border:1px solid var(--border);border-top-width:3px;box-shadow:var(--shadow);padding:10px 11px 8px;cursor:pointer;transiti...
+.meeting-card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.meeting-card.flexible-card{border-style:dashed}
+.meeting-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.meeting-meta{font-family:var(--fm);font-size:9.5px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.meeting-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.mbadge{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap}
+.mbadge.recur{background:var(--purplel);color:var(--purple)}
+.mbadge.flex{background:var(--goldl);color:var(--gold)}
+.mbadge.area{opacity:.9}
+.meeting-acts{display:flex;gap:4px;margin-top:8px;border-top:1px solid var(--border);padding-top:7px}
+.meeting-acts button{background:var(--bg4);color:var(--muted);border:none;font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer;transition:all .15s}
+.meeting-acts button:hover{background:var(--border2);color:var(--text)}
+.meeting-acts .ok:hover{color:var(--green);background:var(--greenl)}
+.meeting-acts .cx:hover{color:var(--red);background:var(--redl)}
+.meeting-acts .tr:hover{color:#6B7280;background:#F3F4F6}
+.meeting-agenda{font-family:var(--fm);font-size:9.5px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);line-height:1.5;display:none}
+.meeting-card.expanded .meeting-agenda{display:block}
+#no-meetings{font-family:var(--fm);font-size:11px;color:var(--muted2);padding:8px 0}
+ 
+/* BOARD */
+#board{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:13px}
+#board.hidden{display:none}
+.column{background:#fff;border-radius:12px;padding:11px;min-height:200px;border:1px solid var(--border);box-shadow:var(--shadow);transition:all .15s}
+.column.drag-over{background:#FFF7F7;border-color:#FECACA;box-shadow:0 0 0 2px #FECACA}
+.col-head{display:flex;align-items:center;gap:6px;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.col-title{font-size:10px;font-weight:700;letter-spacing:.1em}
+.col-cnt{margin-left:auto;background:var(--bg4);color:var(--muted);font-family:var(--fm);font-size:9px;padding:1px 7px;border-radius:10px}
+.col-cards{display:flex;flex-direction:column;gap:7px;min-height:40px}
+.empty-board{text-align:center;padding:30px 20px;color:var(--muted2);font-family:var(--fm);font-size:11px;grid-column:1/-1}
+.empty-board .big{font-size:36px;margin-bottom:8px}
+ 
+/* CARDS */
+.card{background:#fff;border-radius:9px;padding:10px 10px 8px;cursor:grab;border:1px solid var(--border);border-left-width:3px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,opa...
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.card.dragging{opacity:.3;transform:scale(.97)}
+.card-title{color:var(--text);font-size:12px;font-weight:600;line-height:1.4;margin-bottom:4px;word-break:break-word}
+.card-note{color:var(--muted);font-family:var(--fm);font-size:9px;line-height:1.5;margin-bottom:6px;word-break:break-word}
+.card-foot{display:flex;align-items:center;flex-wrap:wrap;gap:3px}
+.atag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;font-weight:500}
+.rtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;background:var(--purplel);color:var(--purple)}
+.ftag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;background:var(--goldl);color:var(--gold)}
+.dtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;background:var(--bg4);color:var(--muted);white-space:nowrap;cursor:pointer;text-decoration:none;display:inline-flex;align...
+.dtag:hover{background:var(--bluel);color:var(--blue)}
+.dtag.ov{background:var(--redl);color:var(--red)}
+.dtag.soon{background:var(--goldl);color:var(--gold)}
+.gcal-btn{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;background:var(--bluel);color:var(--blue);cursor:pointer;border:none;transition:background .15s}
+.gcal-btn:hover{background:#BFDBFE}
+.card-acts{display:flex;align-items:center;gap:3px;margin-top:7px;flex-wrap:wrap}
+.cbtn{background:var(--bg4);color:var(--muted);border:none;font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.cbtn:hover{background:var(--border2);color:var(--text)}
+.cbtn.ok:hover{color:var(--green);background:var(--greenl)}
+.cbtn.cx:hover{color:var(--red);background:var(--redl)}
+.cbtn.tr:hover{color:#6B7280;background:#F3F4F6}
+.cbtn.ed{margin-left:auto}
+ 
+/* ══ STATS PANEL ══ */
+#stats-panel{display:none;padding:16px}
+#stats-panel.active{display:block}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);text-align:center}
+.kpi-val{font-size:32px;font-weight:800;color:var(--red);line-height:1}
+.kpi-val.green{color:var(--green)}
+.kpi-val.purple{color:var(--purple)}
+.kpi-lbl{font-family:var(--fm);font-size:9px;color:var(--muted);margin-top:6px;letter-spacing:.05em}
+.stats-section{background:#fff;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+.stats-section h4{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+/* Chart */
+.chart-wrap{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 4px}
+.chart-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.chart-bars{display:flex;align-items:flex-end;gap:2px;height:80px;width:100%}
+.bar-done{background:var(--green);border-radius:3px 3px 0 0;flex:1;min-height:2px;transition:height .3s}
+.bar-canc{background:var(--red);border-radius:3px 3px 0 0;flex:1;min-height:2px;transition:height .3s}
+.chart-lbl{font-family:var(--fm);font-size:8px;color:var(--muted);text-align:center}
+.chart-legend{display:flex;gap:14px;margin-top:10px;font-family:var(--fm);font-size:9px;color:var(--muted)}
+.legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px}
+/* History table */
+.hist-table{width:100%;border-collapse:collapse;font-family:var(--fm);font-size:10px}
+.hist-table th{text-align:left;padding:6px 8px;font-size:9px;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border)}
+.hist-table td{padding:6px 8px;border-bottom:1px solid var(--bg4)}
+.hist-table tr:last-child td{border:none}
+.pct-bar{height:6px;border-radius:3px;display:inline-block;min-width:2px}
+ 
+/* MODALES */
+.overlay{position:fixed;inset:0;background:rgba(28,25,23,.5);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(3px)}
+.modal{background:#fff;border-radius:14px;padding:20px;width:420px;max-width:96vw;box-shadow:0 24px 64px rgba(28,25,23,.22);max-height:90vh;overflow-y:auto}
+.modal h2{font-size:13px;font-weight:800;letter-spacing:.07em;margin-bottom:14px}
+.mf{margin-bottom:9px}
+.mf label{display:block;color:var(--muted);font-family:var(--fm);font-size:9px;letter-spacing:.07em;margin-bottom:3px}
+.mf input,.mf textarea,.mf select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--fm);font-size:11px;outline:n...
+.mf input:focus,.mf textarea:focus,.mf select:focus{border-color:var(--red);background:#fff}
+.mf textarea{resize:vertical;min-height:48px}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mbtns{display:flex;gap:7px;margin-top:12px}
+.btn-save{flex:1;background:var(--red);color:#fff;border:none;padding:9px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer}
+.btn-save:hover{background:var(--red2)}
+.btn-save.purple{background:var(--purple)}.btn-save.purple:hover{background:#5B21B6}
+.btn-cm{background:var(--bg3);color:var(--muted);border:1px solid var(--border);padding:9px 12px;border-radius:7px;font-family:var(--fh);font-size:11px;cursor:pointer}
+.btn-green{background:#0F9D58;color:#fff;border:none;padding:9px 14px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;flex:1}
+.btn-danger{background:var(--red);color:#fff;border:none;padding:10px 20px;border-radius:7px;font-family:var(--fh);font-size:12px;font-weight:700;cursor:pointer;flex:1}
+.recur-extra{margin-top:6px;display:none}
+.recur-extra.show{display:block}
+ 
+/* DRIVE MODAL */
+.drive-status{font-family:var(--fm);font-size:11px;padding:9px 12px;border-radius:7px;margin-top:8px;display:none}
+.drive-status.ok{background:var(--greenl);color:var(--green);display:block}
+.drive-status.err{background:var(--redl);color:var(--red);display:block}
+.drive-status.loading{background:var(--goldl);color:var(--gold);display:block}
+.drive-info{background:var(--bg3);border-radius:8px;padding:10px 12px;font-family:var(--fm);font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.drive-divider,.areas-divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+ 
+/* AREAS MODAL */
+.area-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;background:var(--bg3);margin-bottom:5px;border:1px solid var(--border)}
+.area-em{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+.area-name{flex:1;font-size:12px;font-weight:600;padding-left:7px;border-left:3px solid #ccc}
+.area-cnt{font-family:var(--fm);font-size:9px;color:var(--muted2);white-space:nowrap}
+.area-del{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px;padding:0 4px;border-radius:4px;transition:all .15s;flex-shrink:0}
+.area-del:hover{color:var(--red);background:var(--redl)}
+.add-area-grid{display:grid;grid-template-columns:48px 1fr 44px;gap:7px;margin-bottom:7px}
+.add-area-grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.color-wrap input[type=color]{width:36px;height:32px;border:1px solid var(--border);border-radius:6px;padding:2px;background:var(--bg3);cursor:pointer}
+ 
+/* ARCHIVO */
+#arch-wrap{padding:10px 13px 100px;display:flex;flex-direction:column;gap:9px}
+#arch-wrap.hidden{display:none}
+.arch-tog{background:none;border:none;font-family:var(--fm);font-size:10px;cursor:pointer;display:flex;align-items:center;gap:6px;padding:3px 0}
+.arch-tog.dt{color:var(--green)}.arch-tog.ct{color:var(--red)}.arch-tog.tt{color:#6B7280}
+.arch-arrow{display:inline-block;transition:transform .2s}
+.arch-list{display:none;flex-direction:column;gap:5px;margin-top:5px}
+.di{border-radius:7px;padding:6px 10px;display:flex;align-items:center;gap:7px}
+.di.dd{background:var(--greenl)}.di.cd{background:var(--redl)}.di.td{background:#F3F4F6;border:1px solid #E5E7EB}
+.di .dit{font-family:var(--fm);font-size:10px;text-decoration:line-through;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.di.dd .dit{color:var(--green)}.di.cd .dit{color:var(--red)}.di.td .dit{color:#6B7280}
+.di .days-left{font-family:var(--fm);font-size:9px;color:var(--muted2);white-space:nowrap;flex-shrink:0}
+.di .days-left.urg{color:var(--red)}
+.di button{background:none;border:none;cursor:pointer;font-size:14px;padding:0 2px;opacity:.6;flex-shrink:0}.di button:hover{opacity:1}
+.trash-empty{font-family:var(--fm);font-size:9px;color:var(--red);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;margin-top:4px;display:inline-block}
+ 
+/* BIAN */
+#fab{position:fixed;bottom:20px;right:20px;width:52px;height:52px;background:var(--red);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size...
+#fab:hover{transform:scale(1.1)}
+#chat-panel{position:fixed;bottom:82px;right:16px;width:360px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 120px);background:#fff;border:1px solid var(--border);border-radius:1...
+#chat-panel.open{display:flex}
+#ch-head{flex-shrink:0;padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--redl);border-radius:16px 16px 0 0}
+#ch-dragon{font-size:22px;flex-shrink:0}
+#ch-name{flex:1;min-width:0}
+#ch-name strong{display:block;font-size:13px;font-weight:800;color:var(--red)}
+#ch-name span{font-family:var(--fm);font-size:9px;color:var(--muted)}
+.ch-hbtns{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.ch-hbtn{background:rgba(185,28,28,.12);border:none;color:var(--red);font-family:var(--fm);font-size:9px;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.ch-hbtn:hover{background:rgba(185,28,28,.22)}
+#ch-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;padding:0 2px;flex-shrink:0}
+#apirow{flex-shrink:0;padding:8px 12px;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;background:#FFFBEB}
+#apirow p{font-family:var(--fm);font-size:9px;color:var(--gold);flex-shrink:0}
+#apikey{flex:1;background:#fff;border:1px solid var(--border2);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--fm);font-size:10px;outline:none;min-width:0}
+#apisave{flex-shrink:0;background:var(--greenl);color:var(--green);border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-family:var(--fm);font-size:9px;font-weight:600;white-space:nowrap}
+#ch-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.cm{padding:9px 11px;border-radius:10px;font-family:var(--fm);font-size:11px;line-height:1.6;max-width:88%;word-break:break-word}
+.cm.user{background:#FEE2E2;color:#7F1D1D;align-self:flex-end;border-radius:10px 10px 2px 10px}
+.cm.ai{background:var(--bg3);color:var(--text);align-self:flex-start;border-left:3px solid var(--red);border-radius:2px 10px 10px 10px}
+.cm.sys{color:var(--muted2);font-size:9.5px;align-self:center;text-align:center;font-style:italic;max-width:100%}
+#ch-inp-row{flex-shrink:0;padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:#fff;border-radius:0 0 16px 16px}
+#ch-inp{flex:1;min-width:0;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--fm);font-size:16px;outline:none}
+#ch-inp:focus{border-color:var(--red);background:#fff}
+#mic-btn{flex-shrink:0;background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;c...
+#mic-btn.recording{background:var(--redl);border-color:var(--red);animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+#ch-send{flex-shrink:0;background:var(--red);color:#fff;border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;tra...
+#ch-send:hover{background:var(--red2)}
+#ch-send:disabled{opacity:.35;cursor:default}
+ 
+@media(max-width:620px){
+  #board{grid-template-columns:1fr;gap:8px;padding:9px}
+  .column{min-height:60px}
+  .kpi-row{grid-template-columns:1fr;gap:8px}
+  #hbtns .hbtn{font-size:9px;padding:4px 7px}
+  #chat-panel{bottom:0;right:0;left:0;width:100%;max-width:100%;border-radius:20px 20px 0 0;height:70vh;max-height:70vh}
+  #fab{bottom:16px;right:16px}
+  .meetings-scroll{padding-bottom:12px}
+  .meeting-card{width:220px}
+}
+ 
+/* ══ MENU DROPDOWN ══ */
+#menu-wrap{position:relative}
+.menu-btn{border-color:var(--border2)!important;font-weight:700!important}
+.menu-btn.open{border-color:var(--red)!important;color:var(--red)!important;background:var(--redl)!important}
+#menu-dropdown{
+  position:fixed;top:60px;right:10px;
+  background:#fff;border:1px solid var(--border);border-radius:12px;
+  box-shadow:var(--shadow2);z-index:200;min-width:210px;max-width:calc(100vw - 20px);
+  display:none;overflow:hidden;
+}
+#menu-dropdown.open{display:block;animation:dropIn .15s ease}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.menu-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;font-family:var(--fm);font-size:11px;
+  color:var(--text);cursor:pointer;border:none;background:none;
+  width:100%;text-align:left;transition:background .12s;
+}
+.menu-item:hover{background:var(--bg3)}
+.menu-divider{border-top:1px solid var(--border);margin:4px 0}
+ 
+/* ══ BOTTOM BAR ══ */
+#bottom-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#fff;border-top:1px solid var(--border);
+  padding:10px 16px 12px;
+  display:flex;justify-content:center;
+  z-index:130;
+  box-shadow:0 -2px 12px rgba(28,25,23,.06);
+}
+.hist-trigger{
+  background:var(--bg3);border:1.5px solid var(--border);
+  padding:9px 28px;border-radius:20px;
+  font-family:var(--fh);font-size:11px;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:10px;
+}
+.hist-trigger:hover{background:var(--border);color:var(--text)}
+.hist-badges{display:flex;gap:5px;align-items:center}
+.hist-badge{
+  font-family:var(--fm);font-size:9px;padding:2px 7px;
+  border-radius:8px;font-weight:600;min-width:18px;text-align:center;
+}
+ 
+/* ══ HISTORIAL SHEET ══ */
+#hist-overlay{
+  position:fixed;inset:0;background:rgba(28,25,23,.4);
+  z-index:160;display:none;
+}
+#hist-overlay.open{display:block}
+#hist-sheet{
+  position:fixed;bottom:0;left:0;right:0;
+  height:76vh;max-height:76vh;
+  background:#fff;border-radius:20px 20px 0 0;
+  z-index:161;
+  transform:translateY(100%);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  box-shadow:0 -8px 32px rgba(28,25,23,.15);
+}
+#hist-sheet.open{transform:translateY(0)}
+#hist-handle{
+  width:40px;height:4px;background:var(--border2);
+  border-radius:2px;margin:12px auto 0;flex-shrink:0;cursor:pointer;
+}
+#hist-tabs{
+  display:flex;padding:8px 14px 0;gap:0;flex-shrink:0;
+  border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;
+}
+#hist-tabs::-webkit-scrollbar{display:none}
+.htab{
+  flex:1;padding:9px 6px;font-family:var(--fm);font-size:10px;font-weight:600;
+  color:var(--muted);background:none;border:none;
+  border-bottom:2px solid transparent;cursor:pointer;
+  transition:all .2s;white-space:nowrap;min-width:70px;
+}
+.htab.active{color:var(--red);border-bottom-color:var(--red)}
+.htab.stats-htab.active{color:var(--purple);border-bottom-color:var(--purple)}
+#hist-content{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch}
+/* Stats inside historial */
+.stats-section{background:#fff;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
+.stats-section h4{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.chart-wrap{display:flex;align-items:flex-end;gap:5px;height:100px;padding:0 2px}
+.chart-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.chart-bars{display:flex;align-items:flex-end;gap:2px;height:80px;width:100%}
+.bar-done{background:var(--green);border-radius:3px 3px 0 0;flex:1;min-height:2px}
+.bar-canc{background:var(--red);border-radius:3px 3px 0 0;flex:1;min-height:2px}
+.chart-lbl{font-family:var(--fm);font-size:8px;color:var(--muted);text-align:center}
+.chart-legend{display:flex;gap:12px;margin-top:8px;font-family:var(--fm);font-size:9px;color:var(--muted)}
+.legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:3px}
+.hist-table{width:100%;border-collapse:collapse;font-family:var(--fm);font-size:10px}
+.hist-table th{text-align:left;padding:5px 7px;font-size:9px;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border)}
+.hist-table td{padding:5px 7px;border-bottom:1px solid var(--bg4)}
+.hist-table tr:last-child td{border:none}
+.pct-bar{height:5px;border-radius:3px;display:inline-block;min-width:2px;vertical-align:middle;margin-right:4px}
+/* List items in historial */
+.hist-list-wrap{display:flex;flex-direction:column;gap:6px;padding-bottom:20px}
+.hli{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px}
+.hli.hli-done{background:var(--greenl)}
+.hli.hli-cancelled{background:var(--redl)}
+.hli.hli-trash{background:#F3F4F6;border:1px solid #E5E7EB}
+.hli .hli-title{font-family:var(--fm);font-size:10px;text-decoration:line-through;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hli.hli-done .hli-title{color:var(--green)}
+.hli.hli-cancelled .hli-title{color:var(--red)}
+.hli.hli-trash .hli-title{color:#6B7280}
+.hli .hli-days{font-family:var(--fm);font-size:9px;color:var(--muted2);white-space:nowrap;flex-shrink:0}
+.hli .hli-days.urg{color:var(--red)}
+.hli button{background:none;border:none;cursor:pointer;font-size:14px;padding:0 2px;opacity:.6;flex-shrink:0}
+.hli button:hover{opacity:1}
+.trash-empty-btn{font-family:var(--fm);font-size:9px;color:var(--red);background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:5px;display:block;margin-top:6px}
+.trash-empty-btn:hover{background:var(--redl)}
+.hist-empty{font-family:var(--fm);font-size:11px;color:var(--muted2);text-align:center;padding:30px 20px}
+ 
+/* ══ HELP MODAL ══ */
+.help-section{margin-bottom:16px}
+.help-section h3{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.help-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-family:var(--fm);font-size:10.5px;line-height:1.5;color:var(--muted);border-bottom:1px solid var(--bg4)}
+.help-row:last-child{border:none}
+.help-icon{flex-shrink:0;width:20px;text-align:center}
+ 
+/* Body padding for bottom bar */
+body{padding-bottom:60px}
+ 
+/* ══ CALENDAR BUTTON + DROPDOWN ══ */
+.btn-calendar{
+  background:#0F9D58;color:#fff;border:none;
+  padding:7px 13px;border-radius:7px;
+  font-family:var(--fh);font-size:11px;font-weight:700;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(15,157,88,.3);
+  transition:all .15s;white-space:nowrap;
+}
+.btn-calendar:hover{background:#0B7A45;transform:translateY(-1px)}
+#cal-wrap{position:relative}
+#cal-progress{
+  position:fixed;top:64px;left:50%;transform:translateX(-50%);
+  background:#1C1917;color:#fff;
+  padding:8px 18px;border-radius:8px;
+  font-family:var(--fm);font-size:11px;
+  z-index:300;box-shadow:var(--shadow2);
+  display:none;white-space:nowrap;
+}
+ 
+/* Responsive for bottom sheet */
+@media(max-width:480px){
+  #hist-sheet{height:85vh;max-height:85vh}
+  .htab{font-size:9px;padding:8px 4px}
+}
+ 
+/* ── CREATION DATE ── */
+.card-age{font-family:var(--fm);font-size:8.5px;color:var(--muted2);margin-top:5px;padding-top:4px;border-top:1px solid var(--bg4)}
+ 
+/* ── FLEXIBLE ALERT PULSE ── */
+.ftag-alert{
+  animation:flexPulse 1.8s ease-in-out infinite;
+  border:1px dashed var(--gold)!important;
+}
+@keyframes flexPulse{
+  0%,100%{opacity:1;background:var(--goldl)}
+  50%{opacity:.55;background:#FEF9C3}
+}
+ 
+/* ── DRAG REORDER INDICATORS ── */
+.card.drop-above{
+  border-top:3px solid var(--blue)!important;
+  margin-top:-2px;
+  box-shadow:0 -3px 0 var(--bluel)!important;
+}
+.card.drop-below{
+  border-bottom:3px solid var(--blue)!important;
+  margin-bottom:-2px;
+  box-shadow:0 3px 0 var(--bluel)!important;
+}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{animation:fi .18s ease forwards}
+</style>
+</head>
+<body>
+ 
+<!-- HEADER -->
+<div id="header">
+  <div id="hlogo">
+    <div id="hdragon">🐉</div>
+    <div id="hinfo">
+      <h1>DRAGON <span>TO DO LIST</span></h1>
+      <div class="sub">Bian · Asistente · Martín</div>
+    </div>
+  </div>
+  <div id="hbtns">
+    <div id="menu-wrap">
+      <button class="hbtn menu-btn" id="menu-btn" onclick="toggleMenu(event)">⚙️ Menú ▾</button>
+      <div id="menu-dropdown">
+        <button class="menu-item" id="drive-menu-item" onclick="openDriveModal();closeMenu()">🔗 Drive <span id="drive-status-dot"></span></button>
+        <button class="menu-item" onclick="openAreasModal();closeMenu()">🗂️ Áreas</button>
+        <button class="menu-item" id="notif-menu-item" onclick="toggleNotif();closeMenu()">🔔 Notificaciones</button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="testCalConnection();closeMenu()">🧪 Probar conexión Calendar</button>
+        <button class="menu-item" onclick="bulkSyncCalendar();closeMenu()">🔄 Sincronizar con Calendar</button>
+        <button class="menu-item" id="cal-log-btn" onclick="showCalLog();closeMenu()" style="display:none;color:var(--red)">⚠️ Ver errores Calendar</button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="exportData();closeMenu()">📤 Exportar datos</button>
+        <button class="menu-item" onclick="document.getElementById('imp-inp').click();closeMenu()">📥 Importar datos</button>
+        <button class="menu-item" onclick="exportICS();closeMenu()">📅 Exportar .ics</button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="exportConfig();closeMenu()">💾 Guardar claves</button>
+        <button class="menu-item" onclick="document.getElementById('cfg-inp').click();closeMenu()">🔓 Cargar claves</button>
+        <input type="file" id="cfg-inp" accept=".json" style="display:none" onchange="importConfig(event)">
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="openHelp();closeMenu()">📖 Manual de ayuda</button>
+      </div>
+    </div>
+    <div id="cal-wrap">
+      <button class="btn-calendar" onclick="window.open('https://calendar.google.com','_blank')">📆 Calendar</button>
+    </div>
+    <div id="cal-progress-bar" style="display:none"></div>
+    <button class="btn-meeting" onclick="openMeetingModal()">+ REUNIÓN</button>
+    <button class="btn-add" onclick="openAdd()">+ TAREA</button>
+    <input type="file" id="imp-inp" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</div>
+ 
+<!-- SYNC BAR -->
+<div id="sync-bar" class="hidden">
+  <span id="sync-icon">☁️</span>
+  <span id="sync-text" style="font-family:var(--fm);font-size:10px"></span>
+  <span id="sync-time" style="margin-left:auto;color:var(--muted2);font-family:var(--fm);font-size:9px"></span>
+</div>
+ 
+<!-- MONTH CLOSE BANNER -->
+<div id="close-banner">
+  <p id="close-banner-text">🗓️ ¿Cerrar el mes?</p>
+  <button class="banner-btn" onclick="closeMonth()">Cerrar mes y archivar</button>
+  <button class="banner-btn secondary" onclick="dismissBanner()">Más tarde</button>
+</div>
+ 
+<div id="toast"></div>
+ 
+<!-- TABS -->
+<div id="tabs">
+  <div class="tab active" id="tab-ALL"      onclick="setTab('ALL')">🗂 TODO <span class="tc" id="tc-ALL"></span></div>
+  <div class="tab" id="tab-UNSJ"     onclick="setTab('UNSJ')">🔬 UNSJ <span class="tc" id="tc-UNSJ"></span></div>
+  <div class="tab" id="tab-Scouts"   onclick="setTab('Scouts')">🏕️ Scouts <span class="tc" id="tc-Scouts"></span></div>
+  <div class="tab" id="tab-Personal" onclick="setTab('Personal')">🏠 Personal <span class="tc" id="tc-Personal"></span></div>
+  <div class="tab" id="tab-Empresas" onclick="setTab('Empresas')">🏢 Empresas <span class="tc" id="tc-Empresas"></span></div>
+  </div>
+ 
+<!-- BOTTOM BAR -->
+<div id="bottom-bar">
+  <button class="hist-trigger" onclick="openHistorial()">
+    <span>📚 Historial</span>
+    <span class="hist-badges">
+      <span class="hist-badge" id="hb-done" style="background:var(--greenl);color:var(--green)"></span>
+      <span class="hist-badge" id="hb-cancelled" style="background:var(--redl);color:var(--red)"></span>
+      <span class="hist-badge" id="hb-trash" style="background:#F3F4F6;color:#6B7280"></span>
+    </span>
+  </button>
+</div>
+ 
+<!-- HISTORIAL OVERLAY + SHEET -->
+<div id="hist-overlay" onclick="closeHistorial()"></div>
+<div id="hist-sheet">
+  <div id="hist-handle" onclick="closeHistorial()"></div>
+  <div id="hist-tabs">
+    <button class="htab stats-htab active" id="htab-stats" onclick="setHistTab('stats')">📊 Stats</button>
+    <button class="htab" id="htab-done" onclick="setHistTab('done')">✅ Completadas</button>
+    <button class="htab" id="htab-cancelled" onclick="setHistTab('cancelled')">⊘ Canceladas</button>
+    <button class="htab" id="htab-trash" onclick="setHistTab('trash')">🗑️ Papelera</button>
+  </div>
+  <div id="hist-content">
+    <!-- Stats panel (shown by default) -->
+    <div id="hist-stats">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-val green" id="kpi-pct">—</div><div class="kpi-lbl">% COMPLETADAS<br>ESTE MES</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-active">—</div><div class="kpi-lbl">TAREAS<br>ACTIVAS</div></div>
+        <div class="kpi"><div class="kpi-val purple" id="kpi-meetings">—</div><div class="kpi-lbl">REUNIONES<br>ESTA SEMANA</div></div>
+      </div>
+      <div class="stats-section">
+        <h4>COMPLETADAS VS CANCELADAS — ÚLTIMOS 12 MESES</h4>
+        <div class="chart-wrap" id="stats-chart"></div>
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background:var(--green)"></span>Completadas</span>
+          <span><span class="legend-dot" style="background:var(--red)"></span>Canceladas</span>
+        </div>
+      </div>
+      <div class="stats-section">
+        <h4>DETALLE MENSUAL</h4>
+        <table class="hist-table" id="stats-table">
+          <thead><tr><th>MES</th><th>CARGADAS</th><th>COMPLETADAS</th><th>CANCELADAS</th></tr></thead>
+          <tbody id="stats-tbody"></tbody>
+        </table>
+      </div>
+      <div style="text-align:center;margin-top:10px;padding-bottom:20px">
+        <button class="btn-cm" onclick="closeMonth()" style="font-size:11px">🗓️ Cerrar mes actual y archivar</button>
+      </div>
+    </div>
+    <!-- List panel (done/cancelled/trash) -->
+    <div id="hist-list" style="display:none"></div>
+  </div>
+</div>
+ 
+<!-- MEETINGS -->
+<div id="meetings-section">
+  <div id="meetings-header">
+    <h3>📅 PRÓXIMAS REUNIONES</h3>
+  </div>
+  <div class="meetings-scroll" id="meetings-list">
+    <span id="no-meetings">Sin reuniones agendadas — tocá + REUNIÓN para agregar</span>
+  </div>
+</div>
+ 
+<!-- BOARD -->
+<div id="board">
+  <div class="column" id="col-urgent"  ondragover="dragOver(event,'urgent')"  ondragleave="dragLeave(event,'urgent')"  ondrop="drop(event,'urgent')">
+    <div class="col-head"><span>🔥</span><span class="col-title" style="color:#B91C1C">URGENTE</span><span class="col-cnt" id="cc-urgent">0</span></div>
+    <div class="col-cards" id="cc-urgent-list"></div>
+  </div>
+  <div class="column" id="col-active"  ondragover="dragOver(event,'active')"  ondragleave="dragLeave(event,'active')"  ondrop="drop(event,'active')">
+    <div class="col-head"><span>⚙️</span><span class="col-title" style="color:#92400E">EN CURSO</span><span class="col-cnt" id="cc-active">0</span></div>
+    <div class="col-cards" id="cc-active-list"></div>
+  </div>
+  <div class="column" id="col-pending" ondragover="dragOver(event,'pending')" ondragleave="dragLeave(event,'pending')" ondrop="drop(event,'pending')">
+    <div class="col-head"><span>📋</span><span class="col-title" style="color:#78716C">PENDIENTE</span><span class="col-cnt" id="cc-pending">0</span></div>
+    <div class="col-cards" id="cc-pending-list"></div>
+  </div>
+</div>
+ 
+<!-- stats moved to historial -->
+ 
+<!-- arch moved to historial sheet -->
+ 
+<!-- MODAL TAREA -->
+<div id="modal" class="overlay" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2 id="modal-title">🐉 NUEVA TAREA</h2>
+    <div class="mf"><label>TÍTULO</label><input id="m-title" type="text" placeholder="¿Qué tenés que hacer?" onkeydown="if(event.key==='Enter')saveCard()"></div>
+    <div class="mf"><label>ÁREA</label><select id="m-area"></select></div>
+    <div class="mf"><label>NOTA</label><textarea id="m-note" placeholder="Contexto, referencias..."></textarea></div>
+    <div class="mf-row">
+      <div class="mf" style="margin:0"><label>FECHA LÍMITE</label><input id="m-due" type="date"></div>
+      <div class="mf" style="margin:0"><label>COLUMNA</label>
+        <select id="m-col">
+          <option value="pending">📋 Pendiente</option>
+          <option value="active">⚙️ En Curso</option>
+          <option value="urgent">🔥 Urgente</option>
+        </select>
+      </div>
+    </div>
+    <div class="mf-row">
+      <div class="mf" style="margin:0"><label>🔔 ALARMA EN CALENDAR</label>
+        <select id="m-alarm">
+          <option value="0">Sin alarma</option>
+          <option value="30">30 min antes</option>
+          <option value="60">1 hora antes</option>
+          <option value="360">6 horas antes</option>
+          <option value="1440" selected>1 día antes</option>
+          <option value="2880">2 días antes</option>
+        </select>
+      </div>
+      <div class="mf" style="margin:0"></div>
+    </div>
+    <div class="mf">
+      <label>REPETICIÓN</label>
+      <select id="m-recur" onchange="updateRecurUI('m')">
+        <option value="">Sin repetición</option>
+        <option value="weekly">🔁 Semanal (cada 7 días)</option>
+        <option value="biweekly">🔁 Quincenal (cada 15 días)</option>
+        <option value="monthly">🔁 Mensual (mismo día)</option>
+        <option value="weekday">🔁 Día de semana fijo</option>
+        <option value="periodic">🔁 Periódica (cada N días)</option>
+        <option value="flexible">🕐 Flexible (a convenir)</option>
+      </select>
+    </div>
+    <div id="m-recur-weekday" class="mf recur-extra"><label>DÍA DE LA SEMANA</label>
+      <select id="m-recur-wd">
+        <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option>
+        <option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
+      </select>
+    </div>
+    <div id="m-recur-interval" class="mf recur-extra"><label>CADA CUÁNTOS DÍAS</label><input type="number" id="m-recur-n" min="1" max="365" value="10" placeholder="10"></div>
+    <div id="m-recur-flex" class="mf recur-extra"><label>NOTA DE REFERENCIA</label><input id="m-recur-flex-note" type="text" placeholder="ej: ~15 días con el equipo IAR"></div>
+    <div class="mbtns">
+      <button class="btn-save" onclick="saveCard()">GUARDAR</button>
+      <button class="btn-cm" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL REUNIÓN -->
+<div id="meeting-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeMeetingModal()">
+  <div class="modal">
+    <h2 id="meeting-modal-title">📅 NUEVA REUNIÓN</h2>
+    <div class="mf"><label>TÍTULO</label><input id="mt-title" type="text" placeholder="Reunión de coordinación CHALÚ-X..."></div>
+    <div class="mf"><label>ÁREA</label><select id="mt-area"></select></div>
+    <div id="mt-overlap-warn" style="display:none;background:var(--goldl);color:var(--gold);font-family:var(--fm);font-size:10px;padding:8px 12px;border-radius:7px;margin-bottom:4px;border:1px soli...
+    <div class="mf-row">
+      <div class="mf" style="margin:0"><label>FECHA INICIO</label><input id="mt-date" type="date" onchange="checkMeetingOverlap()" oninput="checkMeetingOverlap()"></div>
+      <div class="mf" style="margin:0"><label>HORA (opcional)</label><input id="mt-time" type="time" onchange="checkMeetingOverlap()" oninput="checkMeetingOverlap()"></div>
+    </div>
+    <div class="mf-row">
+      <div class="mf" style="margin:0"><label>FECHA FIN <span style="font-weight:400;color:var(--muted2)">(opcional — para eventos multi-día)</span></label><input id="mt-dateend" type="date"></div>
+      <div class="mf" style="margin:0"></div>
+    </div>
+    <div class="mf"><label>LUGAR</label><input id="mt-place" type="text" placeholder="Sala de reuniones, Zoom, etc."></div>
+    <div class="mf"><label>PARTICIPANTES</label><input id="mt-participants" type="text" placeholder="Lopresti, Pola, Valentina..."></div>
+    <div class="mf"><label>AGENDA (editable)</label><textarea id="mt-agenda" rows="3" placeholder="1. Avance CHALÚ-X&#10;2. Presupuesto&#10;3. Próximos pasos"></textarea></div>
+    <div class="mf-row">
+      <div class="mf" style="margin:0"><label>🔔 ALARMA EN CALENDAR</label>
+        <select id="mt-alarm">
+          <option value="0">Sin alarma</option>
+          <option value="30">30 min antes</option>
+          <option value="60">1 hora antes</option>
+          <option value="360">6 horas antes</option>
+          <option value="1440" selected>1 día antes</option>
+          <option value="2880">2 días antes</option>
+        </select>
+      </div>
+      <div class="mf" style="margin:0"></div>
+    </div>
+    <div class="mf">
+      <label>REPETICIÓN</label>
+      <select id="mt-recur" onchange="updateRecurUI('mt')">
+        <option value="">Sin repetición</option>
+        <option value="weekly">🔁 Semanal</option>
+        <option value="biweekly">🔁 Quincenal</option>
+        <option value="monthly">🔁 Mensual</option>
+        <option value="weekday">🔁 Día de semana fijo</option>
+        <option value="periodic">🔁 Periódica (cada N días)</option>
+        <option value="flexible">🕐 Flexible (a convenir)</option>
+      </select>
+    </div>
+    <div id="mt-recur-weekday" class="mf recur-extra"><label>DÍA DE LA SEMANA</label>
+      <select id="mt-recur-wd">
+        <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option>
+        <option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option>
+      </select>
+    </div>
+    <div id="mt-recur-interval" class="mf recur-extra"><label>CADA CUÁNTOS DÍAS</label><input type="number" id="mt-recur-n" min="1" max="365" value="15" placeholder="15"></div>
+    <div id="mt-recur-flex" class="mf recur-extra"><label>NOTA DE REFERENCIA</label><input id="mt-recur-flex-note" type="text" placeholder="ej: ~15 días con IAR"></div>
+    <div class="mbtns">
+      <button class="btn-save purple" onclick="saveMeeting()">GUARDAR REUNIÓN</button>
+      <button class="btn-cm" onclick="closeMeetingModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL CONFIRMAR BORRADO -->
+<div id="confirm-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeConfirm()">
+  <div class="modal" style="width:320px;text-align:center">
+    <h2 style="font-size:32px;margin-bottom:8px">🗑️</h2>
+    <p style="font-size:13px;font-weight:700;margin-bottom:8px">¿Eliminar permanentemente?</p>
+    <p id="confirm-msg" style="font-size:11px;color:var(--muted);margin-bottom:18px;line-height:1.6;font-family:var(--fm)"></p>
+    <div class="mbtns"><button class="btn-danger" onclick="confirmDelete()">Sí, eliminar</button><button class="btn-cm" onclick="closeConfirm()">Cancelar</button></div>
+  </div>
+</div>
+ 
+<!-- MODAL DRIVE -->
+<div id="drive-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeDriveModal()">
+  <div class="modal">
+    <h2>🔗 Conectar con Google Drive</h2>
+    <div class="drive-info">
+      <strong>Sincronización entre dispositivos.</strong> Los datos se guardan en tu Google Sheet y se leen desde cualquier dispositivo. Seguridad HMAC-SHA256.
+    </div>
+    <div class="mf"><label>URL DEL APPS SCRIPT</label><input type="text" id="drive-url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off"></div>
+    <div class="mf"><label>CLAVE SECRETA</label><input type="password" id="drive-key" placeholder="tu-clave-secreta" autocomplete="off"></div>
+    <button class="btn-cm" onclick="testDriveConnection()" style="width:100%;margin-top:4px">🧪 Probar conexión</button>
+    <div id="drive-status" class="drive-status"></div>
+    <hr class="drive-divider">
+    <div class="mbtns">
+      <button class="btn-green" onclick="saveDriveConfig()">✅ Guardar y conectar</button>
+      <button class="btn-cm" onclick="closeDriveModal()">Cancelar</button>
+    </div>
+    <div id="drive-connected-info" style="display:none;margin-top:12px;font-family:var(--fm);font-size:10px;color:var(--muted)">
+      <hr class="drive-divider" style="margin:8px 0">
+      <p style="color:var(--green);font-weight:600">✅ Conectado</p>
+      <p id="last-sync-info" style="margin-top:4px"></p>
+      <button onclick="disconnectDrive()" style="margin-top:8px;background:none;border:none;color:var(--red);font-family:var(--fm);font-size:10px;cursor:pointer;padding:0">Desconectar Drive</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL ÁREAS -->
+<div id="areas-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeAreasModal()">
+  <div class="modal" style="width:440px">
+    <h2>⚙️ GESTIONAR ÁREAS</h2>
+    <div id="areas-list"></div>
+    <hr class="areas-divider">
+    <p style="font-size:11px;font-weight:700;margin-bottom:10px">AGREGAR NUEVA ÁREA</p>
+    <div class="add-area-grid">
+      <div class="mf" style="margin:0"><label>EMOJI</label><input id="na-emoji" placeholder="🆕" maxlength="4" style="text-align:center;font-size:18px"></div>
+      <div class="mf" style="margin:0"><label>NOMBRE</label><input id="na-name" placeholder="Nombre del área" onkeydown="if(event.key==='Enter')addArea()"></div>
+      <div class="mf" style="margin:0"><label>COLOR</label><div class="color-wrap"><input type="color" id="na-color" value="#6366F1"></div></div>
+    </div>
+    <div class="add-area-grid2">
+      <div class="mf" style="margin:0"><label>CATEGORÍA</label>
+        <select id="na-cat"><option value="UNSJ">🔬 UNSJ</option><option value="Scouts">🏕️ Scouts</option><option value="Personal">🏠 Personal</option><option value="Empresas">🏢 Empresas</option>...
+      </div>
+      <div style="display:flex;align-items:flex-end"><button class="btn-save" onclick="addArea()" style="width:100%">+ AGREGAR</button></div>
+    </div>
+    <button class="btn-cm" onclick="closeAreasModal()" style="width:100%;margin-top:6px">Cerrar</button>
+  </div>
+</div>
+ 
+<!-- CALENDAR DEBUG MODAL -->
+<div id="cal-debug-modal" class="overlay" style="display:none" onclick="if(event.target===this)document.getElementById('cal-debug-modal').style.display='none'">
+  <div class="modal" style="width:480px;max-height:80vh">
+    <h2>🔍 Log de sincronización con Google Calendar</h2>
+    <div id="cal-debug-content" style="font-family:var(--fm);font-size:10px;color:var(--text);line-height:1.8;max-height:50vh;overflow-y:auto;background:var(--bg3);padding:12px;border-radius:8px;ma...
+    <div class="mbtns">
+      <button class="btn-cm" onclick="document.getElementById('cal-debug-modal').style.display='none'" style="width:100%">Cerrar</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MEETING RESULT MODAL -->
+<div id="mtresult-modal" class="overlay" style="display:none" onclick="if(event.target===this)confirmDoneMeeting(false)">
+  <div class="modal" style="width:360px">
+    <h2>✅ Reunión realizada</h2>
+    <p style="font-family:var(--fm);font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">¿Querés registrar el resultado o las decisiones tomadas? <em>(opcional)</em></p>
+    <div class="mf">
+      <label>RESULTADO / NOTAS</label>
+      <textarea id="mtresult-note" rows="3" placeholder="Decisiones tomadas, acuerdos, próximos pasos..."></textarea>
+    </div>
+    <div class="mbtns">
+      <button class="btn-save" onclick="confirmDoneMeeting(true)">💾 Guardar con nota</button>
+      <button class="btn-cm" onclick="confirmDoneMeeting(false)">Completar sin nota</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- BIAN FAB -->
+<button id="fab" onclick="toggleChat()" title="Bian">🐉</button>
+<div id="chat-panel">
+  <div id="ch-head">
+    <div id="ch-dragon">🐉</div>
+    <div id="ch-name"><strong>Bian</strong><span>Guardián · Dragón del Tulum</span></div>
+    <div class="ch-hbtns">
+      <button class="ch-hbtn" onclick="askReport()">📊 Informe</button>
+      <button id="ch-close" onclick="toggleChat()">✕</button>
+    </div>
+  </div>
+  <div id="apirow">
+    <p>🔑</p>
+    <input type="password" id="apikey" placeholder="API key Anthropic (sk-ant-...)" autocomplete="off" autocorrect="off" autocapitalize="off">
+    <button id="apisave" onclick="saveKey()">Guardar</button>
+  </div>
+  <div id="ch-msgs"><div class="cm sys">🐉 Saludos, Martín. Ingresá tu API key para activarme.</div></div>
+  <div id="ch-inp-row">
+    <input type="text" id="ch-inp" placeholder="Escribí a Bian..." autocomplete="off" autocorrect="off" autocapitalize="off" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault...
+    <button id="mic-btn" onclick="toggleMic()" title="Micrófono">🎤</button>
+    <button id="ch-send" onclick="sendChat()">🐉</button>
+  </div>
+</div>
+ 
+<script>
+// ════════════════════════════════════════════════════
+//  ÁREAS
+// ════════════════════════════════════════════════════
+const DEFAULT_AREAS={
+  "CHALÚ-X":             {c:"#2563EB",e:"🛸",cat:"UNSJ"},
+  "CHAZE-Agro":          {c:"#059669",e:"🌱",cat:"UNSJ"},
+  "HERON":               {c:"#7C3AED",e:"🔭",cat:"UNSJ"},
+  "CART":                {c:"#0891B2",e:"📡",cat:"UNSJ"},
+  "SAT-PAE":             {c:"#0284C7",e:"💧",cat:"UNSJ"},
+  "LED&T":               {c:"#D97706",e:"🏛️",cat:"UNSJ"},
+  "DEA-UNSJ":            {c:"#DC2626",e:"🏫",cat:"UNSJ"},
+  "ROECyT":              {c:"#9333EA",e:"📦",cat:"UNSJ"},
+  "Sistemas Digitales A":{c:"#F59E0B",e:"🎓",cat:"UNSJ"},
+  "Telecomunicaciones":  {c:"#10B981",e:"📶",cat:"UNSJ"},
+  "Scouts":              {c:"#EF4444",e:"🏕️",cat:"Scouts"},
+  "Familia":             {c:"#EC4899",e:"❤️",cat:"Personal"},
+  "Salud":               {c:"#14B8A6",e:"💪",cat:"Personal"},
+  "Dragón del Tulum":    {c:"#B91C1C",e:"🔪",cat:"Personal"},
+  "Personal":            {c:"#6B7280",e:"🔧",cat:"Personal"},
+  "Consultoría IT":      {c:"#F97316",e:"💻",cat:"Empresas"},
+  "TSS / Tankito":       {c:"#8B5CF6",e:"🗄️",cat:"Empresas"},
+  "Ifrimen SRL":         {c:"#0EA5E9",e:"❄️",cat:"Empresas"},
+};
+let AREAS={};
+ 
+// ════════════════════════════════════════════════════
+//  KEYS & STATE
+// ════════════════════════════════════════════════════
+const CK="dtdl-cards-v4", AKY="dtdl-areas-v4", AKKEY="dtdl-ak";
+const DRIVE_URL="dtdl-drive-url", DRIVE_KEY="dtdl-drive-key", SYNC_TS="dtdl-sync-ts";
+const HIST_KEY="dtdl-history", LAST_CLOSE_KEY="dtdl-last-close";
+ 
+let cards=[], tab="ALL", dragId=null, editId=null, editMeetingId=null;
+let archOpen={done:false,cancelled:false,trash:false};
+let apiKey="", chatHist=[], recog=null, pendingDelId=null;
+let scriptUrl="", hmacKey="";
+let monthlyHistory={};
+const TRASH_MS=7*24*60*60*1000;
+// Drag reorder
+let dragOverCardId=null, dragOverPos="after";
+// Meeting result
+let pendingDoneMeetingId=null;
+ 
+// ════════════════════════════════════════════════════
+//  STORAGE
+// ════════════════════════════════════════════════════
+function saveLocal(){localStorage.setItem(CK,JSON.stringify(cards));}
+function saveAreas(){localStorage.setItem(AKY,JSON.stringify(AREAS));}
+function saveHistory(){localStorage.setItem(HIST_KEY,JSON.stringify(monthlyHistory));}
+ 
+// Legacy key names from previous versions
+const LEGACY_KEYS={
+  apiKey:  ["dtdl-ak","mcc-ak","mcc-apikey"],
+  driveUrl:["dtdl-drive-url","mcc-drive-url","dragon-drive-url"],
+  driveKey:["dtdl-drive-key","mcc-drive-key","dragon-drive-key"],
+};
+ 
+function getWithFallback(primary, legacyList){
+  // Try primary key first
+  const val=localStorage.getItem(primary);
+  if(val)return val;
+  // Try legacy keys and migrate if found
+  for(const k of legacyList){
+    const v=localStorage.getItem(k);
+    if(v){
+      localStorage.setItem(primary,v); // migrate to current key
+      console.log("Migrated key from",k,"to",primary);
+      return v;
+    }
+  }
+  return "";
+}
+ 
+function load(){
+  try{const a=localStorage.getItem(AKY);AREAS=a?JSON.parse(a):JSON.parse(JSON.stringify(DEFAULT_AREAS));}
+  catch{AREAS=JSON.parse(JSON.stringify(DEFAULT_AREAS));}
+  try{const d=localStorage.getItem(CK);cards=d?JSON.parse(d):[];}
+  catch{cards=[];}
+  try{const h=localStorage.getItem(HIST_KEY);monthlyHistory=h?JSON.parse(h):{};}
+  catch{monthlyHistory={};}
+  // Load keys with legacy fallback
+  apiKey=getWithFallback(AKKEY, LEGACY_KEYS.apiKey);
+  scriptUrl=getWithFallback(DRIVE_URL, LEGACY_KEYS.driveUrl);
+  hmacKey=getWithFallback(DRIVE_KEY, LEGACY_KEYS.driveKey);
+  if(apiKey)document.getElementById("apirow").style.display="none";
+  cleanTrash();
+  processPassedMeetings();
+}
+ 
+// ════════════════════════════════════════════════════
+//  HMAC-SHA256 (Web Crypto)
+// ════════════════════════════════════════════════════
+async function computeHMAC(message,secret){
+  const enc=new TextEncoder();
+  const key=await crypto.subtle.importKey("raw",enc.encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+  const sig=await crypto.subtle.sign("HMAC",key,enc.encode(message));
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
+}
+ 
+// ════════════════════════════════════════════════════
+//  APPS SCRIPT CALLS
+// ════════════════════════════════════════════════════
+async function callServer(action,data=null){
+  if(!scriptUrl||!hmacKey)throw new Error("Drive no configurado");
+  const ts=Date.now();
+  let message=action+"|"+ts;
+  let checksum=null;
+  if(action==="save"&&data){checksum=await computeHMAC(JSON.stringify(data),hmacKey);message+="|"+checksum;}
+  const sig=await computeHMAC(message,hmacKey);
+  const payload={action,ts,sig};
+  if(data)payload.data=data;
+  if(checksum)payload.checksum=checksum;
+  const resp=await fetch(scriptUrl,{method:"POST",redirect:"follow",body:JSON.stringify(payload)});
+  if(!resp.ok)throw new Error("HTTP "+resp.status);
+  const result=await resp.json();
+  if(result.error)throw new Error(result.error);
+  return result;
+}
+ 
+let syncTimeout=null;
+async function saveC(){
+  saveLocal();
+  clearTimeout(syncTimeout);
+  syncTimeout=setTimeout(()=>syncToDrive(),1500);
+}
+async function syncToDrive(){
+  if(!scriptUrl||!hmacKey){setSyncBar("offline");return;}
+  setSyncBar("saving");
+  try{
+    await callServer("save",{cards,areas:AREAS,history:monthlyHistory});
+    localStorage.setItem(SYNC_TS,Date.now().toString());
+    setSyncBar("saved");
+  }catch(err){setSyncBar("error",err.message);console.warn("Sync error:",err.message);}
+}
+async function loadFromDrive(){
+  if(!scriptUrl||!hmacKey)return false;
+  setSyncBar("loading");
+  try{
+    const result=await callServer("load");
+    if(result.ok&&result.data&&result.data.cards){
+      cards=result.data.cards;
+      if(result.data.areas)AREAS=result.data.areas;
+      if(result.data.history)monthlyHistory=result.data.history;
+      cleanTrash();processPassedMeetings();saveLocal();saveAreas();saveHistory();
+      setSyncBar("saved");return true;
+    }
+    setSyncBar("saved");return false;
+  }catch(err){setSyncBar("error",err.message);return false;}
+}
+ 
+function setSyncBar(status,detail=""){
+  const bar=document.getElementById("sync-bar");
+  const icon=document.getElementById("sync-icon");
+  const text=document.getElementById("sync-text");
+  const time=document.getElementById("sync-time");
+  if(!scriptUrl||!hmacKey){bar.className="hidden";return;}
+  bar.className="";
+  const ts=localStorage.getItem(SYNC_TS);
+  const timeStr=ts?"Última sync: "+new Date(parseInt(ts)).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}):"";
+  const states={
+    saving:{icon:"🔄",text:"Guardando en Drive...",cls:"saving"},
+    loading:{icon:"🔄",text:"Cargando desde Drive...",cls:"saving"},
+    saved:{icon:"✅",text:"Sincronizado con Drive",cls:"saved"},
+    error:{icon:"⚠️",text:"Sin conexión — datos en caché"+(detail?" · "+detail:""),cls:"error"},
+    offline:{icon:"📴",text:"Drive no configurado",cls:"offline"},
+  };
+  const s=states[status]||states.offline;
+  bar.className=s.cls;icon.textContent=s.icon;text.textContent=s.text;
+  time.textContent=status==="saved"?timeStr:"";
+}
+ 
+// ════════════════════════════════════════════════════
+//  DRIVE MODAL
+// ════════════════════════════════════════════════════
+function openDriveModal(){
+  document.getElementById("drive-url").value=scriptUrl||"";
+  document.getElementById("drive-key").value=hmacKey?"•".repeat(20):"";
+  document.getElementById("drive-status").className="drive-status";
+  const info=document.getElementById("drive-connected-info");
+  if(scriptUrl&&hmacKey){
+    info.style.display="block";
+    const ts=localStorage.getItem(SYNC_TS);
+    document.getElementById("last-sync-info").textContent=ts?"Última sync: "+new Date(parseInt(ts)).toLocaleString("es-AR"):"Nunca sincronizado";
+    document.getElementById("drive-key").value="";
+    document.getElementById("drive-key").placeholder="Dejar vacío para mantener la clave actual";
+  }else{info.style.display="none";}
+  document.getElementById("drive-modal").style.display="flex";
+}
+function closeDriveModal(){document.getElementById("drive-modal").style.display="none";}
+async function testDriveConnection(){
+  const url=document.getElementById("drive-url").value.trim();
+  const statusEl=document.getElementById("drive-status");
+  if(!url){statusEl.textContent="⚠️ Ingresá la URL";statusEl.className="drive-status err";return;}
+  statusEl.textContent="🔄 Probando...";statusEl.className="drive-status loading";
+  try{
+    const resp=await fetch(url,{redirect:"follow"});
+    const data=await resp.json();
+    if(data.status&&data.status.includes("Dragon")){statusEl.textContent="✅ "+data.status;statusEl.className="drive-status ok";}
+    else{statusEl.textContent="⚠️ Respuesta inesperada";statusEl.className="drive-status err";}
+  }catch(err){statusEl.textContent="❌ Error: "+err.message;statusEl.className="drive-status err";}
+}
+function saveDriveConfig(){
+  const url=document.getElementById("drive-url").value.trim();
+  const keyInput=document.getElementById("drive-key").value.trim();
+  const key=keyInput||hmacKey;
+  if(!url){showToast("⚠️ Ingresá la URL");return;}
+  if(!key){showToast("⚠️ Ingresá la clave");return;}
+  scriptUrl=url;hmacKey=key;
+  localStorage.setItem(DRIVE_URL,url);localStorage.setItem(DRIVE_KEY,key);
+  const driveItem=document.getElementById("drive-menu-item");
+  if(driveItem)driveItem.style.color="var(--green)";
+  closeDriveModal();showToast("🔗 Drive configurado — sincronizando...");
+  loadFromDrive().then(loaded=>{if(loaded){render();showToast("✅ Datos cargados desde Drive");}else syncToDrive();});
+}
+function disconnectDrive(){
+  if(!confirm("¿Desconectar Drive?"))return;
+  scriptUrl="";hmacKey="";localStorage.removeItem(DRIVE_URL);localStorage.removeItem(DRIVE_KEY);
+  const btn=document.getElementById("drive-menu-item");if(btn)btn.style.color="";
+  setSyncBar("offline");closeDriveModal();showToast("📴 Drive desconectado");
+}
+ 
+// ════════════════════════════════════════════════════
+//  RECURRENCE
+// ════════════════════════════════════════════════════
+const RECUR_LABELS={
+  weekly:"🔁 Semanal",biweekly:"🔁 Quincenal",monthly:"🔁 Mensual",
+  weekday:"🔁 Semanal fijo",periodic:"🔁 Periódica",flexible:"🕐 A convenir"
+};
+ 
+function getNextDate(dateStr,rec){
+  if(!dateStr||!rec||rec.type==="flexible")return null;
+  const d=new Date(dateStr+"T12:00:00");
+  switch(rec.type){
+    case"weekly":   d.setDate(d.getDate()+7);break;
+    case"biweekly": d.setDate(d.getDate()+15);break;
+    case"monthly":  d.setMonth(d.getMonth()+1);break;
+    case"weekday":  d.setDate(d.getDate()+7);break;
+    case"periodic": d.setDate(d.getDate()+(parseInt(rec.interval)||7));break;
+    default: return null;
+  }
+  return d.toISOString().slice(0,10);
+}
+
+function toIsoDate(date){
+  return date.toISOString().slice(0,10);
+}
+
+function getMeetingEndAt(meeting){
+  if(!meeting.date)return null;
+  if(meeting.dateEnd)return new Date(meeting.dateEnd+"T23:59:59");
+  return new Date(meeting.date+"T"+(meeting.time||"23:59")+":00");
+}
+
+function getRecurringMeetingDates(meeting,nextDate){
+  if(!meeting.dateEnd)return {date:nextDate,dateEnd:null};
+  const currentStart=new Date(meeting.date+"T12:00:00");
+  const currentEnd=new Date(meeting.dateEnd+"T12:00:00");
+  const durationDays=Math.max(0,Math.round((currentEnd-currentStart)/86400000));
+  const nextEnd=new Date(nextDate+"T12:00:00");
+  nextEnd.setDate(nextEnd.getDate()+durationDays);
+  return {date:nextDate,dateEnd:toIsoDate(nextEnd)};
+}
+ 
+function updateRecurUI(prefix){
+  const type=document.getElementById(prefix+"-recur").value;
+  document.getElementById(prefix+"-recur-weekday").classList.toggle("show",type==="weekday");
+  document.getElementById(prefix+"-recur-interval").classList.toggle("show",type==="periodic");
+  document.getElementById(prefix+"-recur-flex").classList.toggle("show",type==="flexible");
+}
+ 
+function getRecurFromForm(prefix){
+  const type=document.getElementById(prefix+"-recur").value;
+  if(!type)return null;
+  const rec={type};
+  if(type==="weekday")rec.weekday=parseInt(document.getElementById(prefix+"-recur-wd").value);
+  if(type==="periodic")rec.interval=parseInt(document.getElementById(prefix+"-recur-n").value)||7;
+  if(type==="flexible")rec.flexNote=document.getElementById(prefix+"-recur-flex-note").value.trim();
+  return rec;
+}
+ 
+function setRecurForm(prefix,rec){
+  const sel=document.getElementById(prefix+"-recur");
+  sel.value=rec?rec.type:"";
+  updateRecurUI(prefix);
+  if(rec){
+    if(rec.weekday!==undefined)document.getElementById(prefix+"-recur-wd").value=rec.weekday;
+    if(rec.interval)document.getElementById(prefix+"-recur-n").value=rec.interval;
+    if(rec.flexNote)document.getElementById(prefix+"-recur-flex-note").value=rec.flexNote;
+  }
+}
+ 
+// Auto-process passed meetings (on load)
+function processPassedMeetings(){
+  const now=new Date();
+  let changed=false;
+  cards.filter(c=>c.type==="meeting"&&c.col==="upcoming").forEach(c=>{
+    const endAt=getMeetingEndAt(c);
+    if(endAt&&endAt<now){
+      c.col="done";c.completedAt=now.getTime();
+      if(c.gcalEventId){
+        callCalServer("update",{...buildCalData(c),resultNote:c.resultNote||"",completed:true}).then(eventId=>{
+          if(eventId&&eventId!==c.gcalEventId){c.gcalEventId=eventId;saveLocal();}
+        });
+      }
+      if(c.recurrence&&c.recurrence.type!=="flexible"){
+        const nextDate=getNextDate(c.date,c.recurrence);
+        if(nextDate){
+          const nextDates=getRecurringMeetingDates(c,nextDate);
+          const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDates.date,dateEnd:nextDates.dateEnd};
+          delete nm.completedAt;delete nm.resultNote;delete nm.gcalEventId;cards.push(nm);
+          callCalServer("create",buildCalData(nm)).then(eventId=>{
+            if(eventId){nm.gcalEventId=eventId;saveLocal();}
+          });
+        }
+      }
+      changed=true;
+    }
+  });
+  if(changed)saveC();
+}
+ 
+// ════════════════════════════════════════════════════
+//  MONTHLY HISTORY
+// ════════════════════════════════════════════════════
+function getCurrentMonthKey(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+function getPrevMonthKey(){
+  const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+function monthKeyFromTs(ts){
+  if(!ts)return "";
+  const d=new Date(ts);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+function monthLabel(key){
+  const [y,m]=key.split("-");
+  const names=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  return names[parseInt(m)-1]+" "+y.slice(2);
+}
+ 
+function checkMonthlyClose(){
+  const lastClose=localStorage.getItem(LAST_CLOSE_KEY)||"";
+  const prevMonth=getPrevMonthKey();
+  const banner=document.getElementById("close-banner");
+  // Show banner if prev month not closed and there are items to close
+  const doneCount=cards.filter(c=>c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===prevMonth).length;
+  const cancCount=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===prevMonth).length;
+  if(lastClose!==getPrevMonthKey()&&(doneCount+cancCount)>0&&!monthlyHistory[prevMonth]){
+    document.getElementById("close-banner-text").textContent=
+      `🗓️ ¿Cerrar el mes ${monthLabel(prevMonth)}? Hay ${doneCount} completadas y ${cancCount} canceladas para archivar.`;
+    banner.style.display="flex";
+  }
+}
+ 
+function dismissBanner(){document.getElementById("close-banner").style.display="none";}
+ 
+function closeMonth(){
+  const monthKey=getPrevMonthKey();
+  const doneItems=cards.filter(c=>c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===monthKey);
+  const cancItems=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===monthKey);
+  const activeItems=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting"&&monthKeyFromTs(c.createdAt)===monthKey);
+  const loaded=doneItems.length+cancItems.length+activeItems.length;
+ 
+  monthlyHistory[monthKey]={
+    loaded,
+    completed:doneItems.length,
+    cancelled:cancItems.length,
+    closedAt:new Date().toISOString()
+  };
+ 
+  // Keep only last 12 months
+  const keys=Object.keys(monthlyHistory).sort().slice(-12);
+  const trimmed={};keys.forEach(k=>trimmed[k]=monthlyHistory[k]);
+  monthlyHistory=trimmed;
+ 
+  // Archive done and cancelled → mark as archived
+  cards.filter(c=>(c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===monthKey)||(c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===monthKey)).forEach(c=>{
+    c.col="archived";c.archivedMonth=monthKey;
+  });
+ 
+  localStorage.setItem(LAST_CLOSE_KEY,monthKey);
+  saveHistory();saveC();
+  document.getElementById("close-banner").style.display="none";
+  render();showToast(`✅ Mes ${monthLabel(monthKey)} archivado`);
+}
+ 
+// ════════════════════════════════════════════════════
+//  PAPELERA
+// ════════════════════════════════════════════════════
+function cleanTrash(){
+  const n=cards.length;
+  cards=cards.filter(c=>c.col!=="trash"||(c.trashedAt&&(Date.now()-c.trashedAt)<TRASH_MS));
+  if(cards.length<n)saveLocal();
+}
+function daysLeft(c){if(!c.trashedAt)return 7;return Math.max(0,7-Math.floor((Date.now()-c.trashedAt)/86400000));}
+function askConfirmDel(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  pendingDelId=id;
+  document.getElementById("confirm-msg").textContent=`"${c.title}" será eliminada permanentemente.`;
+  document.getElementById("confirm-modal").style.display="flex";
+}
+function closeConfirm(){document.getElementById("confirm-modal").style.display="none";pendingDelId=null;}
+function confirmDelete(){
+  if(pendingDelId===null)return;
+  cards=cards.filter(c=>c.id!==pendingDelId);
+  saveC();render();closeConfirm();showToast("🗑️ Eliminada permanentemente");
+}
+function emptyTrash(){
+  if(!confirm("¿Vaciar la papelera? No se puede deshacer."))return;
+  cards=cards.filter(c=>c.col!=="trash");saveC();render();showToast("🗑️ Papelera vaciada");
+  if(document.getElementById("hist-sheet").classList.contains("open"))renderHistList("trash");
+}
+ 
+// ════════════════════════════════════════════════════
+//  GOOGLE CALENDAR SYNC
+// ════════════════════════════════════════════════════
+ 
+// ── Debug log para Calendar sync ─────────────────
+let calDebugLog=[];
+ 
+// ── Calendar menu (simplified - button is now direct link) ──
+function toggleCalMenu(e){if(e)e.stopPropagation();}
+function closeCalMenu(){}
+ 
+// ── Build Cal data from a card ────────────────────
+function buildCalData(c){
+  if(c.type==="meeting"){
+    return{
+      type:"meeting",title:c.title,area:c.area,
+      date:c.date,dateEnd:c.dateEnd||null,
+      time:c.dateEnd?"":c.time||"",
+      place:c.place||"",participants:c.participants||"",
+      agenda:c.agenda||"",alarm:c.alarm||1440,
+      gcalEventId:c.gcalEventId||null
+    };
+  }
+  return{
+    type:"task",title:c.title,area:c.area,
+    due:c.due,note:c.note||"",
+    alarm:c.alarm||1440,
+    gcalEventId:c.gcalEventId||null
+  };
+}
+ 
+// ── Bulk sync: create/update/delete all ──────────
+async function bulkSyncCalendar(){
+  if(!scriptUrl||!hmacKey){
+    showToast("⚠️ Drive no configurado — conectá Drive primero");
+    closeCalMenu();return;
+  }
+  calDebugLog=[];
+  const progress=document.getElementById("cal-progress");
+  if(progress){progress.style.display="block";progress.textContent="🔄 Iniciando...";}
+ 
+  // Items to SYNC (active, with date, not flexible)
+  const toSync=cards.filter(c=>{
+    if(["done","cancelled","trash","archived"].includes(c.col))return false;
+    if(c.type==="meeting"&&!c.date)return false;
+    if(c.type!=="meeting"&&!c.due)return false;
+    if(c.recurrence&&c.recurrence.type==="flexible")return false;
+    return true;
+  });
+ 
+  // Items to DELETE from Cal (done/cancelled/trash WITH gcalEventId)
+  const toDelete=cards.filter(c=>
+    ["done","cancelled","trash"].includes(c.col)&&c.gcalEventId
+  );
+ 
+  const total=toSync.length+toDelete.length;
+  let synced=0,cleaned=0,errors=0;
+ 
+  // Step 1: Clean up completed/cancelled events
+  progress.textContent=`🔄 Limpiando eventos completados (0/${toDelete.length})...`;
+  for(const c of toDelete){
+    try{
+      await callCalServer("delete",{gcalEventId:c.gcalEventId});
+      c.gcalEventId=null;cleaned++;
+      progress.textContent=`🔄 Limpiando (${cleaned}/${toDelete.length})...`;
+    }catch(err){errors++;console.warn("Delete error:",c.title,err.message);}
+  }
+ 
+  // Step 2: Create/update active items
+  progress.textContent=`🔄 Sincronizando ítems activos (0/${toSync.length})...`;
+  for(const c of toSync){
+    try{
+      const op=c.gcalEventId?"update":"create";
+      const calData=buildCalData(c);
+      const eventId=await callCalServer(op,calData);
+      if(eventId){
+        if(eventId!==c.gcalEventId)c.gcalEventId=eventId;
+        synced++;
+      }else if(op==="update"&&c.gcalEventId){
+        // update returns null on success too sometimes — count it
+        synced++;
+      }else{
+        errors++;
+      }
+      progress.textContent=`🔄 Sincronizando (${synced}/${toSync.length})...`;
+    }catch(err){errors++;console.warn("Sync error:",c.title,err.message);}
+  }
+ 
+  saveLocal();
+  render();
+  if(progress){progress.style.display="none";}
+ 
+  // Show log button if there were errors
+  const logBtn=document.getElementById("cal-log-btn");
+  if(logBtn)logBtn.style.display=errors>0?"flex":"none";
+ 
+  const msg="✅ "+synced+" sincronizados · 🗑️ "+cleaned+" eliminados"
+    +(errors?" · ⚠️ "+errors+' errores — tocá "Ver errores"' :"");
+  showToast(msg,5000);
+ 
+  // Auto-show log if all failed
+  if(synced===0&&errors>0){
+    setTimeout(()=>showCalLog(),500);
+  }
+}
+ 
+async function callCalServer(op, calData){
+  if(!scriptUrl||!hmacKey){
+    calDebugLog.push("NO_CONFIG: sin URL o clave secreta");
+    return null;
+  }
+  const itemTitle=(calData.title||calData.gcalEventId||op||"?").slice(0,40);
+  try{
+    const ts=Date.now();
+    const message="calEvent|"+ts;
+    const sig=await computeHMAC(message,hmacKey);
+    const payload={action:"calEvent",ts,sig,data:{op,...calData}};
+    const resp=await fetch(scriptUrl,{method:"POST",redirect:"follow",body:JSON.stringify(payload)});
+    const rawText=await resp.text();
+    if(!resp.ok){
+      calDebugLog.push("HTTP_ERROR "+resp.status+" | "+op+" | "+itemTitle+" | "+rawText.slice(0,80));
+      return null;
+    }
+    let result;
+    try{result=JSON.parse(rawText);}
+    catch(e){
+      calDebugLog.push("JSON_ERROR | "+op+" | "+itemTitle+" | raw:"+rawText.slice(0,80));
+      return null;
+    }
+    if(result.error){
+      calDebugLog.push("SERVER_ERROR | "+op+" | "+itemTitle+" | "+result.error);
+      return null;
+    }
+    calDebugLog.push("OK | "+op+" | "+itemTitle);
+    return result.gcalEventId||null;
+  }catch(err){
+    calDebugLog.push("EXCEPTION | "+op+" | "+itemTitle+" | "+err.message);
+    return null;
+  }
+}
+ 
+ 
+// ── Test connection ───────────────────────────────
+async function testCalConnection(){
+  if(!scriptUrl){showToast("⚠️ Configurá Drive primero");return;}
+  const progress=document.getElementById("cal-progress");
+  if(progress){progress.style.display="block";progress.textContent="🧪 Probando...";}
+  calDebugLog=[];
+  try{
+    const resp=await fetch(scriptUrl,{redirect:"follow"});
+    const text=await resp.text();
+    let result;
+    try{result=JSON.parse(text);}catch(e){result={raw:text.slice(0,200)};}
+    if(progress)progress.style.display="none";
+    calDebugLog.push("GET "+scriptUrl.slice(0,60)+"...");
+    calDebugLog.push("HTTP: "+resp.status);
+    calDebugLog.push("Respuesta: "+JSON.stringify(result));
+    showCalLog();
+  }catch(err){
+    if(progress)progress.style.display="none";
+    calDebugLog.push("❌ Error de red: "+err.message);
+    calDebugLog.push("URL: "+scriptUrl);
+    showCalLog();
+  }
+}
+ 
+// ── Show debug log ────────────────────────────────
+function showCalLog(){
+  closeCalMenu();
+  const el=document.getElementById("cal-debug-content");
+  if(el)el.textContent=calDebugLog.length?calDebugLog.join("\n\n"):"(sin entradas en el log)";
+  document.getElementById("cal-debug-modal").style.display="flex";
+}
+ 
+// ════════════════════════════════════════════════════
+//  CONFIG EXPORT / IMPORT (claves y URLs)
+// ════════════════════════════════════════════════════
+function exportConfig(){
+  const cfg={
+    type:"dragon-config-v1",
+    exported:new Date().toISOString(),
+    note:"Guardá este archivo en un lugar seguro. Contiene tus claves de acceso.",
+    ak: apiKey||"",
+    driveUrl: scriptUrl||"",
+    driveKey: hmacKey||""
+  };
+  const blob=new Blob([JSON.stringify(cfg,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="dragon-config-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("💾 Claves exportadas — guardá el archivo!");
+}
+ 
+function importConfig(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const cfg=JSON.parse(ev.target.result);
+      if(cfg.type!=="dragon-config-v1")throw new Error("Archivo inválido");
+      let msg="¿Cargar esta configuración?\n";
+      if(cfg.ak)msg+="\n✅ API key de Bian";
+      if(cfg.driveUrl)msg+="\n✅ URL de Drive";
+      if(cfg.driveKey)msg+="\n✅ Clave de Drive";
+      if(!confirm(msg))return;
+      if(cfg.ak){
+        apiKey=cfg.ak;
+        localStorage.setItem(AKKEY,cfg.ak);
+        document.getElementById("apirow").style.display="none";
+      }
+      if(cfg.driveUrl){
+        scriptUrl=cfg.driveUrl;
+        localStorage.setItem(DRIVE_URL,cfg.driveUrl);
+      }
+      if(cfg.driveKey){
+        hmacKey=cfg.driveKey;
+        localStorage.setItem(DRIVE_KEY,cfg.driveKey);
+      }
+      // Update UI indicators
+      if(scriptUrl&&hmacKey){
+        const di=document.getElementById("drive-menu-item");
+        if(di)di.style.color="var(--green)";
+        setSyncBar("saved");
+        loadFromDrive().then(loaded=>{if(loaded)render();});
+      }
+      showToast("✅ Claves cargadas correctamente");
+    }catch(err){showToast("⚠️ Error: "+err.message);}
+    e.target.value="";
+  };
+  r.readAsText(file);
+}
+ 
+// ════════════════════════════════════════════════════
+//  EXPORT / IMPORT
+// ════════════════════════════════════════════════════
+function exportData(){
+  const blob=new Blob([JSON.stringify({v:"dtdl-5",date:new Date().toISOString(),cards,areas:AREAS,history:monthlyHistory},null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="dragon-todo-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast("📤 Backup exportado");
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);if(!d.cards)throw new Error("Formato inválido");
+      if(!confirm(`¿Importar backup del ${d.date?.slice(0,10)||"archivo"}?\n${d.cards.length} tareas.`))return;
+      cards=d.cards;if(d.areas)AREAS=d.areas;if(d.history)monthlyHistory=d.history;
+      saveC();saveAreas();saveHistory();render();fillAreaSel("m-area","");
+      showToast(`✅ ${cards.length} ítems importados`);
+    }catch(err){showToast("⚠️ Error: "+err.message);}
+    e.target.value="";
+  };r.readAsText(file);
+}
+function exportICS(){
+  const items=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&(c.due||c.date));
+  if(!items.length){showToast("⚠️ No hay ítems con fecha");return;}
+  let ics="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//DragonToDo//Martin//ES\r\n";
+  items.forEach(c=>{
+    const dateStr=c.due||c.date;const d=dateStr.replace(/-/g,"");
+    const end=new Date(dateStr+"T12:00:00");end.setDate(end.getDate()+1);const ed=end.toISOString().slice(0,10).replace(/-/g,"");
+    ics+=`BEGIN:VEVENT\r\nUID:dtdl-${c.id}@martin\r\nSUMMARY:${c.type==="meeting"?"📅":"🐉"} ${c.title} [${c.area}]\r\nDESCRIPTION:${(c.note||c.agenda||"").replace(/\n/g,"\\n")}\r\nDTSTART;VALUE=DA...
+  });
+  ics+="END:VCALENDAR";
+  const blob=new Blob([ics],{type:"text/calendar"});const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="dragon-todo.ics";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast(`📅 ${items.length} ítems exportados`);
+}
+ 
+// ════════════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════════════
+function showToast(msg,dur=2800){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),dur);
+}
+ 
+// ════════════════════════════════════════════════════
+//  TABS
+// ════════════════════════════════════════════════════
+function setTab(t){
+  tab=t;
+  document.querySelectorAll(".tab").forEach(el=>el.classList.remove("active"));
+  document.getElementById("tab-"+t).classList.add("active");
+  render();
+}
+function getCat(area){return(AREAS[area]||{cat:"Personal"}).cat;}
+ 
+// ════════════════════════════════════════════════════
+//  MEETINGS RENDER
+// ════════════════════════════════════════════════════
+function renderMeetings(){
+  const el=document.getElementById("meetings-list");
+  const meetings=cards
+    .filter(c=>{
+      if(c.type!=="meeting"||c.col!=="upcoming")return false;
+      if(tab!=="ALL"&&tab!=="stats"&&getCat(c.area)!==tab)return false;
+      return true;
+    })
+    .sort((a,b)=>new Date((a.date||"9999-12-31")+"T"+(a.time||"00:00"))-new Date((b.date||"9999-12-31")+"T"+(b.time||"00:00")));
+ 
+  document.getElementById("no-meetings").style.display=meetings.length?"none":"";
+  // Remove existing cards (keep no-meetings span)
+  el.querySelectorAll(".meeting-card").forEach(e=>e.remove());
+ 
+  meetings.forEach(m=>{
+    const a=AREAS[m.area]||{c:"#999",e:"🔷"};
+    const div=document.createElement("div");
+    div.className="meeting-card";
+    div.style.borderTopColor=a.c;
+    const dateStr=m.date?new Date(m.date+"T12:00:00").toLocaleDateString("es-AR",{weekday:"short",day:"numeric",month:"short"}):"Sin fecha";
+    const dateEndStr=m.dateEnd?new Date(m.dateEnd+"T12:00:00").toLocaleDateString("es-AR",{weekday:"short",day:"numeric",month:"short"}):"";
+    const timeStr=m.time&&!m.dateEnd?m.time:"";
+    // Calcular duración si es multi-día
+    let durationStr="";
+    if(m.date&&m.dateEnd){
+      const d1=new Date(m.date+"T12:00:00"),d2=new Date(m.dateEnd+"T12:00:00");
+      const days=Math.round((d2-d1)/86400000)+1;
+      durationStr=` · ${days} días`;
+    }
+    const isFlexMeetingAlert=m.recurrence&&m.recurrence.type==="flexible"&&!m.date;
+    const recurBadge=m.recurrence?`<span class="mbadge ${m.recurrence.type==="flexible"?"flex"+(isFlexMeetingAlert?" ftag-alert":""):"recur"}">${m.recurrence.type==="flexible"?"🕐 "+(m.recurrence.f...
+    const partic=m.participants?`<span class="mbadge" style="background:var(--bg4);color:var(--muted)">👥 ${m.participants.split(",").length}</span>`:"";
+    div.innerHTML=`
+      <div class="meeting-title">${esc(m.title)}</div>
+      <div class="meeting-meta">📅 ${dateStr}${dateEndStr?" → "+dateEndStr+durationStr:timeStr?" · ⏰ "+timeStr:""}</div>
+      ${m.place?`<div class="meeting-meta">📍 ${esc(m.place)}</div>`:""}
+      ${m.participants?`<div class="meeting-meta">👥 ${esc(m.participants)}</div>`:""}
+      <div class="meeting-badges">
+        <span class="mbadge area" style="background:${a.c}18;color:${a.c}">${a.e} ${m.area}</span>
+        ${recurBadge}${partic}
+        ${m.gcalEventId?'<span class="mbadge" style="background:var(--greenl);color:var(--green)">📆 Cal</span>':''}
+      </div>
+      ${m.agenda?`<div class="meeting-agenda">${esc(m.agenda).replace(/\n/g,"<br>")}</div>`:""}
+      <div class="meeting-acts">
+        <button onclick="openEditMeeting(${m.id})" title="Editar">✏️</button>
+        <button class="ok" onclick="doneMeeting(${m.id})" title="Marcar realizada">✅</button>
+        <button class="cx" onclick="cancelMeeting(${m.id})" title="Cancelar">⊘</button>
+        <button class="tr" onclick="trashMeeting(${m.id})" title="Papelera">🗑️</button>
+        ${m.agenda?`<button onclick="toggleAgenda(this)" title="Ver agenda" style="margin-left:auto">📋</button>`:""}
+      </div>`;
+    el.appendChild(div);
+  });
+}
+ 
+function toggleAgenda(btn){
+  const card=btn.closest(".meeting-card");
+  card.classList.toggle("expanded");
+  btn.textContent=card.classList.contains("expanded")?"📋 cerrar":"📋 agenda";
+}
+ 
+// ════════════════════════════════════════════════════
+//  BOARD RENDER
+// ════════════════════════════════════════════════════
+function render(){
+  if(tab==="stats"){renderStats();return;}
+  renderMeetings();
+ 
+  const vis=tab==="ALL"
+    ?cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting")
+    :cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting"&&getCat(c.area)===tab);
+ 
+  ["urgent","active","pending"].forEach(col=>{
+    const list=vis.filter(c=>c.col===col).sort((a,b)=>{
+      const ad=a.due||a.date||null;
+      const bd=b.due||b.date||null;
+      if(!ad&&!bd)return 0;   // ambas sin fecha → orden de carga
+      if(!ad)return 1;         // sin fecha → al fondo
+      if(!bd)return -1;        // con fecha → arriba
+      return new Date(ad)-new Date(bd); // más próxima primero
+    });
+    document.getElementById("cc-"+col).textContent=list.length;
+    document.getElementById("cc-"+col+"-list").innerHTML=list.map(cardHtml).join("");
+  });
+ 
+  const board=document.getElementById("board");
+  board.querySelectorAll(".empty-board").forEach(e=>e.remove());
+  if(vis.length===0){
+    const div=document.createElement("div");div.className="empty-board";
+    div.innerHTML=`<div class="big">🐉</div><p>Sin tareas aquí.<br>Tocá <strong>+ TAREA</strong> para empezar.</p>`;
+    board.appendChild(div);
+  }
+ 
+  const alive=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting");
+  document.getElementById("tc-ALL").textContent=alive.length;
+  ["UNSJ","Scouts","Personal","Empresas"].forEach(k=>{
+    const el=document.getElementById("tc-"+k);
+    if(el)el.textContent=alive.filter(c=>getCat(c.area)===k).length;
+  });
+ 
+  updateHistBadges();
+}
+ 
+function renderArch(st,list){
+  const el=document.getElementById("list-"+st);
+  if(st==="trash"){
+    let html=list.map(c=>{
+      const a=AREAS[c.area]||{e:"🔧"};const dl=daysLeft(c);
+      return `<div class="di td"><span>${a.e}</span><span class="dit">${esc(c.title)}</span>
+        <span class="days-left ${dl<=2?"urg":""}">${dl}d</span>
+        <button onclick="moveTo(${c.id},'pending')" title="Restaurar">↩</button>
+        <button onclick="askConfirmDel(${c.id})" title="Eliminar permanente">🗑️</button></div>`;
+    }).join("");
+    if(list.length)html+=`<button class="trash-empty" onclick="emptyTrash()">Vaciar papelera</button>`;
+    el.innerHTML=html;
+  }else{
+    el.innerHTML=list.map(c=>{
+      const a=AREAS[c.area]||{e:"🔧"};
+      return `<div class="di ${st==="done"?"dd":"cd"}"><span>${a.e}</span><span class="dit">${esc(c.title)}</span>
+        <button onclick="moveTo(${c.id},'pending')" title="Restaurar">↩</button>
+        <button onclick="moveToTrash(${c.id})" title="A papelera">🗑️</button></div>`;
+    }).join("");
+  }
+}
+ 
+function cardHtml(c){
+  const a=AREAS[c.area]||{c:"#999",e:"🔷"};
+  const others=[{id:"urgent",ic:"🔥"},{id:"active",ic:"⚙️"},{id:"pending",ic:"📋"}].filter(o=>o.id!==c.col);
+  let dHtml="",gcalHtml="";
+  if(c.due){
+    const due=new Date(c.due+"T12:00:00"),td=new Date();td.setHours(0,0,0,0);
+    const diff=Math.round((due-td)/86400000);
+    const cls=diff<0?"ov":diff<=3?"soon":"";
+    const lbl=diff<0?`vencida ${-diff}d`:diff===0?"hoy":`en ${diff}d`;
+    const url=buildGCalUrl(c);
+    dHtml=`<a class="dtag ${cls}" href="${url}" target="_blank">📅 ${lbl}</a>`;
+    gcalHtml=`<button class="gcal-btn" onclick="window.open('${url}','_blank')">📆+Cal</button>`;
+  }else{
+    gcalHtml=`<button class="gcal-btn" onclick="openEdit(${c.id})">📅 fecha</button>`;
+  }
+  // Flexible alert: pulse if no due date
+  const isFlexAlert=c.recurrence&&c.recurrence.type==="flexible"&&!c.due;
+  const recurTag=c.recurrence?`<span class="${c.recurrence.type==="flexible"?"ftag"+(isFlexAlert?" ftag-alert":""):" rtag"}">${c.recurrence.type==="flexible"?"🕐 "+(c.recurrence.flexNote||"A conven...
+  const ageStr=formatAge(c.createdAt);
+  return `<div class="card" id="card-${c.id}" draggable="true"
+    ondragstart="dStart(event,${c.id})" ondragend="dEnd()"
+    ondragover="cardDragOver(event,${c.id})"
+    ondragleave="cardDragLeave(event,${c.id})"
+    ondrop="cardDrop(event,${c.id})"
+    style="border-left-color:${a.c}">
+    <div class="card-title">${esc(c.title)}</div>
+    ${c.note?`<div class="card-note">${esc(c.note)}</div>`:""}
+    <div class="card-foot">
+      <span class="atag" style="background:${a.c}18;color:${a.c}">${a.e} ${c.area}</span>
+      ${dHtml}${gcalHtml}${recurTag}
+      ${c.gcalEventId?'<span style="font-family:var(--fm);font-size:9px;color:var(--green)">📆</span>':''}
+    </div>
+    <div class="card-acts">
+      ${others.map(o=>`<button class="cbtn" onclick="moveTo(${c.id},'${o.id}')">→${o.ic}</button>`).join("")}
+      <button class="cbtn ed" onclick="openEdit(${c.id})">✏️</button>
+      <button class="cbtn ok" onclick="doneit(${c.id})">✓</button>
+      <button class="cbtn cx" onclick="cancelit(${c.id})">⊘</button>
+      <button class="cbtn tr" onclick="moveToTrash(${c.id})">🗑️</button>
+    </div>
+    ${ageStr?`<div class="card-age">📌 ${ageStr}</div>`:""}
+  </div>`;
+}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+ 
+function formatAge(ts){
+  if(!ts)return "";
+  const days=Math.floor((Date.now()-ts)/86400000);
+  if(days<1)return "";
+  if(days===1)return "ayer";
+  if(days<7)return "hace "+days+"d";
+  const weeks=Math.floor(days/7);
+  if(weeks<5)return "hace "+weeks+"sem";
+  return "hace "+Math.floor(days/30)+"m";
+}
+function buildGCalUrl(c){
+  const t=encodeURIComponent("🐉 "+c.title+" ["+c.area+"]");
+  const det=encodeURIComponent((c.note||"")+" | Dragon To Do List");
+  let dates="";
+  if(c.due){const d=c.due.replace(/-/g,"");const end=new Date(c.due+"T12:00:00");end.setDate(end.getDate()+1);dates=`&dates=${d}/${end.toISOString().slice(0,10).replace(/-/g,"")}`;}
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${t}&details=${det}${dates}`;
+}
+ 
+// ════════════════════════════════════════════════════
+//  STATS RENDER
+// ════════════════════════════════════════════════════
+function renderStats(){
+  const now=new Date();
+  const currentMonth=getCurrentMonthKey();
+ 
+  // Helper: is timestamp in current month?
+  function inCurrentMonth(ts){
+    if(!ts)return false;
+    const d=new Date(ts);
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")===currentMonth;
+  }
+ 
+  // KPIs
+  const allTasks=cards.filter(c=>c.type!=="meeting");
+  const thisDone=allTasks.filter(c=>c.col==="done"&&inCurrentMonth(c.completedAt));
+  const thisCancelled=allTasks.filter(c=>c.col==="cancelled"&&inCurrentMonth(c.cancelledAt));
+  const totalThisMonth=thisDone.length+thisCancelled.length;
+  const pctDone=totalThisMonth>0?Math.round(thisDone.length/totalThisMonth*100):0;
+  const activeCount=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting").length;
+ 
+  // Meetings this week
+  const weekStart=new Date(now);
+  weekStart.setDate(now.getDate()-now.getDay());
+  weekStart.setHours(0,0,0,0);
+  const weekEnd=new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate()+7);
+  const meetingsThisWeek=cards.filter(function(c){
+    if(c.type!=="meeting"||c.col!=="upcoming"||!c.date)return false;
+    const d=new Date(c.date+"T12:00:00");
+    return d>=weekStart&&d<weekEnd;
+  }).length;
+ 
+  document.getElementById("kpi-pct").textContent=pctDone+"%";
+  document.getElementById("kpi-active").textContent=activeCount;
+  document.getElementById("kpi-meetings").textContent=meetingsThisWeek;
+ 
+  // Build 12-month data (history + current live month)
+  const liveMonthData={
+    loaded:allTasks.filter(c=>c.col!=="trash").length,
+    completed:thisDone.length,
+    cancelled:thisCancelled.length,
+    live:true
+  };
+  const allMonths=Object.assign({},monthlyHistory);
+  allMonths[currentMonth]=liveMonthData;
+  const sortedKeys=Object.keys(allMonths).sort().slice(-12);
+ 
+  // Chart
+  const chartWrap=document.getElementById("stats-chart");
+  chartWrap.innerHTML="";
+  let maxVal=1;
+  sortedKeys.forEach(function(k){
+    const m=allMonths[k];
+    const v=Math.max(m.completed||0,m.cancelled||0);
+    if(v>maxVal)maxVal=v;
+  });
+ 
+  sortedKeys.forEach(function(k){
+    const m=allMonths[k];
+    const hDone=Math.round(((m.completed||0)/maxVal)*80);
+    const hCanc=Math.round(((m.cancelled||0)/maxVal)*80);
+    const col=document.createElement("div");
+    col.className="chart-col";
+    col.innerHTML='<div class="chart-bars">'
+      +'<div class="bar-done" style="height:'+hDone+'px" title="'+(m.completed||0)+' completadas"></div>'
+      +'<div class="bar-canc" style="height:'+hCanc+'px" title="'+(m.cancelled||0)+' canceladas"></div>'
+      +'</div>'
+      +'<div class="chart-lbl">'+monthLabel(k)+'</div>';
+    chartWrap.appendChild(col);
+  });
+ 
+  // Table
+  const tbody=document.getElementById("stats-tbody");
+  const rows=sortedKeys.slice().reverse().map(function(k){
+    const m=allMonths[k];
+    const pctC=m.loaded>0?Math.round((m.completed||0)/m.loaded*100):0;
+    const pctX=m.loaded>0?Math.round((m.cancelled||0)/m.loaded*100):0;
+    const isLive=(k===currentMonth);
+    const style=isLive?' style="font-weight:700"':'';
+    return '<tr'+style+'>'
+      +'<td>'+monthLabel(k)+(isLive?' 🟢':'')+'</td>'
+      +'<td>'+(m.loaded||0)+'</td>'
+      +'<td><span class="pct-bar" style="background:var(--green);width:'+pctC+'px"></span> '+(m.completed||0)+' <span style="color:var(--green);font-weight:600">('+pctC+'%)</span></td>'
+      +'<td><span class="pct-bar" style="background:var(--red);width:'+pctX+'px"></span> '+(m.cancelled||0)+' <span style="color:var(--red);font-weight:600">('+pctX+'%)</span></td>'
+      +'</tr>';
+  });
+  tbody.innerHTML=rows.join('');
+}
+// ════════════════════════════════════════════════════
+//  NOTIFICACIONES
+// ════════════════════════════════════════════════════
+function toggleNotif(){
+  if(!("Notification" in window)){showToast("⚠️ Sin soporte");return;}
+  if(Notification.permission==="granted"){checkNotif();showToast("🐉 Bian revisando...");}
+  else Notification.requestPermission().then(p=>{
+    if(p==="granted"){const b=document.getElementById("notif-menu-item");if(b)b.style.color="var(--green)";checkNotif();showToast("✅ Notificaciones ON");}
+    else showToast("⚠️ Permiso denegado");
+  });
+}
+function checkNotif(){
+  if(Notification.permission!=="granted")return;
+  const last=parseInt(localStorage.getItem("dtdl-nl")||"0");
+  if(Date.now()-last<3600000)return;
+  const today=new Date();today.setHours(0,0,0,0);let n=0;
+  cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.due).forEach(c=>{
+    if(n>=3)return;
+    const diff=Math.round((new Date(c.due+"T12:00:00")-today)/86400000);
+    if(diff<0){new Notification("🐉 Bian — Vencida",{body:`${c.title} · ${c.area}`,tag:"dtdl-"+c.id});n++;}
+    else if(diff<=2){new Notification(`🐉 Bian — Vence ${diff===0?"hoy":diff===1?"mañana":"en 2d"}`,{body:`${c.title} · ${c.area}`,tag:"dtdl-"+c.id});n++;}
+  });
+  // Meetings today
+  const todayStr=today.toISOString().slice(0,10);
+  cards.filter(c=>c.type==="meeting"&&c.col==="upcoming"&&c.date===todayStr).forEach(c=>{
+    if(n>=5)return;
+    new Notification("📅 Reunión hoy — "+c.time,{body:`${c.title}${c.place?" · "+c.place:""}`,tag:"meet-"+c.id});n++;
+  });
+  if(n)localStorage.setItem("dtdl-nl",Date.now().toString());
+}
+ 
+// ════════════════════════════════════════════════════
+//  ACCIONES TAREAS
+// ════════════════════════════════════════════════════
+function moveTo(id,col){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  c.col=col;if(col!=="trash")delete c.trashedAt;
+  saveC();render();
+}
+function moveToTrash(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  if(c.gcalEventId){callCalServer("delete",{gcalEventId:c.gcalEventId});c.gcalEventId=null;}
+  c.col="trash";c.trashedAt=Date.now();
+  saveC();render();showToast("🗑️ En papelera · 7 días para recuperar");
+}
+ 
+function doneit(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  c.col="done";c.completedAt=Date.now();
+  // Delete Cal event (deadline no longer needed)
+  if(c.gcalEventId){
+    callCalServer("delete",{gcalEventId:c.gcalEventId});
+    c.gcalEventId=null;
+  }
+  // Generate next instance if recurring
+  if(c.recurrence&&c.recurrence.type!=="flexible"&&c.due){
+    const nextDate=getNextDate(c.due,c.recurrence);
+    if(nextDate){
+      const newTask={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"pending",due:nextDate};
+      delete newTask.completedAt;delete newTask.gcalEventId;
+      // Create Cal event for next deadline
+      callCalServer("create",{
+        type:"task",title:newTask.title,area:newTask.area,
+        due:newTask.due,note:newTask.note||""
+      }).then(eventId=>{if(eventId){newTask.gcalEventId=eventId;saveLocal();}});
+      cards.push(newTask);
+      showToast("✅ Completada · próxima: "+nextDate+" · 📆 Cal actualizado");
+    }else showToast("✅ ¡Completada!");
+  }else showToast("✅ ¡Completada!");
+  saveC();render();
+}
+ 
+function cancelit(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  if(c.gcalEventId){callCalServer("delete",{gcalEventId:c.gcalEventId});c.gcalEventId=null;}
+  c.col="cancelled";c.cancelledAt=Date.now();
+  saveC();render();showToast("⊘ Cancelada");
+}
+ 
+// ════════════════════════════════════════════════════
+//  ACCIONES REUNIONES
+// ════════════════════════════════════════════════════
+function doneMeeting(id){
+  // Show result modal before completing
+  pendingDoneMeetingId=id;
+  document.getElementById("mtresult-note").value="";
+  document.getElementById("mtresult-modal").style.display="flex";
+  setTimeout(()=>document.getElementById("mtresult-note").focus(),80);
+}
+ 
+function confirmDoneMeeting(withNote){
+  const id=pendingDoneMeetingId;
+  const note=withNote?document.getElementById("mtresult-note").value.trim():"";
+  document.getElementById("mtresult-modal").style.display="none";
+  pendingDoneMeetingId=null;
+  
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  c.col="done";c.completedAt=Date.now();
+  if(note)c.resultNote=note;
+ 
+  // Update Google Calendar event with result note
+  if(c.gcalEventId){
+    callCalServer("update",{...buildCalData(c),resultNote:note||"",completed:true}).then(eventId=>{
+      if(eventId&&eventId!==c.gcalEventId){c.gcalEventId=eventId;saveLocal();}
+    });
+  }
+ 
+  if(c.recurrence&&c.recurrence.type!=="flexible"&&c.date){
+    const nextDate=getNextDate(c.date,c.recurrence);
+    if(nextDate){
+      const nextDates=getRecurringMeetingDates(c,nextDate);
+      const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDates.date,dateEnd:nextDates.dateEnd};
+      delete nm.completedAt;delete nm.resultNote;delete nm.gcalEventId;
+      // Create Cal event for next occurrence
+      callCalServer("create",buildCalData(nm)).then(eventId=>{if(eventId){nm.gcalEventId=eventId;saveLocal();}});
+      cards.push(nm);
+      showToast("✅ Reunión archivada · próxima: "+nextDate);
+    }else showToast("✅ Reunión archivada");
+  }else showToast("✅ Reunión archivada"+(note?" · nota guardada":""));
+  saveC();render();
+}
+function cancelMeeting(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  if(c.gcalEventId){callCalServer("delete",{gcalEventId:c.gcalEventId});c.gcalEventId=null;}
+  c.col="cancelled";c.cancelledAt=Date.now();
+  saveC();render();showToast("⊘ Reunión cancelada · 📆 Cal actualizado");
+}
+function trashMeeting(id){moveToTrash(id);}
+ 
+// ════════════════════════════════════════════════════
+//  DRAG
+// ════════════════════════════════════════════════════
+function dStart(e,id){dragId=id;setTimeout(()=>{const el=document.getElementById("card-"+id);if(el)el.classList.add("dragging");},0);}
+function dEnd(){if(dragId){const el=document.getElementById("card-"+dragId);if(el)el.classList.remove("dragging");dragId=null;}}
+function dragOver(e,col){e.preventDefault();document.getElementById("col-"+col).classList.add("drag-over");}
+function dragLeave(e,col){document.getElementById("col-"+col).classList.remove("drag-over");}
+function drop(e,col){e.preventDefault();document.getElementById("col-"+col).classList.remove("drag-over");if(dragId!==null){moveTo(dragId,col);dragId=null;}}
+ 
+// ════════════════════════════════════════════════════
+//  MODAL TAREA
+// ════════════════════════════════════════════════════
+function fillAreaSel(selId,cur){
+  const sel=document.getElementById(selId);
+  const cats=["UNSJ","Scouts","Personal","Empresas"];let html="";
+  cats.forEach(cat=>{
+    const items=Object.entries(AREAS).filter(([,v])=>v.cat===cat);
+    if(!items.length)return;
+    html+=`<optgroup label="— ${cat} —">${items.map(([k,v])=>`<option value="${k}" ${k===cur?"selected":""}>${v.e} ${k}</option>`).join("")}</optgroup>`;
+  });
+  sel.innerHTML=html;
+}
+function openAdd(){
+  editId=null;document.getElementById("modal-title").textContent="🐉 NUEVA TAREA";
+  ["m-title","m-note"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("m-due").value="";document.getElementById("m-col").value="pending";
+  document.getElementById("m-recur").value="";updateRecurUI("m");
+  document.getElementById("m-alarm").value="1440";
+  fillAreaSel("m-area",Object.keys(AREAS)[0]||"");
+  document.getElementById("modal").style.display="flex";
+  setTimeout(()=>document.getElementById("m-title").focus(),80);
+}
+function openEdit(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  editId=id;document.getElementById("modal-title").textContent="✏️ EDITAR TAREA";
+  document.getElementById("m-title").value=c.title;document.getElementById("m-note").value=c.note||"";
+  document.getElementById("m-due").value=c.due||"";document.getElementById("m-col").value=c.col;
+  document.getElementById("m-alarm").value=c.alarm||"1440";
+  fillAreaSel("m-area",c.area);setRecurForm("m",c.recurrence||null);
+  document.getElementById("modal").style.display="flex";
+  setTimeout(()=>document.getElementById("m-title").focus(),80);
+}
+function closeModal(){document.getElementById("modal").style.display="none";editId=null;}
+function saveCard(){
+  const title=document.getElementById("m-title").value.trim();if(!title)return;
+  const recurrence=getRecurFromForm("m");
+  const alarm=parseInt(document.getElementById("m-alarm").value)||0;
+  if(editId){
+    const c=cards.find(c=>c.id===editId);
+    if(c){c.title=title;c.area=document.getElementById("m-area").value;c.note=document.getElementById("m-note").value.trim();c.due=document.getElementById("m-due").value;c.col=document.getElementBy...
+  }else{
+    cards.push({id:Date.now(),type:"task",title,area:document.getElementById("m-area").value,note:document.getElementById("m-note").value.trim(),due:document.getElementById("m-due").value,col:docum...
+  }
+  const savedId=editId||cards[cards.length-1]?.id;
+  saveC();closeModal();render();
+  // Sync task deadline with Google Calendar
+  const tc=cards.find(c=>c.id===savedId);
+  if(tc){
+    if(tc.due){
+      // Has due date → create or update event
+      const op=tc.gcalEventId?"update":"create";
+      callCalServer(op,{
+        type:"task",title:tc.title,area:tc.area,
+        due:tc.due,note:tc.note||"",
+        alarm:tc.alarm||0,
+        gcalEventId:tc.gcalEventId||null
+      }).then(eventId=>{
+        if(eventId&&eventId!==tc.gcalEventId){
+          tc.gcalEventId=eventId;saveLocal();
+          showToast(editId?"✏️ Tarea actualizada · 📆 Cal sync":"🐉 Tarea agregada · 📆 Cal sync");
+        }else showToast(editId?"✏️ Tarea actualizada":"🐉 Tarea agregada!");
+      });
+    }else{
+      // No due date — if had event, delete it
+      if(tc.gcalEventId){
+        callCalServer("delete",{gcalEventId:tc.gcalEventId});
+        tc.gcalEventId=null;saveLocal();
+      }
+      showToast(editId?"✏️ Tarea actualizada":"🐉 Tarea agregada!");
+    }
+  }
+}
+ 
+// ════════════════════════════════════════════════════
+//  MODAL REUNIÓN
+// ════════════════════════════════════════════════════
+function openMeetingModal(){
+  editMeetingId=null;
+  document.getElementById("meeting-modal-title").textContent="📅 NUEVA REUNIÓN";
+  ["mt-title","mt-place","mt-participants","mt-agenda","mt-recur-flex-note"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("mt-date").value="";document.getElementById("mt-time").value="";
+  document.getElementById("mt-dateend").value="";
+  document.getElementById("mt-alarm").value="1440";
+  document.getElementById("mt-recur").value="";updateRecurUI("mt");
+  const ow=document.getElementById("mt-overlap-warn");if(ow)ow.style.display="none";
+  fillAreaSel("mt-area",Object.keys(AREAS)[0]||"");
+  document.getElementById("meeting-modal").style.display="flex";
+  setTimeout(()=>document.getElementById("mt-title").focus(),80);
+}
+function openEditMeeting(id){
+  const c=cards.find(c=>c.id===id);if(!c)return;
+  editMeetingId=id;
+  document.getElementById("meeting-modal-title").textContent="✏️ EDITAR REUNIÓN";
+  document.getElementById("mt-title").value=c.title;
+  document.getElementById("mt-date").value=c.date||"";document.getElementById("mt-time").value=c.time||"";
+  document.getElementById("mt-dateend").value=c.dateEnd||"";
+  document.getElementById("mt-alarm").value=c.alarm||"1440";
+  const owE=document.getElementById("mt-overlap-warn");if(owE)owE.style.display="none";
+  setTimeout(()=>checkMeetingOverlap(),50); // check overlap for existing date/time
+  document.getElementById("mt-place").value=c.place||"";document.getElementById("mt-participants").value=c.participants||"";
+  document.getElementById("mt-agenda").value=c.agenda||"";
+  fillAreaSel("mt-area",c.area);setRecurForm("mt",c.recurrence||null);
+  document.getElementById("meeting-modal").style.display="flex";
+}
+function closeMeetingModal(){document.getElementById("meeting-modal").style.display="none";editMeetingId=null;}
+// ── checkMeetingOverlap ─────────────────────────
+function checkMeetingOverlap(){
+  const date=document.getElementById("mt-date").value;
+  const time=document.getElementById("mt-time").value;
+  const warnEl=document.getElementById("mt-overlap-warn");
+  if(!warnEl)return;
+  if(!date||!time){warnEl.style.display="none";return;}
+  const startMs=new Date(date+"T"+time+":00").getTime();
+  const endMs=startMs+60*60*1000; // duración asumida 1 hora
+  const conflicts=cards.filter(c=>{
+    if(c.type!=="meeting"||c.col!=="upcoming")return false;
+    if(c.id===editMeetingId)return false; // no comparar con uno mismo
+    if(!c.date||!c.time)return false;     // ignorar reuniones sin hora
+    const cStart=new Date(c.date+"T"+c.time+":00").getTime();
+    const cEnd=cStart+60*60*1000;
+    return startMs<cEnd&&endMs>cStart;   // overlap real
+  });
+  if(conflicts.length>0){
+    const names=conflicts.map(c=>c.title+(c.time?" ("+c.time+")":"")).join(", ");
+    warnEl.textContent="⚠️ Superposición con: "+names+" — podés guardar igual o cambiar el horario.";
+    warnEl.style.display="block";
+  }else{
+    warnEl.style.display="none";
+  }
+}
+ 
+async function saveMeeting(){
+  const title=document.getElementById("mt-title").value.trim();if(!title)return;
+  const recurrence=getRecurFromForm("mt");
+  const mtDateEnd=document.getElementById("mt-dateend").value;
+  const mtAlarm=parseInt(document.getElementById("mt-alarm").value)||0;
+  const data={
+    type:"meeting",title,
+    area:document.getElementById("mt-area").value,
+    date:document.getElementById("mt-date").value,
+    dateEnd:mtDateEnd||null,
+    time:mtDateEnd?"":document.getElementById("mt-time").value,
+    alarm:mtAlarm, // sin hora si es multi-día
+    place:document.getElementById("mt-place").value.trim(),
+    participants:document.getElementById("mt-participants").value.trim(),
+    agenda:document.getElementById("mt-agenda").value.trim(),
+    recurrence,col:"upcoming",createdAt:Date.now()
+  };
+  let cardId;
+  if(editMeetingId){
+    const idx=cards.findIndex(c=>c.id===editMeetingId);
+    if(idx>=0){
+      const existing=cards[idx];
+      data.gcalEventId=existing.gcalEventId||null;
+      cards[idx]={...existing,...data,id:editMeetingId};
+      cardId=editMeetingId;
+    }
+  }else{
+    cardId=Date.now();
+    cards.push({...data,id:cardId});
+  }
+  saveC();closeMeetingModal();render();
+  // Sync with Google Calendar (only if has a real date, not flexible)
+  if(data.date&&data.recurrence?.type!=="flexible"){
+    const c=cards.find(c=>c.id===cardId);
+    if(c){
+      const op=c.gcalEventId?"update":"create";
+      const eventId=await callCalServer(op,{
+        type:"meeting",title:c.title,area:c.area,
+        date:c.date,dateEnd:c.dateEnd||null,
+        time:c.dateEnd?"":c.time||"",
+        place:c.place||"",
+        participants:c.participants||"",agenda:c.agenda||"",
+        alarm:c.alarm||0,
+        gcalEventId:c.gcalEventId||null
+      });
+      if(eventId&&eventId!==c.gcalEventId){
+        c.gcalEventId=eventId;
+        saveLocal();
+        showToast((editMeetingId?"✏️":"📅")+" Reunión guardada · 📆 Google Calendar sincronizado");
+      }else{
+        showToast(editMeetingId?"✏️ Reunión actualizada":"📅 Reunión agendada!");
+      }
+    }
+  }else{
+    showToast(editMeetingId?"✏️ Reunión actualizada":"📅 Reunión agendada (sin fecha)");
+  }
+}
+ 
+// ════════════════════════════════════════════════════
+//  ÁREAS CRUD
+// ════════════════════════════════════════════════════
+function openAreasModal(){renderAreasList();document.getElementById("areas-modal").style.display="flex";}
+function closeAreasModal(){document.getElementById("areas-modal").style.display="none";}
+function renderAreasList(){
+  const el=document.getElementById("areas-list");
+  const cats=["UNSJ","Scouts","Personal","Empresas"];let html="";
+  cats.forEach(cat=>{
+    const items=Object.entries(AREAS).filter(([,v])=>v.cat===cat);
+    if(!items.length)return;
+    html+=`<p style="font-family:var(--fm);font-size:9px;color:var(--muted);letter-spacing:.07em;margin:8px 0 4px">${cat}</p>`;
+    items.forEach(([name,a])=>{
+      const cnt=cards.filter(c=>c.area===name&&!["done","cancelled","trash","archived"].includes(c.col)).length;
+      const safe=name.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+      html+=`<div class="area-row"><span class="area-em">${a.e}</span><span class="area-name" style="border-left-color:${a.c}">${esc(name)}</span>
+        ${cnt?`<span class="area-cnt">${cnt}</span>`:""}
+        <button class="area-del" onclick="deleteArea('${safe}')">×</button></div>`;
+    });
+  });
+  el.innerHTML=html||`<p style="font-family:var(--fm);font-size:11px;color:var(--muted2);text-align:center;padding:12px">Sin áreas</p>`;
+}
+function addArea(){
+  const emoji=document.getElementById("na-emoji").value.trim()||"🔷";
+  const name=document.getElementById("na-name").value.trim();
+  const color=document.getElementById("na-color").value;
+  const cat=document.getElementById("na-cat").value;
+  if(!name){showToast("⚠️ Escribí un nombre");return;}
+  if(AREAS[name]){showToast("⚠️ Ese área ya existe");return;}
+  AREAS[name]={c:color,e:emoji,cat};saveAreas();renderAreasList();fillAreaSel("m-area","");fillAreaSel("mt-area","");
+  document.getElementById("na-emoji").value="";document.getElementById("na-name").value="";
+  showToast(`✅ Área "${name}" creada`);render();syncToDrive();
+}
+function deleteArea(name){
+  const cnt=cards.filter(c=>c.area===name&&!["done","cancelled","trash","archived"].includes(c.col)).length;
+  if(!confirm(cnt?`¿Eliminar "${name}"? Tiene ${cnt} ítem(s) activo(s).`:`¿Eliminar el área "${name}"?`))return;
+  if(cnt)cards.filter(c=>c.area===name).forEach(c=>c.area="Personal");
+  delete AREAS[name];saveAreas();saveC();renderAreasList();fillAreaSel("m-area","");fillAreaSel("mt-area","");
+  showToast(`🗑️ "${name}" eliminada`);render();
+}
+ 
+// ════════════════════════════════════════════════════
+//  ARCHIVE (legacy - redirects to historial sheet)
+// ════════════════════════════════════════════════════
+function toggleArch(st){
+  histTab=st;openHistorial();
+}
+ 
+// ════════════════════════════════════════════════════
+//  BIAN CHAT
+// ════════════════════════════════════════════════════
+function toggleChat(){
+  const panel=document.getElementById("chat-panel");
+  const opening=!panel.classList.contains("open");
+  panel.classList.toggle("open");
+  if(opening)setTimeout(()=>document.getElementById("ch-inp").focus(),200);
+}
+function saveKey(){
+  const v=document.getElementById("apikey").value.trim();
+  if(v&&v.startsWith("sk-")){
+    apiKey=v;localStorage.setItem(AKKEY,v);
+    document.getElementById("apirow").style.display="none";
+    addMsg("ai","🐉 Llave aceptada. Tus proyectos y reuniones están bajo mi guarda, Martín.");
+    setTimeout(()=>document.getElementById("ch-inp").focus(),100);
+  }else addMsg("sys","⚠️ La key debe empezar con sk-ant-");
+}
+function addMsg(role,text){
+  const el=document.getElementById("ch-msgs");
+  const d=document.createElement("div");d.className="cm "+role;d.textContent=text;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;return d;
+}
+function getBoardCtx(){
+  const tasks=cards.filter(c=>c.type!=="meeting"&&!["done","cancelled","trash","archived"].includes(c.col))
+    .map(c=>`[T:${c.id}] ${c.col.toUpperCase()} | ${c.area} | ${c.title}${c.due?" | vence:"+c.due:""}${c.recurrence?" | recur:"+c.recurrence.type:""}`);
+  const meetings=cards.filter(c=>c.type==="meeting"&&c.col==="upcoming")
+    .map(c=>`[R:${c.id}] REUNIÓN | ${c.area} | ${c.title} | ${c.date||"sin fecha"}${c.time?" "+c.time:""}${c.place?" | "+c.place:""}`);
+  return [...tasks,...meetings].join("\n")||"(vacío)";
+}
+function askReport(){
+  if(!apiKey){document.getElementById("chat-panel").classList.add("open");addMsg("sys","⚠️ Ingresá tu API key primero.");document.getElementById("apirow").style.display="flex";return;}
+  document.getElementById("chat-panel").classList.add("open");
+  document.getElementById("ch-inp").value="Dame un informe de mis tareas y reuniones: urgentes, próximas a vencer, reuniones esta semana, y qué me recomendás priorizar hoy.";
+  sendChat();
+}
+function initVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;
+  const r=new SR();r.lang="es-AR";r.continuous=false;r.interimResults=false;
+  r.onresult=e=>{const txt=e.results[0][0].transcript;document.getElementById("ch-inp").value=txt;resetMic();showToast(`🎤 "${txt.slice(0,45)}${txt.length>45?"...":""}"`);}; 
+  r.onerror=e=>{resetMic();showToast("⚠️ Mic: "+e.error);};r.onend=()=>resetMic();return r;
+}
+function resetMic(){const b=document.getElementById("mic-btn");b.textContent="🎤";b.classList.remove("recording");}
+function toggleMic(){
+  if(!recog)recog=initVoice();if(!recog){showToast("⚠️ Sin soporte de micrófono");return;}
+  const b=document.getElementById("mic-btn");
+  if(b.classList.contains("recording")){recog.stop();}
+  else{b.classList.add("recording");b.textContent="⏹️";try{recog.start();}catch(e){resetMic();}}
+}
+async function sendChat(){
+  const inp=document.getElementById("ch-inp");
+  const msg=inp.value.trim();if(!msg)return;
+  if(!apiKey){addMsg("sys","⚠️ Ingresá tu API key primero.");document.getElementById("apirow").style.display="flex";return;}
+  inp.value="";addMsg("user",msg);chatHist.push({role:"user",content:msg});
+  const btn=document.getElementById("ch-send");btn.disabled=true;
+  const thinking=addMsg("sys","🐉 Bian pensando...");
+  const hoy=new Date().toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const SYS=`Sos Bian (狴犴), séptimo hijo del Rey Dragón. Asistente personal de Martín — ingeniero electrónico, doctor en Control, profesor en la UNSJ (San Juan, Argentina). Tótem scout: dragón míst...
+HOY ES: ${hoy}. Usá esta fecha para calcular cualquier referencia relativa ("el lunes que viene", "la semana próxima", "en 3 días", etc.). Para fechas siempre usá formato YYYY-MM-DD.
+Áreas: ${Object.keys(AREAS).join(", ")}.
+Columnas de tareas: urgent, active, pending.
+Repetición disponible: weekly, biweekly, monthly, weekday, periodic, flexible.
+ 
+TABLERO ACTUAL:
+${getBoardCtx()}
+ 
+Para modificar, UN bloque ACTION al final:
+TAREAS: <ACTION>{"t":"add","title":"...","area":"...","note":"...","due":"YYYY-MM-DD","col":"pending","recurrence":null}</ACTION>
+<ACTION>{"t":"move","id":N,"col":"urgent"}</ACTION>
+<ACTION>{"t":"done","id":N}</ACTION>
+<ACTION>{"t":"cancel","id":N}</ACTION>
+<ACTION>{"t":"trash","id":N}</ACTION>
+<ACTION>{"t":"update","id":N,"title":"...","area":"...","note":"...","due":"..."}</ACTION>
+REUNIONES: <ACTION>{"t":"add_meeting","title":"...","area":"...","date":"YYYY-MM-DD","dateEnd":"YYYY-MM-DD o null","time":"HH:MM o vacío","place":"...","participants":"...","agenda":"...","recurren...
+<ACTION>{"t":"done_meeting","id":N}</ACTION>
+Sin cambios: <ACTION>{"t":"none"}</ACTION>`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:700,system:SYS,messages:chatHist})
+    });
+    const data=await r.json();thinking.remove();
+    if(data.content&&data.content[0]){
+      const text=data.content[0].text;
+      const am=text.match(/<ACTION>([\s\S]*?)<\/ACTION>/);
+      const display=text.replace(/<ACTION>[\s\S]*?<\/ACTION>/,"").trim();
+      if(display)addMsg("ai",display);
+      chatHist.push({role:"assistant",content:text});
+      if(am){try{execAction(JSON.parse(am[1]));}catch(e){console.error(e);}}
+    }else addMsg("sys","Error: "+(data.error?.message||"respuesta inválida"));
+  }catch(err){thinking.remove();addMsg("sys","Error de red: "+err.message);}
+  btn.disabled=false;
+  setTimeout(()=>inp.focus(),50);
+}
+function execAction(a){
+  switch(a.t){
+    case"add":
+      cards.push({id:Date.now(),type:"task",title:a.title||"",area:a.area||"Personal",note:a.note||"",due:a.due||"",col:a.col||"pending",recurrence:a.recurrence||null,createdAt:Date.now()});
+      break;
+    case"add_meeting":
+      cards.push({id:Date.now(),type:"meeting",title:a.title||"",area:a.area||"Personal",date:a.date||"",dateEnd:a.dateEnd||null,time:a.dateEnd?"":a.time||"",place:a.place||"",participants:a.partic...
+      break;
+    case"move":moveTo(a.id,a.col);return;
+    case"done":doneit(a.id);return;
+    case"done_meeting":doneMeeting(a.id);return;
+    case"cancel":cancelit(a.id);return;
+    case"trash":moveToTrash(a.id);return;
+    case"update":{const c=cards.find(c=>c.id===a.id);if(c){if(a.title)c.title=a.title;if(a.area)c.area=a.area;if(a.note!==undefined)c.note=a.note;if(a.due!==undefined)c.due=a.due;}break;}
+    default:return;
+  }
+  saveC();render();
+}
+ 
+// ════════════════════════════════════════════════════
+//  MENU DROPDOWN
+// ════════════════════════════════════════════════════
+function toggleMenu(e){
+  if(e)e.stopPropagation();
+  const dd=document.getElementById("menu-dropdown");
+  const btn=document.getElementById("menu-btn");
+  const open=dd.classList.toggle("open");
+  btn.classList.toggle("open",open);
+}
+function closeMenu(){
+  document.getElementById("menu-dropdown").classList.remove("open");
+  document.getElementById("menu-btn").classList.remove("open");
+}
+document.addEventListener("click",function(e){
+  const wrap=document.getElementById("menu-wrap");
+  if(wrap&&!wrap.contains(e.target))closeMenu();
+ 
+});
+ 
+// ════════════════════════════════════════════════════
+//  HISTORIAL SHEET
+// ════════════════════════════════════════════════════
+let histTab="stats";
+ 
+function openHistorial(){
+  document.getElementById("hist-overlay").classList.add("open");
+  document.getElementById("hist-sheet").classList.add("open");
+  renderHistTab();
+}
+function closeHistorial(){
+  document.getElementById("hist-overlay").classList.remove("open");
+  document.getElementById("hist-sheet").classList.remove("open");
+}

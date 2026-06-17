@@ -1,0 +1,12 @@
+# OS
+Thumbs.db
+.DS_Store
+
+# Editors
+.vscode/*
+!.vscode/settings.json
+
+# Local exports and backups
+*.tmp
+*.bak
+*.orig

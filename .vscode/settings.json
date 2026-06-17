@@ -1,5 +1,12 @@
 {
   "files.associations": {
     "*.gs": "javascript"
-  }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "html.validate.styles": false,
+  "html.validate.scripts": false,
+  "css.lint.validProperties": [],
+  "problems.decorations.enabled": false
 }

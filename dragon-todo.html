@@ -1435,9 +1435,11 @@ async function bulkSyncCalendar(){
   }
 }
 
-async function callCalServer(op, calData){
+async function callCalServer(op, calData, opts={}){
+  const strict=!!opts.strict;
   if(!scriptUrl||!hmacKey){
     calDebugLog.push("NO_CONFIG: sin URL o clave secreta");
+    if(strict)throw new Error("Drive no configurado");
     return null;
   }
   const itemTitle=(calData.title||calData.gcalEventId||op||"?").slice(0,40);
@@ -1450,22 +1452,26 @@ async function callCalServer(op, calData){
     const rawText=await resp.text();
     if(!resp.ok){
       calDebugLog.push("HTTP_ERROR "+resp.status+" | "+op+" | "+itemTitle+" | "+rawText.slice(0,80));
+      if(strict)throw new Error("HTTP "+resp.status);
       return null;
     }
     let result;
     try{result=JSON.parse(rawText);}
     catch(e){
       calDebugLog.push("JSON_ERROR | "+op+" | "+itemTitle+" | raw:"+rawText.slice(0,80));
+      if(strict)throw new Error("Respuesta inválida del servidor");
       return null;
     }
     if(result.error){
       calDebugLog.push("SERVER_ERROR | "+op+" | "+itemTitle+" | "+result.error);
+      if(strict)throw new Error(result.error);
       return null;
     }
     calDebugLog.push("OK | "+op+" | "+itemTitle);
-    return result.gcalEventId||null;
+    return result.gcalEventId||(op==="update"?calData.gcalEventId||null:null);
   }catch(err){
     calDebugLog.push("EXCEPTION | "+op+" | "+itemTitle+" | "+err.message);
+    if(strict)throw err;
     return null;
   }
 }
@@ -2219,7 +2225,7 @@ function doneMeeting(id){
   setTimeout(()=>document.getElementById("mtresult-note").focus(),80);
 }
 
-function confirmDoneMeeting(withNote){
+async function confirmDoneMeeting(withNote){
   const id=pendingDoneMeetingId;
   const note=withNote?document.getElementById("mtresult-note").value.trim():"";
   document.getElementById("mtresult-modal").style.display="none";
@@ -2231,14 +2237,18 @@ function confirmDoneMeeting(withNote){
 
   // Update Google Calendar event with result note
   if(c.gcalEventId){
-    callCalServer("update",{
-      type:"meeting",title:c.title,area:c.area,
-      date:c.date,time:c.time||"",place:c.place||"",
-      participants:c.participants||"",agenda:c.agenda||"",
-      resultNote:note||"",completed:true,
-      alarm:c.alarm||0,
-      gcalEventId:c.gcalEventId
-    });
+    try{
+      await callCalServer("update",{
+        type:"meeting",title:c.title,area:c.area,
+        date:c.date,time:c.time||"",place:c.place||"",
+        participants:c.participants||"",agenda:c.agenda||"",
+        resultNote:note||"",completed:true,
+        alarm:c.alarm||0,
+        gcalEventId:c.gcalEventId
+      },{strict:true});
+    }catch(err){
+      console.warn("Error al actualizar evento en Calendar:",err.message);
+    }
   }
 
   if(c.recurrence&&c.recurrence.type!=="flexible"&&c.date){
@@ -2247,20 +2257,36 @@ function confirmDoneMeeting(withNote){
       const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDate};
       delete nm.completedAt;delete nm.resultNote;delete nm.gcalEventId;
       // Create Cal event for next occurrence
-      callCalServer("create",{
-        type:"meeting",title:nm.title,area:nm.area,
-        date:nm.date,time:nm.time||"",place:nm.place||"",
-        participants:nm.participants||"",agenda:nm.agenda||""
-      }).then(eventId=>{if(eventId){nm.gcalEventId=eventId;saveLocal();}});
+      try{
+        const eventId=await callCalServer("create",{
+          type:"meeting",title:nm.title,area:nm.area,
+          date:nm.date,time:nm.time||"",place:nm.place||"",
+          participants:nm.participants||"",agenda:nm.agenda||""
+        },{strict:true});
+        if(eventId){
+          nm.gcalEventId=eventId;
+          saveC();
+        }
+      }catch(err){
+        console.warn("Error al crear evento siguiente en Calendar:",err.message);
+      }
       cards.push(nm);
       showToast("✅ Reunión archivada · próxima: "+nextDate);
     }else showToast("✅ Reunión archivada");
   }else showToast("✅ Reunión archivada"+(note?" · nota guardada":""));
   saveC();render();
 }
-function cancelMeeting(id){
+async function cancelMeeting(id){
   const c=cards.find(c=>c.id===id);if(!c)return;
-  if(c.gcalEventId){callCalServer("delete",{gcalEventId:c.gcalEventId});c.gcalEventId=null;}
+  if(c.gcalEventId){
+    try{
+      await callCalServer("delete",{gcalEventId:c.gcalEventId},{strict:true});
+      c.gcalEventId=null;
+    }catch(err){
+      console.warn("Error al eliminar evento de Calendar:",err.message);
+      c.gcalEventId=null;
+    }
+  }
   c.col="cancelled";c.cancelledAt=Date.now();
   saveC();render();showToast("⊘ Reunión cancelada · 📆 Cal actualizado");
 }
@@ -2412,6 +2438,7 @@ function checkMeetingOverlap(){
 
 async function saveMeeting(){
   const title=document.getElementById("mt-title").value.trim();if(!title)return;
+  const wasEditing=!!editMeetingId;
   const recurrence=getRecurFromForm("mt");
   const mtDateEnd=document.getElementById("mt-dateend").value;
   const mtAlarm=parseInt(document.getElementById("mt-alarm").value)||0;
@@ -2446,25 +2473,30 @@ async function saveMeeting(){
     const c=cards.find(c=>c.id===cardId);
     if(c){
       const op=c.gcalEventId?"update":"create";
-      const eventId=await callCalServer(op,{
-        type:"meeting",title:c.title,area:c.area,
-        date:c.date,dateEnd:c.dateEnd||null,
-        time:c.dateEnd?"":c.time||"",
-        place:c.place||"",
-        participants:c.participants||"",agenda:c.agenda||"",
-        alarm:c.alarm||0,
-        gcalEventId:c.gcalEventId||null
-      });
-      if(eventId&&!c.gcalEventId){
-        c.gcalEventId=eventId;
-        saveLocal();
-        showToast((editMeetingId?"✏️":"📅")+" Reunión guardada · 📆 Google Calendar sincronizado");
-      }else{
-        showToast(editMeetingId?"✏️ Reunión actualizada":"📅 Reunión agendada!");
+      try{
+        const eventId=await callCalServer(op,{
+          type:"meeting",title:c.title,area:c.area,
+          date:c.date,dateEnd:c.dateEnd||null,
+          time:c.dateEnd?"":c.time||"",
+          place:c.place||"",
+          participants:c.participants||"",agenda:c.agenda||"",
+          alarm:c.alarm||0,
+          gcalEventId:c.gcalEventId||null
+        },{strict:true});
+
+        // Persist event id after create/update and sync to Drive.
+        if(eventId&&eventId!==c.gcalEventId){
+          c.gcalEventId=eventId;
+          saveC();
+        }
+
+        showToast((wasEditing?"✏️":"📅")+" Reunión guardada · 📆 Google Calendar sincronizado");
+      }catch(err){
+        showToast("⚠️ Reunión guardada, pero no se pudo sincronizar Calendar: "+err.message,5000);
       }
     }
   }else{
-    showToast(editMeetingId?"✏️ Reunión actualizada":"📅 Reunión agendada (sin fecha)");
+    showToast(wasEditing?"✏️ Reunión actualizada":"📅 Reunión agendada (sin fecha)");
   }
 }
 

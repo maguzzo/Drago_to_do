@@ -1,74 +1,79 @@
-﻿// ═══════════════════════════════════════════════════════
-//  🐉 DRAGON TO DO LIST — Google Apps Script v2
-//  Servidor seguro HMAC-SHA256 + Google Calendar
+// ═══════════════════════════════════════════════════════
+//  🐉 DRAGON TO DO LIST — Google Apps Script v2.1
+//  Servidor seguro HMAC-SHA256 + Google Calendar + Sheets
 // ═══════════════════════════════════════════════════════
 //
-//  CONFIGURACIÓN: solo cambiar estas dos líneas
+//  CONFIGURACIÓN: solo cambiar estas líneas
 //
-const SECRET_KEY  = "REEMPLAZAR_CON_TU_CLAVE";   // ← misma clave que en la app
-const SHEET_NAME  = "DragonToDo";                 // ← no cambiar
-const CALENDAR_ID = "martinaleguzzo@gmail.com";   // ← tu Gmail
+const SECRET_KEY  = "REEMPLAZAR_CON_TU_CLAVE";  // ← misma clave que en la app
+const SHEET_NAME  = "DragonToDo";               // ← no cambiar
+const CALENDAR_ID = "martinaleguzzo@gmail.com"; // ← tu Gmail
 //
 // ═══════════════════════════════════════════════════════
- 
-const TOLERANCE_MS = 60000; // 60 segundos
- 
+
+const TOLERANCE_MS = 60000; // 60 segundos de tolerancia en timestamp
+
 // ── PUNTO DE ENTRADA POST ────────────────────────────────
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
- 
+
     if (!payload.ts || !payload.sig || !payload.action) {
       return respond({ error: "Petición incompleta" });
     }
- 
-    // Verificar timestamp
+
+    // Verificar timestamp (evita replay attacks)
     if (Math.abs(Date.now() - Number(payload.ts)) > TOLERANCE_MS) {
       return respond({ error: "Petición expirada" });
     }
- 
+
     // Construir mensaje HMAC
-    // "save" incluye checksum de los datos; "load" y "calEvent" usan solo action|ts
+    // "save" incluye checksum de los datos
+    // "load" y "calEvent" usan solo action|ts (sin checksum)
     let msg = payload.action + "|" + payload.ts;
     if (payload.action === "save" && payload.checksum) {
       msg += "|" + payload.checksum;
     }
- 
-    // Verificar firma
+
+    // Verificar firma HMAC-SHA256
     if (!safeEqual(hmac(msg), payload.sig)) {
       return respond({ error: "Firma inválida" });
     }
- 
+
     // ── ACCIONES ──────────────────────────────────────────
     if (payload.action === "load") {
       return respond({ ok: true, data: loadData() });
     }
- 
+
     if (payload.action === "save") {
       saveData(payload.data);
       return respond({ ok: true, ts: new Date().toISOString() });
     }
- 
+
     if (payload.action === "calEvent") {
       const data = payload.data || {};
       const result = handleCalEvent(data);
       return respond({ ok: true, ...result });
     }
- 
-    return respond({ error: "Acción desconocida" });
- 
+
+    return respond({ error: "Acción desconocida: " + payload.action });
+
   } catch (err) {
+    Logger.log("doPost error: " + err);
     return respond({ error: err.toString() });
   }
 }
 
-// ── GET — verificar que el script está vivo ───────────────
+// ── GET — ping para verificar que el script está vivo ────
 function doGet(e) {
-  return respond({ status: "🐉 Dragon Server activo v2", ts: new Date().toISOString() });
+  return respond({
+    status: "🐉 Dragon Server activo v2",
+    ts: new Date().toISOString()
+  });
 }
 
 // ═══════════════════════════════════════════════════════
-//  GOOGLE SHEETS
+//  GOOGLE SHEETS — Almacenamiento de datos
 // ═══════════════════════════════════════════════════════
 function getSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -96,7 +101,7 @@ function loadData() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  GOOGLE CALENDAR
+//  GOOGLE CALENDAR — Gestión de eventos
 // ═══════════════════════════════════════════════════════
 function handleCalEvent(data) {
   if (!data || !data.op) return { error: "op requerido" };
@@ -107,7 +112,7 @@ function handleCalEvent(data) {
     }
     if (data.op === "update" && data.gcalEventId) {
       const newId = updateCalEvent(data.gcalEventId, data);
-      // If updateCalEvent created a new event (old one not found), return new ID
+      // Si updateCalEvent recreó el evento (el original no existía), devuelve nuevo ID
       return { gcalEventId: newId || data.gcalEventId };
     }
     if (data.op === "create") {
@@ -124,98 +129,123 @@ function handleCalEvent(data) {
 function createCalEvent(data) {
   const cal = CalendarApp.getCalendarById(CALENDAR_ID) || CalendarApp.getDefaultCalendar();
   let event;
+
   if (data.type === "meeting" && data.date) {
     const title = "📅 " + data.title + " [" + data.area + "]";
     const desc  = buildDescription(data);
     const loc   = data.place || "";
+
     if (data.dateEnd) {
-      // Evento multi-día (ej: viaje de jueves a sábado)
+      // Evento multi-día (ej: viaje jueves → sábado)
       const start = new Date(data.date + "T12:00:00");
       const end   = new Date(data.dateEnd + "T12:00:00");
-      end.setDate(end.getDate() + 1); // Google Cal end date is exclusive
+      end.setDate(end.getDate() + 1); // Google Cal: end date es exclusiva
       event = cal.createAllDayEvent(title, start, end, { description: desc, location: loc });
+
     } else if (data.time) {
-      // Reunión con horario específico — un solo día
+      // Reunión con hora específica — evento timed de 1 hora
       const start = new Date(data.date + "T" + data.time + ":00");
-      const end   = new Date(start.getTime() + 60 * 60 * 1000); // 1 hora por defecto
+      const end   = new Date(start.getTime() + 60 * 60 * 1000);
       event = cal.createEvent(title, start, end, { description: desc, location: loc });
+
     } else {
-      // Reunión todo el día — un solo día
+      // Reunión sin hora — evento all-day
       const date = new Date(data.date + "T12:00:00");
       event = cal.createAllDayEvent(title, date, { description: desc, location: loc });
     }
+
   } else if (data.type === "task" && data.due) {
-    // Tarea deadline — evento todo el día
+    // Tarea con deadline — evento all-day
     const title = "🐉 ⚑ " + data.title + " [" + data.area + "]";
     const date  = new Date(data.due + "T12:00:00");
     event = cal.createAllDayEvent(title, date, {
       description: (data.note || "") + "\n\n— Dragon To Do List"
     });
   }
-  // Add alarm/reminder if specified
+
+  // Agregar alarma popup si está configurada
   if (event && data.alarm && parseInt(data.alarm) > 0) {
     event.addPopupReminder(parseInt(data.alarm));
   }
+
   return event ? event.getId() : null;
 }
 
 function updateCalEvent(gcalEventId, data) {
   const event = CalendarApp.getEventById(gcalEventId);
+
   if (!event) {
-    // Evento no encontrado (fue borrado manualmente o es un ID viejo)
-    // Crear uno nuevo y devolver el nuevo ID para evitar duplicados
-    Logger.log("updateCalEvent: evento no encontrado, creando nuevo para: " + data.title);
+    // Evento no encontrado — fue borrado manualmente o el ID es de otra versión
+    // Crear uno nuevo para evitar duplicados futuros
+    Logger.log("updateCalEvent: evento no encontrado, recreando: " + data.title);
     return createCalEvent(data);
   }
+
   if (data.type === "meeting") {
-    const newTitle = (data.completed ? "✅ " : "📅 ") + data.title + " [" + data.area + "]";
-    event.setTitle(newTitle);
+    const prefix = data.completed ? "✅ " : "📅 ";
+    event.setTitle(prefix + data.title + " [" + data.area + "]");
     event.setDescription(buildDescription(data));
     if (data.place) event.setLocation(data.place);
-    // Update reminder
+
+    // Actualizar alarma
     event.removeAllReminders();
     if (data.alarm && parseInt(data.alarm) > 0) {
       event.addPopupReminder(parseInt(data.alarm));
     }
-    // Actualizar fecha/hora si cambió
-    if (data.date && data.dateEnd) {
+
+    // Actualizar fechas
+    if (data.dateEnd) {
+      // Multi-día
       const start = new Date(data.date + "T12:00:00");
       const end   = new Date(data.dateEnd + "T12:00:00");
       end.setDate(end.getDate() + 1);
-      if (typeof event.setAllDayDates === "function") {
+      try {
         event.setAllDayDates(start, end);
-      } else {
+      } catch (e) {
+        // Fallback: si setAllDayDates no está disponible, recrear
         event.deleteEvent();
         return createCalEvent(data);
       }
     } else if (data.date && data.time) {
+      // Timed
       const start = new Date(data.date + "T" + data.time + ":00");
       const end   = new Date(start.getTime() + 60 * 60 * 1000);
       event.setTime(start, end);
     } else if (data.date) {
+      // All-day un día
       const date = new Date(data.date + "T12:00:00");
-      if (typeof event.setAllDayDate === "function") {
+      try {
         event.setAllDayDate(date);
-      } else {
-        const end  = new Date(date.getTime() + 24 * 60 * 60 * 1000);
+      } catch (e) {
+        const end = new Date(date.getTime() + 24 * 60 * 60 * 1000);
         event.setTime(date, end);
       }
     }
+
   } else if (data.type === "task") {
-    const newTitle = (data.completed ? "✅ 🐉 " : "🐉 ⚑ ") + data.title + " [" + data.area + "]";
-    event.setTitle(newTitle);
+    const prefix = data.completed ? "✅ 🐉 " : "🐉 ⚑ ";
+    event.setTitle(prefix + data.title + " [" + data.area + "]");
     event.setDescription((data.note || "") + "\n\n— Dragon To Do List");
+
+    // Actualizar fecha del deadline (all-day)
     if (data.due) {
       const date = new Date(data.due + "T12:00:00");
-      const end  = new Date(date.getTime() + 24 * 60 * 60 * 1000);
-      event.setTime(date, end);
+      try {
+        event.setAllDayDate(date); // FIX: mantener como all-day
+      } catch (e) {
+        // Fallback para compatibilidad
+        const end = new Date(date.getTime() + 24 * 60 * 60 * 1000);
+        event.setTime(date, end);
+      }
     }
-    // Update reminder
+
+    // Actualizar alarma
     event.removeAllReminders();
     if (data.alarm && parseInt(data.alarm) > 0) {
       event.addPopupReminder(parseInt(data.alarm));
     }
   }
+  // Retorno implícito undefined → handleCalEvent usa data.gcalEventId como fallback
 }
 
 function deleteCalEvent(gcalEventId) {
@@ -223,7 +253,8 @@ function deleteCalEvent(gcalEventId) {
     const event = CalendarApp.getEventById(gcalEventId);
     if (event) event.deleteEvent();
   } catch (err) {
-    Logger.log("deleteCalEvent: " + err); // Silencioso — puede que ya no exista
+    Logger.log("deleteCalEvent (ignorado): " + err);
+    // Silencioso — el evento puede haber sido eliminado manualmente
   }
 }
 
@@ -239,17 +270,24 @@ function buildDescription(data) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  SEGURIDAD
+//  SEGURIDAD — HMAC-SHA256
 // ═══════════════════════════════════════════════════════
 function hmac(message) {
-  const raw = Utilities.computeHmacSha256Signature(message, SECRET_KEY, Utilities.Charset.UTF_8);
+  const raw = Utilities.computeHmacSha256Signature(
+    message,
+    SECRET_KEY,
+    Utilities.Charset.UTF_8
+  );
   return Utilities.base64Encode(raw);
 }
 
+// Comparación en tiempo constante (evita timing attacks)
 function safeEqual(a, b) {
   if (a.length !== b.length) return false;
   let diff = 0;
-  for (let index = 0; index < a.length; index++) diff |= a.charCodeAt(index) ^ b.charCodeAt(index);
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
   return diff === 0;
 }
 

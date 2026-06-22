@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html>
-<!-- @ts-nocheck -->
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -24,9 +23,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
- 
+
 /* HEADER */
-#header{background:#fff;border-bottom:2px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shado...
+#header{background:#fff;border-bottom:2px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow);gap:8px;flex-wrap:wrap}
 #hlogo{display:flex;align-items:center;gap:9px}
 #hdragon{font-size:26px;filter:drop-shadow(0 2px 4px rgba(185,28,28,.3))}
 #hinfo h1{font-size:14px;font-weight:800;letter-spacing:-.02em}
@@ -38,11 +37,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .hbtn.on{background:var(--greenl);border-color:#86EFAC;color:var(--green)}
 .hbtn.areas-btn{border-color:var(--red);color:var(--red);background:var(--redl);font-weight:700}
 .hbtn.drive-btn{border-color:#0F9D58;color:#0F9D58;background:#F0FFF4}
-.btn-add{background:var(--red);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(185,28,28,.28)...
+.btn-add{background:var(--red);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(185,28,28,.28);transition:all .15s}
 .btn-add:hover{background:var(--red2);transform:translateY(-1px)}
-.btn-meeting{background:var(--purple);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,...
+.btn-meeting{background:var(--purple);color:#fff;border:none;padding:7px 13px;border-radius:7px;font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,217,.28);transition:all .15s}
 .btn-meeting:hover{background:#5B21B6;transform:translateY(-1px)}
- 
+
 /* SYNC BAR */
 #sync-bar{width:100%;padding:4px 16px;font-family:var(--fm);font-size:10px;display:flex;align-items:center;gap:6px;background:#fff;border-bottom:1px solid var(--border);transition:all .3s}
 #sync-bar.saving{background:#FFFBEB;border-color:#FDE68A}
@@ -50,27 +49,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 #sync-bar.error{background:#FFF1F2;border-color:#FECDD3}
 #sync-bar.offline,#sync-bar.hidden{background:var(--bg3)}
 #sync-bar.hidden{display:none}
- 
+
 /* MONTH CLOSE BANNER */
 #close-banner{display:none;background:var(--purplel);border-bottom:2px solid #C4B5FD;padding:10px 16px;align-items:center;gap:10px;flex-wrap:wrap}
 #close-banner p{font-family:var(--fm);font-size:11px;color:var(--purple);flex:1}
 .banner-btn{background:var(--purple);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-family:var(--fh);font-size:10px;font-weight:700;cursor:pointer}
 .banner-btn.secondary{background:none;color:var(--purple);border:1px solid #C4B5FD}
- 
+
 /* TOAST */
-#toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:#1C1917;color:#fff;padding:9px 16px;border-radius:8px;font-family:var(--fm);font-size:11px;z-index:400;pointer-events:n...
+#toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:#1C1917;color:#fff;padding:9px 16px;border-radius:8px;font-family:var(--fm);font-size:11px;z-index:400;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;box-shadow:var(--shadow2)}
 #toast.show{opacity:1}
- 
+
 /* TABS */
 #tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);padding:0 14px;overflow-x:auto;scrollbar-width:none}
 #tabs::-webkit-scrollbar{display:none}
 .tab{padding:8px 13px;font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;user-select:none}
 .tab.active{color:var(--red);border-bottom-color:var(--red)}
+.tab.hoy-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .tab.stats-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
 .tab:hover:not(.active){color:var(--text)}
 .tc{font-family:var(--fm);font-size:9px;margin-left:4px;background:var(--bg4);padding:1px 5px;border-radius:8px;color:var(--muted)}
 .tab.active .tc{background:var(--redl);color:var(--red)}
- 
+
 /* ══ MEETINGS SECTION ══ */
 #meetings-section{padding:12px 13px 4px;border-bottom:2px dashed var(--border)}
 #meetings-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -78,7 +78,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .meetings-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
 .meetings-scroll::-webkit-scrollbar{height:3px}
 .meetings-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.meeting-card{flex-shrink:0;width:240px;background:#fff;border-radius:10px;border:1px solid var(--border);border-top-width:3px;box-shadow:var(--shadow);padding:10px 11px 8px;cursor:pointer;transiti...
+.meeting-card{flex-shrink:0;width:240px;background:#fff;border-radius:10px;border:1px solid var(--border);border-top-width:3px;box-shadow:var(--shadow);padding:10px 11px 8px;cursor:pointer;transition:transform .15s,box-shadow .15s}
 .meeting-card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
 .meeting-card.flexible-card{border-style:dashed}
 .meeting-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
@@ -97,7 +97,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .meeting-agenda{font-family:var(--fm);font-size:9.5px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);line-height:1.5;display:none}
 .meeting-card.expanded .meeting-agenda{display:block}
 #no-meetings{font-family:var(--fm);font-size:11px;color:var(--muted2);padding:8px 0}
- 
+
 /* BOARD */
 #board{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:13px}
 #board.hidden{display:none}
@@ -109,9 +109,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .col-cards{display:flex;flex-direction:column;gap:7px;min-height:40px}
 .empty-board{text-align:center;padding:30px 20px;color:var(--muted2);font-family:var(--fm);font-size:11px;grid-column:1/-1}
 .empty-board .big{font-size:36px;margin-bottom:8px}
- 
+
 /* CARDS */
-.card{background:#fff;border-radius:9px;padding:10px 10px 8px;cursor:grab;border:1px solid var(--border);border-left-width:3px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,opa...
+.card{background:#fff;border-radius:9px;padding:10px 10px 8px;cursor:grab;border:1px solid var(--border);border-left-width:3px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,opacity .15s}
 .card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
 .card.dragging{opacity:.3;transform:scale(.97)}
 .card-title{color:var(--text);font-size:12px;font-weight:600;line-height:1.4;margin-bottom:4px;word-break:break-word}
@@ -120,7 +120,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .atag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;font-weight:500}
 .rtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;background:var(--purplel);color:var(--purple)}
 .ftag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:10px;white-space:nowrap;background:var(--goldl);color:var(--gold)}
-.dtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;background:var(--bg4);color:var(--muted);white-space:nowrap;cursor:pointer;text-decoration:none;display:inline-flex;align...
+.dtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:4px;background:var(--bg4);color:var(--muted);white-space:nowrap;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:2px;transition:background .15s}
 .dtag:hover{background:var(--bluel);color:var(--blue)}
 .dtag.ov{background:var(--redl);color:var(--red)}
 .dtag.soon{background:var(--goldl);color:var(--gold)}
@@ -133,7 +133,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .cbtn.cx:hover{color:var(--red);background:var(--redl)}
 .cbtn.tr:hover{color:#6B7280;background:#F3F4F6}
 .cbtn.ed{margin-left:auto}
- 
+
 /* ══ STATS PANEL ══ */
 #stats-panel{display:none;padding:16px}
 #stats-panel.active{display:block}
@@ -160,14 +160,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .hist-table td{padding:6px 8px;border-bottom:1px solid var(--bg4)}
 .hist-table tr:last-child td{border:none}
 .pct-bar{height:6px;border-radius:3px;display:inline-block;min-width:2px}
- 
+
 /* MODALES */
 .overlay{position:fixed;inset:0;background:rgba(28,25,23,.5);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(3px)}
 .modal{background:#fff;border-radius:14px;padding:20px;width:420px;max-width:96vw;box-shadow:0 24px 64px rgba(28,25,23,.22);max-height:90vh;overflow-y:auto}
 .modal h2{font-size:13px;font-weight:800;letter-spacing:.07em;margin-bottom:14px}
 .mf{margin-bottom:9px}
 .mf label{display:block;color:var(--muted);font-family:var(--fm);font-size:9px;letter-spacing:.07em;margin-bottom:3px}
-.mf input,.mf textarea,.mf select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--fm);font-size:11px;outline:n...
+.mf input,.mf textarea,.mf select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--fm);font-size:11px;outline:none;transition:border-color .15s}
 .mf input:focus,.mf textarea:focus,.mf select:focus{border-color:var(--red);background:#fff}
 .mf textarea{resize:vertical;min-height:48px}
 .mf-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -180,7 +180,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .btn-danger{background:var(--red);color:#fff;border:none;padding:10px 20px;border-radius:7px;font-family:var(--fh);font-size:12px;font-weight:700;cursor:pointer;flex:1}
 .recur-extra{margin-top:6px;display:none}
 .recur-extra.show{display:block}
- 
+
 /* DRIVE MODAL */
 .drive-status{font-family:var(--fm);font-size:11px;padding:9px 12px;border-radius:7px;margin-top:8px;display:none}
 .drive-status.ok{background:var(--greenl);color:var(--green);display:block}
@@ -188,7 +188,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .drive-status.loading{background:var(--goldl);color:var(--gold);display:block}
 .drive-info{background:var(--bg3);border-radius:8px;padding:10px 12px;font-family:var(--fm);font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:10px}
 .drive-divider,.areas-divider{border:none;border-top:1px solid var(--border);margin:12px 0}
- 
+
 /* AREAS MODAL */
 .area-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;background:var(--bg3);margin-bottom:5px;border:1px solid var(--border)}
 .area-em{font-size:16px;width:24px;text-align:center;flex-shrink:0}
@@ -199,7 +199,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .add-area-grid{display:grid;grid-template-columns:48px 1fr 44px;gap:7px;margin-bottom:7px}
 .add-area-grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
 .color-wrap input[type=color]{width:36px;height:32px;border:1px solid var(--border);border-radius:6px;padding:2px;background:var(--bg3);cursor:pointer}
- 
+
 /* ARCHIVO */
 #arch-wrap{padding:10px 13px 100px;display:flex;flex-direction:column;gap:9px}
 #arch-wrap.hidden{display:none}
@@ -215,11 +215,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .di .days-left.urg{color:var(--red)}
 .di button{background:none;border:none;cursor:pointer;font-size:14px;padding:0 2px;opacity:.6;flex-shrink:0}.di button:hover{opacity:1}
 .trash-empty{font-family:var(--fm);font-size:9px;color:var(--red);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;margin-top:4px;display:inline-block}
- 
+
 /* BIAN */
-#fab{position:fixed;bottom:20px;right:20px;width:52px;height:52px;background:var(--red);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size...
+#fab{position:fixed;bottom:20px;right:20px;width:52px;height:52px;background:var(--red);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 16px rgba(185,28,28,.45);z-index:140;transition:transform .2s}
 #fab:hover{transform:scale(1.1)}
-#chat-panel{position:fixed;bottom:82px;right:16px;width:360px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 120px);background:#fff;border:1px solid var(--border);border-radius:1...
+#chat-panel{position:fixed;bottom:82px;right:16px;width:360px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 120px);background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow2);z-index:141;display:none;flex-direction:column;overflow:hidden}
 #chat-panel.open{display:flex}
 #ch-head{flex-shrink:0;padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--redl);border-radius:16px 16px 0 0}
 #ch-dragon{font-size:22px;flex-shrink:0}
@@ -242,13 +242,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 #ch-inp-row{flex-shrink:0;padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:#fff;border-radius:0 0 16px 16px}
 #ch-inp{flex:1;min-width:0;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--fm);font-size:16px;outline:none}
 #ch-inp:focus{border-color:var(--red);background:#fff}
-#mic-btn{flex-shrink:0;background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;c...
+#mic-btn{flex-shrink:0;background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);transition:all .15s}
 #mic-btn.recording{background:var(--redl);border-color:var(--red);animation:pulse .8s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-#ch-send{flex-shrink:0;background:var(--red);color:#fff;border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;tra...
+#ch-send{flex-shrink:0;background:var(--red);color:#fff;border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .15s}
 #ch-send:hover{background:var(--red2)}
 #ch-send:disabled{opacity:.35;cursor:default}
- 
+
 @media(max-width:620px){
   #board{grid-template-columns:1fr;gap:8px;padding:9px}
   .column{min-height:60px}
@@ -259,7 +259,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
   .meetings-scroll{padding-bottom:12px}
   .meeting-card{width:220px}
 }
- 
+
 /* ══ MENU DROPDOWN ══ */
 #menu-wrap{position:relative}
 .menu-btn{border-color:var(--border2)!important;font-weight:700!important}
@@ -280,7 +280,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 }
 .menu-item:hover{background:var(--bg3)}
 .menu-divider{border-top:1px solid var(--border);margin:4px 0}
- 
+
 /* ══ BOTTOM BAR ══ */
 #bottom-bar{
   position:fixed;bottom:0;left:0;right:0;
@@ -303,7 +303,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
   font-family:var(--fm);font-size:9px;padding:2px 7px;
   border-radius:8px;font-weight:600;min-width:18px;text-align:center;
 }
- 
+
 /* ══ HISTORIAL SHEET ══ */
 #hist-overlay{
   position:fixed;inset:0;background:rgba(28,25,23,.4);
@@ -372,17 +372,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);min-height:100
 .trash-empty-btn{font-family:var(--fm);font-size:9px;color:var(--red);background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:5px;display:block;margin-top:6px}
 .trash-empty-btn:hover{background:var(--redl)}
 .hist-empty{font-family:var(--fm);font-size:11px;color:var(--muted2);text-align:center;padding:30px 20px}
- 
+
 /* ══ HELP MODAL ══ */
 .help-section{margin-bottom:16px}
 .help-section h3{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .help-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-family:var(--fm);font-size:10.5px;line-height:1.5;color:var(--muted);border-bottom:1px solid var(--bg4)}
 .help-row:last-child{border:none}
 .help-icon{flex-shrink:0;width:20px;text-align:center}
- 
+
 /* Body padding for bottom bar */
 body{padding-bottom:60px}
- 
+
 /* ══ CALENDAR BUTTON + DROPDOWN ══ */
 .btn-calendar{
   background:#0F9D58;color:#fff;border:none;
@@ -402,16 +402,16 @@ body{padding-bottom:60px}
   z-index:300;box-shadow:var(--shadow2);
   display:none;white-space:nowrap;
 }
- 
+
 /* Responsive for bottom sheet */
 @media(max-width:480px){
   #hist-sheet{height:85vh;max-height:85vh}
   .htab{font-size:9px;padding:8px 4px}
 }
- 
+
 /* ── CREATION DATE ── */
 .card-age{font-family:var(--fm);font-size:8.5px;color:var(--muted2);margin-top:5px;padding-top:4px;border-top:1px solid var(--bg4)}
- 
+
 /* ── FLEXIBLE ALERT PULSE ── */
 .ftag-alert{
   animation:flexPulse 1.8s ease-in-out infinite;
@@ -421,7 +421,7 @@ body{padding-bottom:60px}
   0%,100%{opacity:1;background:var(--goldl)}
   50%{opacity:.55;background:#FEF9C3}
 }
- 
+
 /* ── DRAG REORDER INDICATORS ── */
 .card.drop-above{
   border-top:3px solid var(--blue)!important;
@@ -435,10 +435,111 @@ body{padding-bottom:60px}
 }
 @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .card{animation:fi .18s ease forwards}
+
+/* ══ VISTA HOY ══ */
+#hoy-header{
+  background:linear-gradient(135deg,var(--goldl),#FFF7ED);
+  border-bottom:2px solid #FDE68A;
+  padding:10px 16px;display:none;
+}
+#hoy-header.show{display:block}
+.hoy-title{font-size:13px;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:8px}
+.hoy-date{font-family:var(--fm);font-size:10px;color:var(--muted);margin-top:3px}
+.hoy-empty{text-align:center;padding:40px 20px;color:var(--muted2);font-family:var(--fm);font-size:11px;grid-column:1/-1}
+.hoy-empty .big{font-size:36px;margin-bottom:8px}
+#board .col-title.hoy-col{color:var(--gold)!important}
+
+/* ══ CAPTURA RÁPIDA ══ */
+#quick-fab{
+  position:fixed;bottom:82px;right:20px;
+  width:44px;height:44px;
+  background:#fff;border:2px solid var(--border2);
+  border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;z-index:138;
+  box-shadow:var(--shadow2);
+  transition:all .2s;color:var(--gold);
+}
+#quick-fab:hover{border-color:var(--gold);background:var(--goldl);transform:scale(1.1)}
+#quick-fab.open{border-color:var(--gold);background:var(--goldl)}
+#quick-capture{
+  position:fixed;bottom:136px;right:16px;
+  width:320px;max-width:calc(100vw - 32px);
+  background:#fff;border-radius:14px;border:1px solid var(--border);
+  box-shadow:var(--shadow2);z-index:139;
+  display:none;overflow:hidden;
+}
+#quick-capture.open{display:block;animation:slideUp .2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#qc-head{
+  background:var(--goldl);border-bottom:1px solid #FDE68A;
+  padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#qc-head span{font-family:var(--fh);font-size:11px;font-weight:800;color:var(--gold)}
+#qc-close{background:none;border:none;cursor:pointer;color:var(--gold);font-size:18px;line-height:1;padding:0}
+#qc-body{padding:11px 12px 12px}
+#qc-title{
+  width:100%;background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:8px;padding:10px 12px;
+  font-family:var(--fh);font-size:13px;color:var(--text);outline:none;
+  margin-bottom:8px;box-sizing:border-box;
+}
+#qc-title:focus{border-color:var(--gold);background:#fff}
+#qc-row{display:flex;gap:6px;align-items:stretch}
+#qc-area-sel,#qc-col-sel{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:7px;padding:7px 8px;
+  font-family:var(--fm);font-size:10px;color:var(--text);outline:none;min-width:0;
+}
+#qc-area-sel:focus,#qc-col-sel:focus{border-color:var(--gold);background:#fff}
+#qc-save{
+  flex-shrink:0;background:var(--gold);color:#fff;border:none;
+  border-radius:7px;padding:7px 14px;
+  font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;
+}
+#qc-save:hover{background:#78350F}
+@media(max-width:480px){
+  #quick-fab{bottom:72px}
+  #quick-capture{bottom:126px;right:8px;left:8px;width:auto}
+}
+
+/* ══ SUBTASKS ══ */
+.st-section{margin-top:8px;padding-top:7px;border-top:1px solid var(--border)}
+.st-bar{display:flex;align-items:center;gap:6px;cursor:pointer;padding:3px 0;user-select:none}
+.st-bar:hover{opacity:.8}
+.st-toggle{font-size:9px;color:var(--muted);flex-shrink:0;width:10px;transition:transform .2s}
+.st-toggle.open{transform:rotate(90deg)}
+.st-prog-wrap{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.st-prog-fill{height:100%;border-radius:3px;transition:width .35s}
+.st-count{font-family:var(--fm);font-size:9px;color:var(--muted);flex-shrink:0}
+.st-pct{font-family:var(--fm);font-size:9px;font-weight:700;flex-shrink:0;min-width:28px;text-align:right}
+.st-list{padding-top:5px;display:flex;flex-direction:column;gap:3px}
+.st-item{display:flex;align-items:center;gap:5px;padding:3px 0;border-radius:4px}
+.st-item.done .st-title{text-decoration:line-through;color:var(--muted2)}
+.st-chk{background:none;border:1.5px solid var(--border2);border-radius:3px;width:15px;height:15px;font-size:8px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;color:transparent;padding:0}
+.st-chk.checked{background:var(--greenl);border-color:var(--green);color:var(--green)}
+.st-chk:hover{border-color:var(--green)}
+.st-title{font-family:var(--fm);font-size:10px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-due{font-family:var(--fm);font-size:8.5px;color:var(--muted2);background:var(--bg4);padding:1px 5px;border-radius:3px;flex-shrink:0;cursor:pointer;transition:all .15s;border:none}
+.st-due:hover{background:var(--bluel);color:var(--blue)}
+.st-due.ov{background:var(--redl);color:var(--red)}
+.st-due-inp{font-family:var(--fm);font-size:9px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;background:var(--bg3);color:var(--text);outline:none;width:105px;flex-shrink:0}
+.st-due-inp:focus{border-color:var(--blue);background:#fff}
+.st-del{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:12px;padding:0 2px;flex-shrink:0;opacity:0;transition:opacity .15s;line-height:1}
+.st-item:hover .st-del{opacity:1}
+.st-del:hover{color:var(--red)}
+.st-add-row{display:flex;gap:4px;margin-top:5px;align-items:center}
+.st-add-inp{flex:1;background:var(--bg4);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-family:var(--fm);font-size:10px;color:var(--text);outline:none;min-width:0}
+.st-add-inp:focus{border-color:var(--purple);background:#fff}
+.st-add-btn{background:var(--purplel);color:var(--purple);border:none;border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer;flex-shrink:0;font-weight:700}
+.st-add-btn:hover{background:var(--purple);color:#fff}
+.st-new-btn{background:none;border:none;font-family:var(--fm);font-size:9px;color:var(--muted2);cursor:pointer;padding:5px 0 0;margin-top:4px;border-top:1px dashed var(--border);width:100%;text-align:left;transition:color .15s}
+.st-new-btn:hover{color:var(--purple)}
 </style>
 </head>
 <body>
- 
+
 <!-- HEADER -->
 <div id="header">
   <div id="hlogo">
@@ -480,32 +581,33 @@ body{padding-bottom:60px}
     <input type="file" id="imp-inp" accept=".json" style="display:none" onchange="importData(event)">
   </div>
 </div>
- 
+
 <!-- SYNC BAR -->
 <div id="sync-bar" class="hidden">
   <span id="sync-icon">☁️</span>
   <span id="sync-text" style="font-family:var(--fm);font-size:10px"></span>
   <span id="sync-time" style="margin-left:auto;color:var(--muted2);font-family:var(--fm);font-size:9px"></span>
 </div>
- 
+
 <!-- MONTH CLOSE BANNER -->
 <div id="close-banner">
   <p id="close-banner-text">🗓️ ¿Cerrar el mes?</p>
   <button class="banner-btn" onclick="closeMonth()">Cerrar mes y archivar</button>
   <button class="banner-btn secondary" onclick="dismissBanner()">Más tarde</button>
 </div>
- 
+
 <div id="toast"></div>
- 
+
 <!-- TABS -->
 <div id="tabs">
   <div class="tab active" id="tab-ALL"      onclick="setTab('ALL')">🗂 TODO <span class="tc" id="tc-ALL"></span></div>
+  <div class="tab hoy-tab" id="tab-HOY"     onclick="setTab('HOY')">☀️ HOY <span class="tc" id="tc-HOY"></span></div>
   <div class="tab" id="tab-UNSJ"     onclick="setTab('UNSJ')">🔬 UNSJ <span class="tc" id="tc-UNSJ"></span></div>
   <div class="tab" id="tab-Scouts"   onclick="setTab('Scouts')">🏕️ Scouts <span class="tc" id="tc-Scouts"></span></div>
   <div class="tab" id="tab-Personal" onclick="setTab('Personal')">🏠 Personal <span class="tc" id="tc-Personal"></span></div>
   <div class="tab" id="tab-Empresas" onclick="setTab('Empresas')">🏢 Empresas <span class="tc" id="tc-Empresas"></span></div>
   </div>
- 
+
 <!-- BOTTOM BAR -->
 <div id="bottom-bar">
   <button class="hist-trigger" onclick="openHistorial()">
@@ -517,7 +619,7 @@ body{padding-bottom:60px}
     </span>
   </button>
 </div>
- 
+
 <!-- HISTORIAL OVERLAY + SHEET -->
 <div id="hist-overlay" onclick="closeHistorial()"></div>
 <div id="hist-sheet">
@@ -559,7 +661,13 @@ body{padding-bottom:60px}
     <div id="hist-list" style="display:none"></div>
   </div>
 </div>
- 
+
+<!-- HOY HEADER -->
+<div id="hoy-header">
+  <div class="hoy-title">☀️ <span id="hoy-title-text">Modo Hoy</span></div>
+  <div class="hoy-date" id="hoy-date-text"></div>
+</div>
+
 <!-- MEETINGS -->
 <div id="meetings-section">
   <div id="meetings-header">
@@ -569,7 +677,7 @@ body{padding-bottom:60px}
     <span id="no-meetings">Sin reuniones agendadas — tocá + REUNIÓN para agregar</span>
   </div>
 </div>
- 
+
 <!-- BOARD -->
 <div id="board">
   <div class="column" id="col-urgent"  ondragover="dragOver(event,'urgent')"  ondragleave="dragLeave(event,'urgent')"  ondrop="drop(event,'urgent')">
@@ -585,11 +693,11 @@ body{padding-bottom:60px}
     <div class="col-cards" id="cc-pending-list"></div>
   </div>
 </div>
- 
+
 <!-- stats moved to historial -->
- 
+
 <!-- arch moved to historial sheet -->
- 
+
 <!-- MODAL TAREA -->
 <div id="modal" class="overlay" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal">
@@ -646,14 +754,14 @@ body{padding-bottom:60px}
     </div>
   </div>
 </div>
- 
+
 <!-- MODAL REUNIÓN -->
 <div id="meeting-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeMeetingModal()">
   <div class="modal">
     <h2 id="meeting-modal-title">📅 NUEVA REUNIÓN</h2>
     <div class="mf"><label>TÍTULO</label><input id="mt-title" type="text" placeholder="Reunión de coordinación CHALÚ-X..."></div>
     <div class="mf"><label>ÁREA</label><select id="mt-area"></select></div>
-    <div id="mt-overlap-warn" style="display:none;background:var(--goldl);color:var(--gold);font-family:var(--fm);font-size:10px;padding:8px 12px;border-radius:7px;margin-bottom:4px;border:1px soli...
+    <div id="mt-overlap-warn" style="display:none;background:var(--goldl);color:var(--gold);font-family:var(--fm);font-size:10px;padding:8px 12px;border-radius:7px;margin-bottom:4px;border:1px solid #FDE68A;line-height:1.5"></div>
     <div class="mf-row">
       <div class="mf" style="margin:0"><label>FECHA INICIO</label><input id="mt-date" type="date" onchange="checkMeetingOverlap()" oninput="checkMeetingOverlap()"></div>
       <div class="mf" style="margin:0"><label>HORA (opcional)</label><input id="mt-time" type="time" onchange="checkMeetingOverlap()" oninput="checkMeetingOverlap()"></div>
@@ -704,7 +812,7 @@ body{padding-bottom:60px}
     </div>
   </div>
 </div>
- 
+
 <!-- MODAL CONFIRMAR BORRADO -->
 <div id="confirm-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeConfirm()">
   <div class="modal" style="width:320px;text-align:center">
@@ -714,7 +822,7 @@ body{padding-bottom:60px}
     <div class="mbtns"><button class="btn-danger" onclick="confirmDelete()">Sí, eliminar</button><button class="btn-cm" onclick="closeConfirm()">Cancelar</button></div>
   </div>
 </div>
- 
+
 <!-- MODAL DRIVE -->
 <div id="drive-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeDriveModal()">
   <div class="modal">
@@ -739,7 +847,7 @@ body{padding-bottom:60px}
     </div>
   </div>
 </div>
- 
+
 <!-- MODAL ÁREAS -->
 <div id="areas-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeAreasModal()">
   <div class="modal" style="width:440px">
@@ -754,25 +862,25 @@ body{padding-bottom:60px}
     </div>
     <div class="add-area-grid2">
       <div class="mf" style="margin:0"><label>CATEGORÍA</label>
-        <select id="na-cat"><option value="UNSJ">🔬 UNSJ</option><option value="Scouts">🏕️ Scouts</option><option value="Personal">🏠 Personal</option><option value="Empresas">🏢 Empresas</option>...
+        <select id="na-cat"><option value="UNSJ">🔬 UNSJ</option><option value="Scouts">🏕️ Scouts</option><option value="Personal">🏠 Personal</option><option value="Empresas">🏢 Empresas</option></select>
       </div>
       <div style="display:flex;align-items:flex-end"><button class="btn-save" onclick="addArea()" style="width:100%">+ AGREGAR</button></div>
     </div>
     <button class="btn-cm" onclick="closeAreasModal()" style="width:100%;margin-top:6px">Cerrar</button>
   </div>
 </div>
- 
+
 <!-- CALENDAR DEBUG MODAL -->
 <div id="cal-debug-modal" class="overlay" style="display:none" onclick="if(event.target===this)document.getElementById('cal-debug-modal').style.display='none'">
   <div class="modal" style="width:480px;max-height:80vh">
     <h2>🔍 Log de sincronización con Google Calendar</h2>
-    <div id="cal-debug-content" style="font-family:var(--fm);font-size:10px;color:var(--text);line-height:1.8;max-height:50vh;overflow-y:auto;background:var(--bg3);padding:12px;border-radius:8px;ma...
+    <div id="cal-debug-content" style="font-family:var(--fm);font-size:10px;color:var(--text);line-height:1.8;max-height:50vh;overflow-y:auto;background:var(--bg3);padding:12px;border-radius:8px;margin-bottom:14px;white-space:pre-wrap;word-break:break-all"></div>
     <div class="mbtns">
       <button class="btn-cm" onclick="document.getElementById('cal-debug-modal').style.display='none'" style="width:100%">Cerrar</button>
     </div>
   </div>
 </div>
- 
+
 <!-- MEETING RESULT MODAL -->
 <div id="mtresult-modal" class="overlay" style="display:none" onclick="if(event.target===this)confirmDoneMeeting(false)">
   <div class="modal" style="width:360px">
@@ -788,7 +896,30 @@ body{padding-bottom:60px}
     </div>
   </div>
 </div>
- 
+
+<!-- CAPTURA RÁPIDA -->
+<button id="quick-fab" onclick="toggleQuickCapture()" title="⚡ Captura rápida">⚡</button>
+<div id="quick-capture">
+  <div id="qc-head">
+    <span>⚡ Captura rápida</span>
+    <button id="qc-close" onclick="closeQuickCapture()">✕</button>
+  </div>
+  <div id="qc-body">
+    <input type="text" id="qc-title" placeholder="¿Qué tenés que hacer?"
+      autocomplete="off" autocorrect="off" autocapitalize="off"
+      onkeydown="if(event.key==='Enter')saveQuick();if(event.key==='Escape')closeQuickCapture()">
+    <div id="qc-row">
+      <select id="qc-area-sel"></select>
+      <select id="qc-col-sel">
+        <option value="pending">📋 Pendiente</option>
+        <option value="active">⚙️ En Curso</option>
+        <option value="urgent">🔥 Urgente</option>
+      </select>
+      <button id="qc-save" onclick="saveQuick()">✓</button>
+    </div>
+  </div>
+</div>
+
 <!-- BIAN FAB -->
 <button id="fab" onclick="toggleChat()" title="Bian">🐉</button>
 <div id="chat-panel">
@@ -807,12 +938,12 @@ body{padding-bottom:60px}
   </div>
   <div id="ch-msgs"><div class="cm sys">🐉 Saludos, Martín. Ingresá tu API key para activarme.</div></div>
   <div id="ch-inp-row">
-    <input type="text" id="ch-inp" placeholder="Escribí a Bian..." autocomplete="off" autocorrect="off" autocapitalize="off" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault...
+    <input type="text" id="ch-inp" placeholder="Escribí a Bian..." autocomplete="off" autocorrect="off" autocapitalize="off" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
     <button id="mic-btn" onclick="toggleMic()" title="Micrófono">🎤</button>
     <button id="ch-send" onclick="sendChat()">🐉</button>
   </div>
 </div>
- 
+
 <script>
 // ════════════════════════════════════════════════════
 //  ÁREAS
@@ -838,14 +969,14 @@ const DEFAULT_AREAS={
   "Ifrimen SRL":         {c:"#0EA5E9",e:"❄️",cat:"Empresas"},
 };
 let AREAS={};
- 
+
 // ════════════════════════════════════════════════════
 //  KEYS & STATE
 // ════════════════════════════════════════════════════
 const CK="dtdl-cards-v4", AKY="dtdl-areas-v4", AKKEY="dtdl-ak";
 const DRIVE_URL="dtdl-drive-url", DRIVE_KEY="dtdl-drive-key", SYNC_TS="dtdl-sync-ts";
 const HIST_KEY="dtdl-history", LAST_CLOSE_KEY="dtdl-last-close";
- 
+
 let cards=[], tab="ALL", dragId=null, editId=null, editMeetingId=null;
 let archOpen={done:false,cancelled:false,trash:false};
 let apiKey="", chatHist=[], recog=null, pendingDelId=null;
@@ -856,21 +987,23 @@ const TRASH_MS=7*24*60*60*1000;
 let dragOverCardId=null, dragOverPos="after";
 // Meeting result
 let pendingDoneMeetingId=null;
- 
+// Subtask expanded state
+const expandedSts=new Set();
+
 // ════════════════════════════════════════════════════
 //  STORAGE
 // ════════════════════════════════════════════════════
 function saveLocal(){localStorage.setItem(CK,JSON.stringify(cards));}
 function saveAreas(){localStorage.setItem(AKY,JSON.stringify(AREAS));}
 function saveHistory(){localStorage.setItem(HIST_KEY,JSON.stringify(monthlyHistory));}
- 
+
 // Legacy key names from previous versions
 const LEGACY_KEYS={
   apiKey:  ["dtdl-ak","mcc-ak","mcc-apikey"],
   driveUrl:["dtdl-drive-url","mcc-drive-url","dragon-drive-url"],
   driveKey:["dtdl-drive-key","mcc-drive-key","dragon-drive-key"],
 };
- 
+
 function getWithFallback(primary, legacyList){
   // Try primary key first
   const val=localStorage.getItem(primary);
@@ -886,7 +1019,7 @@ function getWithFallback(primary, legacyList){
   }
   return "";
 }
- 
+
 function load(){
   try{const a=localStorage.getItem(AKY);AREAS=a?JSON.parse(a):JSON.parse(JSON.stringify(DEFAULT_AREAS));}
   catch{AREAS=JSON.parse(JSON.stringify(DEFAULT_AREAS));}
@@ -902,7 +1035,7 @@ function load(){
   cleanTrash();
   processPassedMeetings();
 }
- 
+
 // ════════════════════════════════════════════════════
 //  HMAC-SHA256 (Web Crypto)
 // ════════════════════════════════════════════════════
@@ -912,7 +1045,7 @@ async function computeHMAC(message,secret){
   const sig=await crypto.subtle.sign("HMAC",key,enc.encode(message));
   return btoa(String.fromCharCode(...new Uint8Array(sig)));
 }
- 
+
 // ════════════════════════════════════════════════════
 //  APPS SCRIPT CALLS
 // ════════════════════════════════════════════════════
@@ -932,7 +1065,7 @@ async function callServer(action,data=null){
   if(result.error)throw new Error(result.error);
   return result;
 }
- 
+
 let syncTimeout=null;
 async function saveC(){
   saveLocal();
@@ -957,13 +1090,13 @@ async function loadFromDrive(){
       cards=result.data.cards;
       if(result.data.areas)AREAS=result.data.areas;
       if(result.data.history)monthlyHistory=result.data.history;
-      cleanTrash();processPassedMeetings();saveLocal();saveAreas();saveHistory();
+      saveLocal();saveAreas();saveHistory();cleanTrash();
       setSyncBar("saved");return true;
     }
     setSyncBar("saved");return false;
   }catch(err){setSyncBar("error",err.message);return false;}
 }
- 
+
 function setSyncBar(status,detail=""){
   const bar=document.getElementById("sync-bar");
   const icon=document.getElementById("sync-icon");
@@ -984,7 +1117,7 @@ function setSyncBar(status,detail=""){
   bar.className=s.cls;icon.textContent=s.icon;text.textContent=s.text;
   time.textContent=status==="saved"?timeStr:"";
 }
- 
+
 // ════════════════════════════════════════════════════
 //  DRIVE MODAL
 // ════════════════════════════════════════════════════
@@ -1031,10 +1164,10 @@ function saveDriveConfig(){
 function disconnectDrive(){
   if(!confirm("¿Desconectar Drive?"))return;
   scriptUrl="";hmacKey="";localStorage.removeItem(DRIVE_URL);localStorage.removeItem(DRIVE_KEY);
-  const btn=document.getElementById("drive-menu-item");if(btn)btn.style.color="";
+  const btn=document.getElementById("drive-btn");btn.textContent="🔗 Drive";btn.style.background="";
   setSyncBar("offline");closeDriveModal();showToast("📴 Drive desconectado");
 }
- 
+
 // ════════════════════════════════════════════════════
 //  RECURRENCE
 // ════════════════════════════════════════════════════
@@ -1042,7 +1175,7 @@ const RECUR_LABELS={
   weekly:"🔁 Semanal",biweekly:"🔁 Quincenal",monthly:"🔁 Mensual",
   weekday:"🔁 Semanal fijo",periodic:"🔁 Periódica",flexible:"🕐 A convenir"
 };
- 
+
 function getNextDate(dateStr,rec){
   if(!dateStr||!rec||rec.type==="flexible")return null;
   const d=new Date(dateStr+"T12:00:00");
@@ -1057,33 +1190,13 @@ function getNextDate(dateStr,rec){
   return d.toISOString().slice(0,10);
 }
 
-function toIsoDate(date){
-  return date.toISOString().slice(0,10);
-}
-
-function getMeetingEndAt(meeting){
-  if(!meeting.date)return null;
-  if(meeting.dateEnd)return new Date(meeting.dateEnd+"T23:59:59");
-  return new Date(meeting.date+"T"+(meeting.time||"23:59")+":00");
-}
-
-function getRecurringMeetingDates(meeting,nextDate){
-  if(!meeting.dateEnd)return {date:nextDate,dateEnd:null};
-  const currentStart=new Date(meeting.date+"T12:00:00");
-  const currentEnd=new Date(meeting.dateEnd+"T12:00:00");
-  const durationDays=Math.max(0,Math.round((currentEnd-currentStart)/86400000));
-  const nextEnd=new Date(nextDate+"T12:00:00");
-  nextEnd.setDate(nextEnd.getDate()+durationDays);
-  return {date:nextDate,dateEnd:toIsoDate(nextEnd)};
-}
- 
 function updateRecurUI(prefix){
   const type=document.getElementById(prefix+"-recur").value;
   document.getElementById(prefix+"-recur-weekday").classList.toggle("show",type==="weekday");
   document.getElementById(prefix+"-recur-interval").classList.toggle("show",type==="periodic");
   document.getElementById(prefix+"-recur-flex").classList.toggle("show",type==="flexible");
 }
- 
+
 function getRecurFromForm(prefix){
   const type=document.getElementById(prefix+"-recur").value;
   if(!type)return null;
@@ -1093,7 +1206,7 @@ function getRecurFromForm(prefix){
   if(type==="flexible")rec.flexNote=document.getElementById(prefix+"-recur-flex-note").value.trim();
   return rec;
 }
- 
+
 function setRecurForm(prefix,rec){
   const sel=document.getElementById(prefix+"-recur");
   sel.value=rec?rec.type:"";
@@ -1104,37 +1217,28 @@ function setRecurForm(prefix,rec){
     if(rec.flexNote)document.getElementById(prefix+"-recur-flex-note").value=rec.flexNote;
   }
 }
- 
+
 // Auto-process passed meetings (on load)
 function processPassedMeetings(){
   const now=new Date();
   let changed=false;
   cards.filter(c=>c.type==="meeting"&&c.col==="upcoming").forEach(c=>{
-    const endAt=getMeetingEndAt(c);
-    if(endAt&&endAt<now){
+    const dt=new Date(c.date+"T"+(c.time||"23:59")+":00");
+    if(dt<now){
       c.col="done";c.completedAt=now.getTime();
-      if(c.gcalEventId){
-        callCalServer("update",{...buildCalData(c),resultNote:c.resultNote||"",completed:true}).then(eventId=>{
-          if(eventId&&eventId!==c.gcalEventId){c.gcalEventId=eventId;saveLocal();}
-        });
-      }
       if(c.recurrence&&c.recurrence.type!=="flexible"){
         const nextDate=getNextDate(c.date,c.recurrence);
         if(nextDate){
-          const nextDates=getRecurringMeetingDates(c,nextDate);
-          const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDates.date,dateEnd:nextDates.dateEnd};
-          delete nm.completedAt;delete nm.resultNote;delete nm.gcalEventId;cards.push(nm);
-          callCalServer("create",buildCalData(nm)).then(eventId=>{
-            if(eventId){nm.gcalEventId=eventId;saveLocal();}
-          });
+          const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDate};
+          delete nm.completedAt;cards.push(nm);
         }
       }
       changed=true;
     }
   });
-  if(changed)saveC();
+  if(changed)saveLocal();
 }
- 
+
 // ════════════════════════════════════════════════════
 //  MONTHLY HISTORY
 // ════════════════════════════════════════════════════
@@ -1146,63 +1250,58 @@ function getPrevMonthKey(){
   const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
 }
-function monthKeyFromTs(ts){
-  if(!ts)return "";
-  const d=new Date(ts);
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
-}
 function monthLabel(key){
   const [y,m]=key.split("-");
   const names=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
   return names[parseInt(m)-1]+" "+y.slice(2);
 }
- 
+
 function checkMonthlyClose(){
   const lastClose=localStorage.getItem(LAST_CLOSE_KEY)||"";
   const prevMonth=getPrevMonthKey();
   const banner=document.getElementById("close-banner");
   // Show banner if prev month not closed and there are items to close
-  const doneCount=cards.filter(c=>c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===prevMonth).length;
-  const cancCount=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===prevMonth).length;
+  const doneCount=cards.filter(c=>c.col==="done"&&c.type!=="meeting").length;
+  const cancCount=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting").length;
   if(lastClose!==getPrevMonthKey()&&(doneCount+cancCount)>0&&!monthlyHistory[prevMonth]){
     document.getElementById("close-banner-text").textContent=
       `🗓️ ¿Cerrar el mes ${monthLabel(prevMonth)}? Hay ${doneCount} completadas y ${cancCount} canceladas para archivar.`;
     banner.style.display="flex";
   }
 }
- 
+
 function dismissBanner(){document.getElementById("close-banner").style.display="none";}
- 
+
 function closeMonth(){
   const monthKey=getPrevMonthKey();
-  const doneItems=cards.filter(c=>c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===monthKey);
-  const cancItems=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===monthKey);
-  const activeItems=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting"&&monthKeyFromTs(c.createdAt)===monthKey);
+  const doneItems=cards.filter(c=>c.col==="done"&&c.type!=="meeting");
+  const cancItems=cards.filter(c=>c.col==="cancelled"&&c.type!=="meeting");
+  const activeItems=cards.filter(c=>!["done","cancelled","trash"].includes(c.col)&&c.type!=="meeting");
   const loaded=doneItems.length+cancItems.length+activeItems.length;
- 
+
   monthlyHistory[monthKey]={
     loaded,
     completed:doneItems.length,
     cancelled:cancItems.length,
     closedAt:new Date().toISOString()
   };
- 
+
   // Keep only last 12 months
   const keys=Object.keys(monthlyHistory).sort().slice(-12);
   const trimmed={};keys.forEach(k=>trimmed[k]=monthlyHistory[k]);
   monthlyHistory=trimmed;
- 
+
   // Archive done and cancelled → mark as archived
-  cards.filter(c=>(c.col==="done"&&c.type!=="meeting"&&monthKeyFromTs(c.completedAt)===monthKey)||(c.col==="cancelled"&&c.type!=="meeting"&&monthKeyFromTs(c.cancelledAt)===monthKey)).forEach(c=>{
+  cards.filter(c=>c.col==="done"||c.col==="cancelled").forEach(c=>{
     c.col="archived";c.archivedMonth=monthKey;
   });
- 
+
   localStorage.setItem(LAST_CLOSE_KEY,monthKey);
   saveHistory();saveC();
   document.getElementById("close-banner").style.display="none";
   render();showToast(`✅ Mes ${monthLabel(monthKey)} archivado`);
 }
- 
+
 // ════════════════════════════════════════════════════
 //  PAPELERA
 // ════════════════════════════════════════════════════
@@ -1229,18 +1328,18 @@ function emptyTrash(){
   cards=cards.filter(c=>c.col!=="trash");saveC();render();showToast("🗑️ Papelera vaciada");
   if(document.getElementById("hist-sheet").classList.contains("open"))renderHistList("trash");
 }
- 
+
 // ════════════════════════════════════════════════════
 //  GOOGLE CALENDAR SYNC
 // ════════════════════════════════════════════════════
- 
+
 // ── Debug log para Calendar sync ─────────────────
 let calDebugLog=[];
- 
+
 // ── Calendar menu (simplified - button is now direct link) ──
 function toggleCalMenu(e){if(e)e.stopPropagation();}
 function closeCalMenu(){}
- 
+
 // ── Build Cal data from a card ────────────────────
 function buildCalData(c){
   if(c.type==="meeting"){
@@ -1260,7 +1359,7 @@ function buildCalData(c){
     gcalEventId:c.gcalEventId||null
   };
 }
- 
+
 // ── Bulk sync: create/update/delete all ──────────
 async function bulkSyncCalendar(){
   if(!scriptUrl||!hmacKey){
@@ -1270,7 +1369,7 @@ async function bulkSyncCalendar(){
   calDebugLog=[];
   const progress=document.getElementById("cal-progress");
   if(progress){progress.style.display="block";progress.textContent="🔄 Iniciando...";}
- 
+
   // Items to SYNC (active, with date, not flexible)
   const toSync=cards.filter(c=>{
     if(["done","cancelled","trash","archived"].includes(c.col))return false;
@@ -1279,15 +1378,15 @@ async function bulkSyncCalendar(){
     if(c.recurrence&&c.recurrence.type==="flexible")return false;
     return true;
   });
- 
+
   // Items to DELETE from Cal (done/cancelled/trash WITH gcalEventId)
   const toDelete=cards.filter(c=>
     ["done","cancelled","trash"].includes(c.col)&&c.gcalEventId
   );
- 
+
   const total=toSync.length+toDelete.length;
   let synced=0,cleaned=0,errors=0;
- 
+
   // Step 1: Clean up completed/cancelled events
   progress.textContent=`🔄 Limpiando eventos completados (0/${toDelete.length})...`;
   for(const c of toDelete){
@@ -1297,7 +1396,7 @@ async function bulkSyncCalendar(){
       progress.textContent=`🔄 Limpiando (${cleaned}/${toDelete.length})...`;
     }catch(err){errors++;console.warn("Delete error:",c.title,err.message);}
   }
- 
+
   // Step 2: Create/update active items
   progress.textContent=`🔄 Sincronizando ítems activos (0/${toSync.length})...`;
   for(const c of toSync){
@@ -1306,7 +1405,7 @@ async function bulkSyncCalendar(){
       const calData=buildCalData(c);
       const eventId=await callCalServer(op,calData);
       if(eventId){
-        if(eventId!==c.gcalEventId)c.gcalEventId=eventId;
+        if(!c.gcalEventId)c.gcalEventId=eventId;
         synced++;
       }else if(op==="update"&&c.gcalEventId){
         // update returns null on success too sometimes — count it
@@ -1317,25 +1416,25 @@ async function bulkSyncCalendar(){
       progress.textContent=`🔄 Sincronizando (${synced}/${toSync.length})...`;
     }catch(err){errors++;console.warn("Sync error:",c.title,err.message);}
   }
- 
+
   saveLocal();
   render();
   if(progress){progress.style.display="none";}
- 
+
   // Show log button if there were errors
   const logBtn=document.getElementById("cal-log-btn");
   if(logBtn)logBtn.style.display=errors>0?"flex":"none";
- 
+
   const msg="✅ "+synced+" sincronizados · 🗑️ "+cleaned+" eliminados"
     +(errors?" · ⚠️ "+errors+' errores — tocá "Ver errores"' :"");
   showToast(msg,5000);
- 
+
   // Auto-show log if all failed
   if(synced===0&&errors>0){
     setTimeout(()=>showCalLog(),500);
   }
 }
- 
+
 async function callCalServer(op, calData){
   if(!scriptUrl||!hmacKey){
     calDebugLog.push("NO_CONFIG: sin URL o clave secreta");
@@ -1370,8 +1469,8 @@ async function callCalServer(op, calData){
     return null;
   }
 }
- 
- 
+
+
 // ── Test connection ───────────────────────────────
 async function testCalConnection(){
   if(!scriptUrl){showToast("⚠️ Configurá Drive primero");return;}
@@ -1395,7 +1494,7 @@ async function testCalConnection(){
     showCalLog();
   }
 }
- 
+
 // ── Show debug log ────────────────────────────────
 function showCalLog(){
   closeCalMenu();
@@ -1403,7 +1502,7 @@ function showCalLog(){
   if(el)el.textContent=calDebugLog.length?calDebugLog.join("\n\n"):"(sin entradas en el log)";
   document.getElementById("cal-debug-modal").style.display="flex";
 }
- 
+
 // ════════════════════════════════════════════════════
 //  CONFIG EXPORT / IMPORT (claves y URLs)
 // ════════════════════════════════════════════════════
@@ -1424,7 +1523,7 @@ function exportConfig(){
   URL.revokeObjectURL(url);
   showToast("💾 Claves exportadas — guardá el archivo!");
 }
- 
+
 function importConfig(e){
   const file=e.target.files[0];if(!file)return;
   const r=new FileReader();
@@ -1463,7 +1562,7 @@ function importConfig(e){
   };
   r.readAsText(file);
 }
- 
+
 // ════════════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ════════════════════════════════════════════════════
@@ -1495,14 +1594,14 @@ function exportICS(){
   items.forEach(c=>{
     const dateStr=c.due||c.date;const d=dateStr.replace(/-/g,"");
     const end=new Date(dateStr+"T12:00:00");end.setDate(end.getDate()+1);const ed=end.toISOString().slice(0,10).replace(/-/g,"");
-    ics+=`BEGIN:VEVENT\r\nUID:dtdl-${c.id}@martin\r\nSUMMARY:${c.type==="meeting"?"📅":"🐉"} ${c.title} [${c.area}]\r\nDESCRIPTION:${(c.note||c.agenda||"").replace(/\n/g,"\\n")}\r\nDTSTART;VALUE=DA...
+    ics+=`BEGIN:VEVENT\r\nUID:dtdl-${c.id}@martin\r\nSUMMARY:${c.type==="meeting"?"📅":"🐉"} ${c.title} [${c.area}]\r\nDESCRIPTION:${(c.note||c.agenda||"").replace(/\n/g,"\\n")}\r\nDTSTART;VALUE=DATE:${d}\r\nDTEND;VALUE=DATE:${ed}\r\nEND:VEVENT\r\n`;
   });
   ics+="END:VCALENDAR";
   const blob=new Blob([ics],{type:"text/calendar"});const url=URL.createObjectURL(blob);
   const a=document.createElement("a");a.href=url;a.download="dragon-todo.ics";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   showToast(`📅 ${items.length} ítems exportados`);
 }
- 
+
 // ════════════════════════════════════════════════════
 //  TOAST
 // ════════════════════════════════════════════════════
@@ -1510,7 +1609,7 @@ function showToast(msg,dur=2800){
   const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),dur);
 }
- 
+
 // ════════════════════════════════════════════════════
 //  TABS
 // ════════════════════════════════════════════════════
@@ -1518,27 +1617,49 @@ function setTab(t){
   tab=t;
   document.querySelectorAll(".tab").forEach(el=>el.classList.remove("active"));
   document.getElementById("tab-"+t).classList.add("active");
+  // HOY mode: show header with date
+  const hoyHdr=document.getElementById("hoy-header");
+  if(hoyHdr){
+    if(t==="HOY"){
+      hoyHdr.classList.add("show");
+      const now=new Date();
+      document.getElementById("hoy-title-text").textContent=
+        "Modo Hoy — "+now.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+      const todayStr=now.toISOString().slice(0,10);
+      const hoyItems=cards.filter(c=>{
+        if(["done","cancelled","trash","archived"].includes(c.col))return false;
+        if(c.type==="meeting")return c.col==="upcoming"&&c.date===todayStr;
+        return c.col==="urgent"||(c.due&&c.due<=todayStr);
+      }).length;
+      document.getElementById("hoy-date-text").textContent=
+        hoyItems+" ítem"+(hoyItems!==1?"s":"")+" para atender hoy";
+    }else{
+      hoyHdr.classList.remove("show");
+    }
+  }
   render();
 }
 function getCat(area){return(AREAS[area]||{cat:"Personal"}).cat;}
- 
+
 // ════════════════════════════════════════════════════
 //  MEETINGS RENDER
 // ════════════════════════════════════════════════════
 function renderMeetings(){
   const el=document.getElementById("meetings-list");
+  const todayMeet=new Date().toISOString().slice(0,10);
   const meetings=cards
     .filter(c=>{
       if(c.type!=="meeting"||c.col!=="upcoming")return false;
+      if(tab==="HOY")return c.date===todayMeet; // solo hoy
       if(tab!=="ALL"&&tab!=="stats"&&getCat(c.area)!==tab)return false;
       return true;
     })
     .sort((a,b)=>new Date((a.date||"9999-12-31")+"T"+(a.time||"00:00"))-new Date((b.date||"9999-12-31")+"T"+(b.time||"00:00")));
- 
+
   document.getElementById("no-meetings").style.display=meetings.length?"none":"";
   // Remove existing cards (keep no-meetings span)
   el.querySelectorAll(".meeting-card").forEach(e=>e.remove());
- 
+
   meetings.forEach(m=>{
     const a=AREAS[m.area]||{c:"#999",e:"🔷"};
     const div=document.createElement("div");
@@ -1555,7 +1676,7 @@ function renderMeetings(){
       durationStr=` · ${days} días`;
     }
     const isFlexMeetingAlert=m.recurrence&&m.recurrence.type==="flexible"&&!m.date;
-    const recurBadge=m.recurrence?`<span class="mbadge ${m.recurrence.type==="flexible"?"flex"+(isFlexMeetingAlert?" ftag-alert":""):"recur"}">${m.recurrence.type==="flexible"?"🕐 "+(m.recurrence.f...
+    const recurBadge=m.recurrence?`<span class="mbadge ${m.recurrence.type==="flexible"?"flex"+(isFlexMeetingAlert?" ftag-alert":""):"recur"}">${m.recurrence.type==="flexible"?"🕐 "+(m.recurrence.flexNote||"A convenir"):RECUR_LABELS[m.recurrence.type]||"🔁"}</span>`:"";
     const partic=m.participants?`<span class="mbadge" style="background:var(--bg4);color:var(--muted)">👥 ${m.participants.split(",").length}</span>`:"";
     div.innerHTML=`
       <div class="meeting-title">${esc(m.title)}</div>
@@ -1578,24 +1699,36 @@ function renderMeetings(){
     el.appendChild(div);
   });
 }
- 
+
 function toggleAgenda(btn){
   const card=btn.closest(".meeting-card");
   card.classList.toggle("expanded");
   btn.textContent=card.classList.contains("expanded")?"📋 cerrar":"📋 agenda";
 }
- 
+
 // ════════════════════════════════════════════════════
 //  BOARD RENDER
 // ════════════════════════════════════════════════════
 function render(){
   if(tab==="stats"){renderStats();return;}
   renderMeetings();
- 
-  const vis=tab==="ALL"
-    ?cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting")
-    :cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting"&&getCat(c.area)===tab);
- 
+
+  const todayStr=new Date().toISOString().slice(0,10);
+
+  // Filtro de tareas según tab activo
+  let vis;
+  if(tab==="ALL"){
+    vis=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting");
+  }else if(tab==="HOY"){
+    // HOY: urgentes + vencen hoy + atrasadas
+    vis=cards.filter(c=>{
+      if(["done","cancelled","trash","archived"].includes(c.col)||c.type==="meeting")return false;
+      return c.col==="urgent"||(c.due&&c.due<=todayStr);
+    });
+  }else{
+    vis=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting"&&getCat(c.area)===tab);
+  }
+
   ["urgent","active","pending"].forEach(col=>{
     const list=vis.filter(c=>c.col===col).sort((a,b)=>{
       const ad=a.due||a.date||null;
@@ -1608,25 +1741,36 @@ function render(){
     document.getElementById("cc-"+col).textContent=list.length;
     document.getElementById("cc-"+col+"-list").innerHTML=list.map(cardHtml).join("");
   });
- 
+
   const board=document.getElementById("board");
   board.querySelectorAll(".empty-board").forEach(e=>e.remove());
   if(vis.length===0){
     const div=document.createElement("div");div.className="empty-board";
-    div.innerHTML=`<div class="big">🐉</div><p>Sin tareas aquí.<br>Tocá <strong>+ TAREA</strong> para empezar.</p>`;
+    div.innerHTML=tab==="HOY"
+      ?`<div class="big">☀️</div><p>¡Todo al día!<br>No tenés tareas urgentes ni vencidas hoy.</p>`
+      :`<div class="big">🐉</div><p>Sin tareas aquí.<br>Tocá <strong>+ TAREA</strong> para empezar.</p>`;
     board.appendChild(div);
   }
- 
+
   const alive=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting");
   document.getElementById("tc-ALL").textContent=alive.length;
+  // HOY badge: urgentes + vencen hoy + atrasadas + reuniones hoy
+  const todayForCount=new Date().toISOString().slice(0,10);
+  const hoyCount=cards.filter(c=>{
+    if(["done","cancelled","trash","archived"].includes(c.col))return false;
+    if(c.type==="meeting")return c.col==="upcoming"&&c.date===todayForCount;
+    return c.col==="urgent"||(c.due&&c.due<=todayForCount);
+  }).length;
+  const tcHoy=document.getElementById("tc-HOY");
+  if(tcHoy)tcHoy.textContent=hoyCount;
   ["UNSJ","Scouts","Personal","Empresas"].forEach(k=>{
     const el=document.getElementById("tc-"+k);
     if(el)el.textContent=alive.filter(c=>getCat(c.area)===k).length;
   });
- 
+
   updateHistBadges();
 }
- 
+
 function renderArch(st,list){
   const el=document.getElementById("list-"+st);
   if(st==="trash"){
@@ -1648,7 +1792,7 @@ function renderArch(st,list){
     }).join("");
   }
 }
- 
+
 function cardHtml(c){
   const a=AREAS[c.area]||{c:"#999",e:"🔷"};
   const others=[{id:"urgent",ic:"🔥"},{id:"active",ic:"⚙️"},{id:"pending",ic:"📋"}].filter(o=>o.id!==c.col);
@@ -1666,7 +1810,7 @@ function cardHtml(c){
   }
   // Flexible alert: pulse if no due date
   const isFlexAlert=c.recurrence&&c.recurrence.type==="flexible"&&!c.due;
-  const recurTag=c.recurrence?`<span class="${c.recurrence.type==="flexible"?"ftag"+(isFlexAlert?" ftag-alert":""):" rtag"}">${c.recurrence.type==="flexible"?"🕐 "+(c.recurrence.flexNote||"A conven...
+  const recurTag=c.recurrence?`<span class="${c.recurrence.type==="flexible"?"ftag"+(isFlexAlert?" ftag-alert":""):" rtag"}">${c.recurrence.type==="flexible"?"🕐 "+(c.recurrence.flexNote||"A convenir"):(RECUR_LABELS[c.recurrence.type]||"🔁")}</span>`:"";
   const ageStr=formatAge(c.createdAt);
   return `<div class="card" id="card-${c.id}" draggable="true"
     ondragstart="dStart(event,${c.id})" ondragend="dEnd()"
@@ -1689,10 +1833,11 @@ function cardHtml(c){
       <button class="cbtn tr" onclick="moveToTrash(${c.id})">🗑️</button>
     </div>
     ${ageStr?`<div class="card-age">📌 ${ageStr}</div>`:""}
+    ${buildStSection(c)}
   </div>`;
 }
 function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
- 
+
 function formatAge(ts){
   if(!ts)return "";
   const days=Math.floor((Date.now()-ts)/86400000);
@@ -1710,21 +1855,21 @@ function buildGCalUrl(c){
   if(c.due){const d=c.due.replace(/-/g,"");const end=new Date(c.due+"T12:00:00");end.setDate(end.getDate()+1);dates=`&dates=${d}/${end.toISOString().slice(0,10).replace(/-/g,"")}`;}
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${t}&details=${det}${dates}`;
 }
- 
+
 // ════════════════════════════════════════════════════
 //  STATS RENDER
 // ════════════════════════════════════════════════════
 function renderStats(){
   const now=new Date();
   const currentMonth=getCurrentMonthKey();
- 
+
   // Helper: is timestamp in current month?
   function inCurrentMonth(ts){
     if(!ts)return false;
     const d=new Date(ts);
     return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")===currentMonth;
   }
- 
+
   // KPIs
   const allTasks=cards.filter(c=>c.type!=="meeting");
   const thisDone=allTasks.filter(c=>c.col==="done"&&inCurrentMonth(c.completedAt));
@@ -1732,7 +1877,7 @@ function renderStats(){
   const totalThisMonth=thisDone.length+thisCancelled.length;
   const pctDone=totalThisMonth>0?Math.round(thisDone.length/totalThisMonth*100):0;
   const activeCount=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col)&&c.type!=="meeting").length;
- 
+
   // Meetings this week
   const weekStart=new Date(now);
   weekStart.setDate(now.getDate()-now.getDay());
@@ -1744,11 +1889,11 @@ function renderStats(){
     const d=new Date(c.date+"T12:00:00");
     return d>=weekStart&&d<weekEnd;
   }).length;
- 
+
   document.getElementById("kpi-pct").textContent=pctDone+"%";
   document.getElementById("kpi-active").textContent=activeCount;
   document.getElementById("kpi-meetings").textContent=meetingsThisWeek;
- 
+
   // Build 12-month data (history + current live month)
   const liveMonthData={
     loaded:allTasks.filter(c=>c.col!=="trash").length,
@@ -1759,7 +1904,7 @@ function renderStats(){
   const allMonths=Object.assign({},monthlyHistory);
   allMonths[currentMonth]=liveMonthData;
   const sortedKeys=Object.keys(allMonths).sort().slice(-12);
- 
+
   // Chart
   const chartWrap=document.getElementById("stats-chart");
   chartWrap.innerHTML="";
@@ -1769,7 +1914,7 @@ function renderStats(){
     const v=Math.max(m.completed||0,m.cancelled||0);
     if(v>maxVal)maxVal=v;
   });
- 
+
   sortedKeys.forEach(function(k){
     const m=allMonths[k];
     const hDone=Math.round(((m.completed||0)/maxVal)*80);
@@ -1783,7 +1928,7 @@ function renderStats(){
       +'<div class="chart-lbl">'+monthLabel(k)+'</div>';
     chartWrap.appendChild(col);
   });
- 
+
   // Table
   const tbody=document.getElementById("stats-tbody");
   const rows=sortedKeys.slice().reverse().map(function(k){
@@ -1808,7 +1953,7 @@ function toggleNotif(){
   if(!("Notification" in window)){showToast("⚠️ Sin soporte");return;}
   if(Notification.permission==="granted"){checkNotif();showToast("🐉 Bian revisando...");}
   else Notification.requestPermission().then(p=>{
-    if(p==="granted"){const b=document.getElementById("notif-menu-item");if(b)b.style.color="var(--green)";checkNotif();showToast("✅ Notificaciones ON");}
+    if(p==="granted"){const b=document.getElementById("notif-btn");b.classList.add("on");b.textContent="🔔 ON";checkNotif();showToast("✅ Notificaciones ON");}
     else showToast("⚠️ Permiso denegado");
   });
 }
@@ -1831,7 +1976,7 @@ function checkNotif(){
   });
   if(n)localStorage.setItem("dtdl-nl",Date.now().toString());
 }
- 
+
 // ════════════════════════════════════════════════════
 //  ACCIONES TAREAS
 // ════════════════════════════════════════════════════
@@ -1846,7 +1991,7 @@ function moveToTrash(id){
   c.col="trash";c.trashedAt=Date.now();
   saveC();render();showToast("🗑️ En papelera · 7 días para recuperar");
 }
- 
+
 function doneit(id){
   const c=cards.find(c=>c.id===id);if(!c)return;
   c.col="done";c.completedAt=Date.now();
@@ -1872,17 +2017,200 @@ function doneit(id){
   }else showToast("✅ ¡Completada!");
   saveC();render();
 }
- 
+
 function cancelit(id){
   const c=cards.find(c=>c.id===id);if(!c)return;
   if(c.gcalEventId){callCalServer("delete",{gcalEventId:c.gcalEventId});c.gcalEventId=null;}
   c.col="cancelled";c.cancelledAt=Date.now();
   saveC();render();showToast("⊘ Cancelada");
 }
- 
+
 // ════════════════════════════════════════════════════
 //  ACCIONES REUNIONES
 // ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  SUBTASKS
+// ════════════════════════════════════════════════════
+function toggleSubtasks(cardId){
+  const el=document.getElementById("stlist-"+cardId);
+  const tog=document.getElementById("sttog-"+cardId);
+  if(!el)return;
+  const isOpen=el.style.display!=="none";
+  el.style.display=isOpen?"none":"flex";
+  if(tog)tog.classList.toggle("open",!isOpen);
+  if(isOpen)expandedSts.delete(cardId);
+  else expandedSts.add(cardId);
+}
+
+function showStAdd(cardId){
+  expandedSts.add(cardId);
+  // No necesitamos inicializar c.subtasks aquí — buildStSection maneja el estado vacío
+  render();
+  // Focus al input que ahora sí existe en el DOM
+  setTimeout(()=>{
+    document.getElementById("stadd-"+cardId)?.focus();
+  },40);
+}
+
+function addSubtask(cardId){
+  const inp=document.getElementById("stadd-"+cardId);
+  if(!inp)return;
+  const title=inp.value.trim();
+  if(!title){inp.focus();return;}  // si está vacío, solo hacer focus
+  const c=cards.find(c=>c.id===cardId);
+  if(!c)return;
+  if(!c.subtasks)c.subtasks=[];  // inicializar aquí, cuando hay contenido real
+  c.subtasks.push({
+    id:Date.now()+Math.floor(Math.random()*1000),
+    title,done:false,due:null
+  });
+  inp.value="";
+  expandedSts.add(cardId);
+  saveC();render();
+  setTimeout(()=>{
+    const el=document.getElementById("stlist-"+cardId);
+    if(el)el.style.display="flex";
+    const tog=document.getElementById("sttog-"+cardId);
+    if(tog)tog.classList.add("open");
+    document.getElementById("stadd-"+cardId)?.focus();
+  },60);
+}
+
+function toggleSubtask(cardId,stId){
+  const c=cards.find(c=>c.id===cardId);
+  if(!c||!c.subtasks)return;
+  const st=c.subtasks.find(s=>s.id===stId);
+  if(!st)return;
+  st.done=!st.done;
+  expandedSts.add(cardId);
+  // Check if all done
+  if(c.subtasks.length>0&&c.subtasks.every(s=>s.done)){
+    saveC();
+    if(confirm("✅ Todas las subtareas completadas.\n¿Marcar la tarea \""+c.title+"\" como completada?")){
+      doneit(cardId);
+      return;
+    }
+  }
+  saveC();render();
+  setTimeout(()=>{
+    const el=document.getElementById("stlist-"+cardId);
+    if(el)el.style.display="flex";
+  },50);
+}
+
+function setSubtaskDue(cardId,stId,due){
+  const c=cards.find(c=>c.id===cardId);
+  if(!c||!c.subtasks)return;
+  const st=c.subtasks.find(s=>s.id===stId);
+  if(!st)return;
+  // Validate against parent due date
+  if(due&&c.due&&due>c.due){
+    showToast("⚠️ Subtarea vence después que la tarea padre ("+c.due+") — guardada igual");
+  }
+  st.due=due||null;
+  expandedSts.add(cardId);
+  saveC();render();
+  setTimeout(()=>{
+    const el=document.getElementById("stlist-"+cardId);
+    if(el)el.style.display="flex";
+  },50);
+}
+
+function deleteSubtask(cardId,stId){
+  const c=cards.find(c=>c.id===cardId);
+  if(!c||!c.subtasks)return;
+  c.subtasks=c.subtasks.filter(s=>s.id!==stId);
+  expandedSts.add(cardId);
+  saveC();render();
+  setTimeout(()=>{
+    if(c.subtasks.length>0){
+      const el=document.getElementById("stlist-"+cardId);
+      if(el)el.style.display="flex";
+    }
+  },50);
+}
+
+function stDueLabel(due,parentDue){
+  if(!due)return"";
+  const today=new Date();today.setHours(0,0,0,0);
+  const d=new Date(due+"T12:00:00");
+  const diff=Math.round((d-today)/86400000);
+  const ov=diff<0||(parentDue&&due>parentDue);
+  const lbl=diff<0?"vencida":diff===0?"hoy":diff===1?"mañana":"en "+diff+"d";
+  return`<button class="st-due ${ov?"ov":""}" onclick="event.stopPropagation();stEditDue(${0},${0},'${due}')" title="Cambiar fecha">📅 ${lbl}</button>`;
+}
+
+function stEditDue(cardId,stId,current){
+  // Show a date prompt
+  const v=prompt("Fecha límite de la subtarea (YYYY-MM-DD):",current||"");
+  if(v===null)return;
+  setSubtaskDue(cardId,stId,v||null);
+}
+
+function buildStSection(c){
+  const hasSubtasks=c.subtasks&&c.subtasks.length>0;
+  const isExpanded=expandedSts.has(c.id);
+
+  // Sin subtareas y no expandido: mostrar botón sutil
+  if(!hasSubtasks&&!isExpanded){
+    return`<button class="st-new-btn" onclick="event.stopPropagation();showStAdd(${c.id})">＋ agregar subtarea</button>`;
+  }
+
+  // Sin subtareas pero expandido (click reciente): mostrar input directamente
+  if(!hasSubtasks&&isExpanded){
+    return`<div class="st-section">
+      <div class="st-add-row">
+        <input class="st-add-inp" id="stadd-${c.id}" placeholder="Primera subtarea..."
+          onclick="event.stopPropagation()"
+          onkeydown="if(event.key==='Enter'){event.stopPropagation();addSubtask(${c.id});}
+                     if(event.key==='Escape'){event.stopPropagation();expandedSts.delete(${c.id});render();}"
+          type="text">
+        <button class="st-add-btn" onclick="event.stopPropagation();addSubtask(${c.id})">↵</button>
+        <button class="st-add-btn" style="background:var(--bg4);color:var(--muted)"
+          onclick="event.stopPropagation();expandedSts.delete(${c.id});render()">✕</button>
+      </div>
+    </div>`;
+  }
+
+  const total=c.subtasks.length;
+  const done=c.subtasks.filter(s=>s.done).length;
+  const pct=Math.round(done/total*100);
+  const barColor=pct===100?"var(--green)":pct>=50?"var(--gold)":"var(--red)";
+  const today=new Date().toISOString().slice(0,10);
+
+  const items=c.subtasks.map(st=>{
+    const ov=st.due&&st.due<today;
+    const afterParent=st.due&&c.due&&st.due>c.due;
+    const dueBadge=st.due
+      ?`<button class="st-due ${(ov||afterParent)?"ov":""}" onclick="event.stopPropagation();stEditDue(${c.id},${st.id},'${st.due}')" title="${afterParent?"⚠️ Vence después de la tarea padre":ov?"⚠️ Vencida":"Cambiar fecha"}">📅 ${st.due}</button>`
+      :`<button class="st-due" onclick="event.stopPropagation();stEditDue(${c.id},${st.id},null)" title="Agregar fecha">📅</button>`;
+    return`<div class="st-item ${st.done?"done":""}">
+      <button class="st-chk ${st.done?"checked":""}" onclick="event.stopPropagation();toggleSubtask(${c.id},${st.id})">${st.done?"✓":""}</button>
+      <span class="st-title">${esc(st.title)}</span>
+      ${dueBadge}
+      <button class="st-del" onclick="event.stopPropagation();deleteSubtask(${c.id},${st.id})">×</button>
+    </div>`;
+  }).join("");
+
+  return`<div class="st-section">
+    <div class="st-bar" onclick="event.stopPropagation();toggleSubtasks(${c.id})">
+      <span class="st-toggle${isExpanded?" open":""}" id="sttog-${c.id}">▶</span>
+      <div class="st-prog-wrap"><div class="st-prog-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <span class="st-count">${done}/${total}</span>
+      <span class="st-pct" style="color:${barColor}">${pct}%</span>
+    </div>
+    <div class="st-list" id="stlist-${c.id}" style="display:${isExpanded?"flex":"none"};flex-direction:column;gap:3px">
+      ${items}
+      <div class="st-add-row">
+        <input class="st-add-inp" id="stadd-${c.id}" placeholder="+ agregar subtarea..."
+          onclick="event.stopPropagation()"
+          onkeydown="if(event.key==='Enter'){event.stopPropagation();addSubtask(${c.id});}" type="text">
+        <button class="st-add-btn" onclick="event.stopPropagation();addSubtask(${c.id})">↵</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 function doneMeeting(id){
   // Show result modal before completing
   pendingDoneMeetingId=id;
@@ -1890,7 +2218,7 @@ function doneMeeting(id){
   document.getElementById("mtresult-modal").style.display="flex";
   setTimeout(()=>document.getElementById("mtresult-note").focus(),80);
 }
- 
+
 function confirmDoneMeeting(withNote){
   const id=pendingDoneMeetingId;
   const note=withNote?document.getElementById("mtresult-note").value.trim():"";
@@ -1900,22 +2228,30 @@ function confirmDoneMeeting(withNote){
   const c=cards.find(c=>c.id===id);if(!c)return;
   c.col="done";c.completedAt=Date.now();
   if(note)c.resultNote=note;
- 
+
   // Update Google Calendar event with result note
   if(c.gcalEventId){
-    callCalServer("update",{...buildCalData(c),resultNote:note||"",completed:true}).then(eventId=>{
-      if(eventId&&eventId!==c.gcalEventId){c.gcalEventId=eventId;saveLocal();}
+    callCalServer("update",{
+      type:"meeting",title:c.title,area:c.area,
+      date:c.date,time:c.time||"",place:c.place||"",
+      participants:c.participants||"",agenda:c.agenda||"",
+      resultNote:note||"",completed:true,
+      alarm:c.alarm||0,
+      gcalEventId:c.gcalEventId
     });
   }
- 
+
   if(c.recurrence&&c.recurrence.type!=="flexible"&&c.date){
     const nextDate=getNextDate(c.date,c.recurrence);
     if(nextDate){
-      const nextDates=getRecurringMeetingDates(c,nextDate);
-      const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDates.date,dateEnd:nextDates.dateEnd};
+      const nm={...c,id:Date.now()+Math.floor(Math.random()*1000),col:"upcoming",date:nextDate};
       delete nm.completedAt;delete nm.resultNote;delete nm.gcalEventId;
       // Create Cal event for next occurrence
-      callCalServer("create",buildCalData(nm)).then(eventId=>{if(eventId){nm.gcalEventId=eventId;saveLocal();}});
+      callCalServer("create",{
+        type:"meeting",title:nm.title,area:nm.area,
+        date:nm.date,time:nm.time||"",place:nm.place||"",
+        participants:nm.participants||"",agenda:nm.agenda||""
+      }).then(eventId=>{if(eventId){nm.gcalEventId=eventId;saveLocal();}});
       cards.push(nm);
       showToast("✅ Reunión archivada · próxima: "+nextDate);
     }else showToast("✅ Reunión archivada");
@@ -1929,7 +2265,7 @@ function cancelMeeting(id){
   saveC();render();showToast("⊘ Reunión cancelada · 📆 Cal actualizado");
 }
 function trashMeeting(id){moveToTrash(id);}
- 
+
 // ════════════════════════════════════════════════════
 //  DRAG
 // ════════════════════════════════════════════════════
@@ -1938,7 +2274,7 @@ function dEnd(){if(dragId){const el=document.getElementById("card-"+dragId);if(e
 function dragOver(e,col){e.preventDefault();document.getElementById("col-"+col).classList.add("drag-over");}
 function dragLeave(e,col){document.getElementById("col-"+col).classList.remove("drag-over");}
 function drop(e,col){e.preventDefault();document.getElementById("col-"+col).classList.remove("drag-over");if(dragId!==null){moveTo(dragId,col);dragId=null;}}
- 
+
 // ════════════════════════════════════════════════════
 //  MODAL TAREA
 // ════════════════════════════════════════════════════
@@ -1979,9 +2315,12 @@ function saveCard(){
   const alarm=parseInt(document.getElementById("m-alarm").value)||0;
   if(editId){
     const c=cards.find(c=>c.id===editId);
-    if(c){c.title=title;c.area=document.getElementById("m-area").value;c.note=document.getElementById("m-note").value.trim();c.due=document.getElementById("m-due").value;c.col=document.getElementBy...
+    if(c){c.title=title;c.area=document.getElementById("m-area").value;c.note=document.getElementById("m-note").value.trim();c.due=document.getElementById("m-due").value;c.col=document.getElementById("m-col").value;c.recurrence=recurrence;c.alarm=alarm;
+      // Preserve subtasks on edit
+      // c.subtasks stays as-is
+    }
   }else{
-    cards.push({id:Date.now(),type:"task",title,area:document.getElementById("m-area").value,note:document.getElementById("m-note").value.trim(),due:document.getElementById("m-due").value,col:docum...
+    cards.push({id:Date.now(),type:"task",title,area:document.getElementById("m-area").value,note:document.getElementById("m-note").value.trim(),due:document.getElementById("m-due").value,col:document.getElementById("m-col").value,recurrence,alarm,createdAt:Date.now()});
   }
   const savedId=editId||cards[cards.length-1]?.id;
   saveC();closeModal();render();
@@ -1997,7 +2336,7 @@ function saveCard(){
         alarm:tc.alarm||0,
         gcalEventId:tc.gcalEventId||null
       }).then(eventId=>{
-        if(eventId&&eventId!==tc.gcalEventId){
+        if(eventId&&!tc.gcalEventId){
           tc.gcalEventId=eventId;saveLocal();
           showToast(editId?"✏️ Tarea actualizada · 📆 Cal sync":"🐉 Tarea agregada · 📆 Cal sync");
         }else showToast(editId?"✏️ Tarea actualizada":"🐉 Tarea agregada!");
@@ -2012,7 +2351,7 @@ function saveCard(){
     }
   }
 }
- 
+
 // ════════════════════════════════════════════════════
 //  MODAL REUNIÓN
 // ════════════════════════════════════════════════════
@@ -2070,7 +2409,7 @@ function checkMeetingOverlap(){
     warnEl.style.display="none";
   }
 }
- 
+
 async function saveMeeting(){
   const title=document.getElementById("mt-title").value.trim();if(!title)return;
   const recurrence=getRecurFromForm("mt");
@@ -2116,7 +2455,7 @@ async function saveMeeting(){
         alarm:c.alarm||0,
         gcalEventId:c.gcalEventId||null
       });
-      if(eventId&&eventId!==c.gcalEventId){
+      if(eventId&&!c.gcalEventId){
         c.gcalEventId=eventId;
         saveLocal();
         showToast((editMeetingId?"✏️":"📅")+" Reunión guardada · 📆 Google Calendar sincronizado");
@@ -2128,7 +2467,7 @@ async function saveMeeting(){
     showToast(editMeetingId?"✏️ Reunión actualizada":"📅 Reunión agendada (sin fecha)");
   }
 }
- 
+
 // ════════════════════════════════════════════════════
 //  ÁREAS CRUD
 // ════════════════════════════════════════════════════
@@ -2169,14 +2508,48 @@ function deleteArea(name){
   delete AREAS[name];saveAreas();saveC();renderAreasList();fillAreaSel("m-area","");fillAreaSel("mt-area","");
   showToast(`🗑️ "${name}" eliminada`);render();
 }
- 
+
+// ════════════════════════════════════════════════════
+//  CAPTURA RÁPIDA
+// ════════════════════════════════════════════════════
+function toggleQuickCapture(){
+  const panel=document.getElementById("quick-capture");
+  const fab=document.getElementById("quick-fab");
+  const isOpen=panel.classList.toggle("open");
+  fab.classList.toggle("open",isOpen);
+  if(isOpen){
+    fillAreaSel("qc-area-sel",Object.keys(AREAS)[0]||"");
+    setTimeout(()=>document.getElementById("qc-title").focus(),80);
+  }
+}
+function closeQuickCapture(){
+  document.getElementById("quick-capture").classList.remove("open");
+  document.getElementById("quick-fab").classList.remove("open");
+  document.getElementById("qc-title").value="";
+}
+function saveQuick(){
+  const title=document.getElementById("qc-title").value.trim();
+  if(!title){document.getElementById("qc-title").focus();return;}
+  const area=document.getElementById("qc-area-sel").value||Object.keys(AREAS)[0]||"Personal";
+  const col=document.getElementById("qc-col-sel").value||"pending";
+  cards.push({
+    id:Date.now(),type:"task",title,area,note:"",due:"",
+    col,recurrence:null,alarm:1440,createdAt:Date.now()
+  });
+  saveC();
+  closeQuickCapture();
+  render();
+  showToast("⚡ "+title.slice(0,35)+(title.length>35?"...":"")+" → "+col);
+  // Sync to Calendar if has due (not here — no due in quick capture)
+}
+
 // ════════════════════════════════════════════════════
 //  ARCHIVE (legacy - redirects to historial sheet)
 // ════════════════════════════════════════════════════
 function toggleArch(st){
   histTab=st;openHistorial();
 }
- 
+
 // ════════════════════════════════════════════════════
 //  BIAN CHAT
 // ════════════════════════════════════════════════════
@@ -2202,7 +2575,17 @@ function addMsg(role,text){
 }
 function getBoardCtx(){
   const tasks=cards.filter(c=>c.type!=="meeting"&&!["done","cancelled","trash","archived"].includes(c.col))
-    .map(c=>`[T:${c.id}] ${c.col.toUpperCase()} | ${c.area} | ${c.title}${c.due?" | vence:"+c.due:""}${c.recurrence?" | recur:"+c.recurrence.type:""}`);
+    .map(c=>{
+      let line=`[T:${c.id}] ${c.col.toUpperCase()} | ${c.area} | ${c.title}${c.due?" | vence:"+c.due:""}${c.recurrence?" | recur:"+c.recurrence.type:""}`;
+      if(c.subtasks&&c.subtasks.length>0){
+        const stDone=c.subtasks.filter(s=>s.done).length;
+        line+=` | subtareas:${stDone}/${c.subtasks.length}`;
+        c.subtasks.forEach(st=>{
+          line+=`\n  ST[${st.id}] ${st.done?"✓":"○"} ${st.title}${st.due?" ("+st.due+")":""}`;
+        });
+      }
+      return line;
+    });
   const meetings=cards.filter(c=>c.type==="meeting"&&c.col==="upcoming")
     .map(c=>`[R:${c.id}] REUNIÓN | ${c.area} | ${c.title} | ${c.date||"sin fecha"}${c.time?" "+c.time:""}${c.place?" | "+c.place:""}`);
   return [...tasks,...meetings].join("\n")||"(vacío)";
@@ -2234,23 +2617,27 @@ async function sendChat(){
   const btn=document.getElementById("ch-send");btn.disabled=true;
   const thinking=addMsg("sys","🐉 Bian pensando...");
   const hoy=new Date().toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  const SYS=`Sos Bian (狴犴), séptimo hijo del Rey Dragón. Asistente personal de Martín — ingeniero electrónico, doctor en Control, profesor en la UNSJ (San Juan, Argentina). Tótem scout: dragón míst...
+  const SYS=`Sos Bian (狴犴), séptimo hijo del Rey Dragón. Asistente personal de Martín — ingeniero electrónico, doctor en Control, profesor en la UNSJ (San Juan, Argentina). Tótem scout: dragón místico. Cuchillería: Dragón del Tulum. Sabio, justo, directo. Tuteo. Español breve.
 HOY ES: ${hoy}. Usá esta fecha para calcular cualquier referencia relativa ("el lunes que viene", "la semana próxima", "en 3 días", etc.). Para fechas siempre usá formato YYYY-MM-DD.
 Áreas: ${Object.keys(AREAS).join(", ")}.
 Columnas de tareas: urgent, active, pending.
 Repetición disponible: weekly, biweekly, monthly, weekday, periodic, flexible.
- 
+
 TABLERO ACTUAL:
 ${getBoardCtx()}
- 
+
 Para modificar, UN bloque ACTION al final:
 TAREAS: <ACTION>{"t":"add","title":"...","area":"...","note":"...","due":"YYYY-MM-DD","col":"pending","recurrence":null}</ACTION>
+SUBTAREAS: <ACTION>{"t":"add_subtask","id":N,"title":"...","due":"YYYY-MM-DD o null"}</ACTION>
+<ACTION>{"t":"done_subtask","id":N,"stId":M}</ACTION>
+<ACTION>{"t":"update_subtask","id":N,"stId":M,"title":"...","due":"..."}</ACTION>
+<ACTION>{"t":"del_subtask","id":N,"stId":M}</ACTION>
 <ACTION>{"t":"move","id":N,"col":"urgent"}</ACTION>
 <ACTION>{"t":"done","id":N}</ACTION>
 <ACTION>{"t":"cancel","id":N}</ACTION>
 <ACTION>{"t":"trash","id":N}</ACTION>
 <ACTION>{"t":"update","id":N,"title":"...","area":"...","note":"...","due":"..."}</ACTION>
-REUNIONES: <ACTION>{"t":"add_meeting","title":"...","area":"...","date":"YYYY-MM-DD","dateEnd":"YYYY-MM-DD o null","time":"HH:MM o vacío","place":"...","participants":"...","agenda":"...","recurren...
+REUNIONES: <ACTION>{"t":"add_meeting","title":"...","area":"...","date":"YYYY-MM-DD","dateEnd":"YYYY-MM-DD o null","time":"HH:MM o vacío","place":"...","participants":"...","agenda":"...","recurrence":null}</ACTION>
 <ACTION>{"t":"done_meeting","id":N}</ACTION>
 Sin cambios: <ACTION>{"t":"none"}</ACTION>`;
   try{
@@ -2278,7 +2665,7 @@ function execAction(a){
       cards.push({id:Date.now(),type:"task",title:a.title||"",area:a.area||"Personal",note:a.note||"",due:a.due||"",col:a.col||"pending",recurrence:a.recurrence||null,createdAt:Date.now()});
       break;
     case"add_meeting":
-      cards.push({id:Date.now(),type:"meeting",title:a.title||"",area:a.area||"Personal",date:a.date||"",dateEnd:a.dateEnd||null,time:a.dateEnd?"":a.time||"",place:a.place||"",participants:a.partic...
+      cards.push({id:Date.now(),type:"meeting",title:a.title||"",area:a.area||"Personal",date:a.date||"",dateEnd:a.dateEnd||null,time:a.dateEnd?"":a.time||"",place:a.place||"",participants:a.participants||"",agenda:a.agenda||"",recurrence:a.recurrence||null,col:"upcoming",createdAt:Date.now()});
       break;
     case"move":moveTo(a.id,a.col);return;
     case"done":doneit(a.id);return;
@@ -2286,11 +2673,40 @@ function execAction(a){
     case"cancel":cancelit(a.id);return;
     case"trash":moveToTrash(a.id);return;
     case"update":{const c=cards.find(c=>c.id===a.id);if(c){if(a.title)c.title=a.title;if(a.area)c.area=a.area;if(a.note!==undefined)c.note=a.note;if(a.due!==undefined)c.due=a.due;}break;}
+    case"add_subtask":{
+      const c=cards.find(c=>c.id===a.id);
+      if(c){
+        if(!c.subtasks)c.subtasks=[];
+        c.subtasks.push({id:Date.now()+Math.floor(Math.random()*1000),title:a.title||"",done:false,due:a.due||null});
+        expandedSts.add(a.id);
+      }
+      break;}
+    case"done_subtask":{
+      const c=cards.find(c=>c.id===a.id);
+      if(c&&c.subtasks){
+        const st=c.subtasks.find(s=>s.id===a.stId);
+        if(st)st.done=true;
+        expandedSts.add(a.id);
+        if(c.subtasks.every(s=>s.done)){saveC();doneit(a.id);return;}
+      }
+      break;}
+    case"update_subtask":{
+      const c=cards.find(c=>c.id===a.id);
+      if(c&&c.subtasks){
+        const st=c.subtasks.find(s=>s.id===a.stId);
+        if(st){if(a.title)st.title=a.title;if(a.due!==undefined)st.due=a.due||null;}
+        expandedSts.add(a.id);
+      }
+      break;}
+    case"del_subtask":{
+      const c=cards.find(c=>c.id===a.id);
+      if(c&&c.subtasks){c.subtasks=c.subtasks.filter(s=>s.id!==a.stId);}
+      break;}
     default:return;
   }
   saveC();render();
 }
- 
+
 // ════════════════════════════════════════════════════
 //  MENU DROPDOWN
 // ════════════════════════════════════════════════════
@@ -2308,14 +2724,14 @@ function closeMenu(){
 document.addEventListener("click",function(e){
   const wrap=document.getElementById("menu-wrap");
   if(wrap&&!wrap.contains(e.target))closeMenu();
- 
+
 });
- 
+
 // ════════════════════════════════════════════════════
 //  HISTORIAL SHEET
 // ════════════════════════════════════════════════════
 let histTab="stats";
- 
+
 function openHistorial(){
   document.getElementById("hist-overlay").classList.add("open");
   document.getElementById("hist-sheet").classList.add("open");
@@ -2325,3 +2741,159 @@ function closeHistorial(){
   document.getElementById("hist-overlay").classList.remove("open");
   document.getElementById("hist-sheet").classList.remove("open");
 }
+function setHistTab(t){
+  histTab=t;
+  document.querySelectorAll(".htab").forEach(el=>el.classList.remove("active"));
+  document.getElementById("htab-"+t).classList.add("active");
+  renderHistTab();
+}
+function renderHistTab(){
+  const statsDiv=document.getElementById("hist-stats");
+  const listDiv=document.getElementById("hist-list");
+  if(histTab==="stats"){
+    statsDiv.style.display="block";listDiv.style.display="none";
+    renderStats();
+  }else{
+    statsDiv.style.display="none";listDiv.style.display="block";
+    renderHistList(histTab);
+  }
+}
+function renderHistList(st){
+  const el=document.getElementById("hist-list");
+  const list=cards.filter(c=>c.col===st);
+  if(!list.length){
+    el.innerHTML='<div class="hist-empty">Sin ítems aquí.</div>';return;
+  }
+  let html='<div class="hist-list-wrap">';
+  if(st==="trash"){
+    html+=list.map(c=>{
+      const a=AREAS[c.area]||{e:"🔧"};const dl=daysLeft(c);
+      return `<div class="hli hli-trash">
+        <span>${a.e}</span>
+        <span class="hli-title">${esc(c.title)}</span>
+        <span class="hli-days ${dl<=2?"urg":""}">${dl}d</span>
+        <button onclick="moveTo(${c.id},'pending');renderHistList('trash')" title="Restaurar">↩</button>
+        <button onclick="askConfirmDel(${c.id})" title="Eliminar permanente">🗑️</button>
+      </div>`;
+    }).join("");
+    html+=`<button class="trash-empty-btn" onclick="emptyTrash()">🗑️ Vaciar papelera (${list.length})</button>`;
+  }else{
+    const cls=st==="done"?"hli-done":"hli-cancelled";
+    html+=list.map(c=>{
+      const a=AREAS[c.area]||{e:"🔧"};
+      return `<div class="hli ${cls}">
+        <span>${a.e}</span>
+        <span class="hli-title">${esc(c.title)}</span>
+        <button onclick="moveTo(${c.id},'pending');renderHistList('${st}')" title="Restaurar">↩</button>
+        <button onclick="moveToTrash(${c.id});renderHistList('${st}')" title="A papelera">🗑️</button>
+      </div>`;
+    }).join("");
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// Update bottom bar badges
+function updateHistBadges(){
+  const done=cards.filter(c=>c.col==="done").length;
+  const canc=cards.filter(c=>c.col==="cancelled").length;
+  const trash=cards.filter(c=>c.col==="trash").length;
+  const bdone=document.getElementById("hb-done");
+  const bcanc=document.getElementById("hb-cancelled");
+  const btrash=document.getElementById("hb-trash");
+  if(bdone)bdone.textContent=done>0?"✅ "+done:"";
+  if(bcanc)bcanc.textContent=canc>0?"⊘ "+canc:"";
+  if(btrash)btrash.textContent=trash>0?"🗑️ "+trash:"";
+}
+
+// ════════════════════════════════════════════════════
+//  HELP MODAL
+// ════════════════════════════════════════════════════
+function openHelp(){document.getElementById("help-modal").style.display="flex";}
+function closeHelp(){document.getElementById("help-modal").style.display="none";}
+
+// ════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════
+load();
+fillAreaSel("m-area",Object.keys(AREAS)[0]||"");
+fillAreaSel("mt-area",Object.keys(AREAS)[0]||"");
+fillAreaSel("qc-area-sel",Object.keys(AREAS)[0]||"");
+if(Notification.permission==="granted"){
+  const ni=document.getElementById("notif-menu-item");
+  if(ni)ni.style.color="var(--green)";
+}
+if(scriptUrl&&hmacKey){
+  const driveItem=document.getElementById("drive-menu-item");
+  if(driveItem)driveItem.style.color="var(--green)";
+  setSyncBar("saved");
+}else{setSyncBar("offline");}
+render();
+checkMonthlyClose();
+setTimeout(checkNotif,2000);
+if(scriptUrl&&hmacKey){loadFromDrive().then(loaded=>{if(loaded)render();});}
+</script>
+
+<!-- HELP MODAL -->
+<div id="help-modal" class="overlay" style="display:none" onclick="if(event.target===this)closeHelp()">
+  <div class="modal" style="width:460px;max-height:85vh">
+    <h2>📖 Manual de Ayuda — Dragon To Do List</h2>
+    
+    <div class="help-section">
+      <h3>📅 PRÓXIMAS REUNIONES</h3>
+      <div class="help-row"><span class="help-icon">+</span><span>Botón <strong>+ REUNIÓN</strong>: crea reunión con fecha, hora, lugar, participantes y agenda</span></div>
+      <div class="help-row"><span class="help-icon">📋</span><span>Tocá <strong>agenda</strong> para ver/ocultar el orden del día</span></div>
+      <div class="help-row"><span class="help-icon">✓</span><span><strong>Realizada</strong>: archiva la reunión. Si es recurrente, genera la próxima automáticamente</span></div>
+      <div class="help-row"><span class="help-icon">⊘</span><span><strong>Cancelar</strong>: causa externa, queda registrada en Historial</span></div>
+    </div>
+
+    <div class="help-section">
+      <h3>🗂️ TABLERO DE TAREAS</h3>
+      <div class="help-row"><span class="help-icon">🔥</span><span><strong>Urgente</strong>: atención inmediata</span></div>
+      <div class="help-row"><span class="help-icon">⚙️</span><span><strong>En Curso</strong>: lo que estás trabajando ahora</span></div>
+      <div class="help-row"><span class="help-icon">📋</span><span><strong>Pendiente</strong>: lo que viene después. Podés arrastrar entre columnas</span></div>
+      <div class="help-row"><span class="help-icon">✓</span><span><strong>Listo</strong>: completa la tarea. Si es recurrente, crea la próxima con la nueva fecha</span></div>
+      <div class="help-row"><span class="help-icon">⊘</span><span><strong>Cancelar</strong>: causa externa (cliente canceló, proyecto caído). Queda en el historial</span></div>
+      <div class="help-row"><span class="help-icon">🗑️</span><span><strong>Papelera</strong>: error de carga o decisión interna. Se elimina en 7 días automáticamente</span></div>
+    </div>
+
+    <div class="help-section">
+      <h3>🔁 REPETICIÓN</h3>
+      <div class="help-row"><span class="help-icon">📆</span><span><strong>Semanal / Quincenal / Mensual</strong>: se regenera automáticamente al completar</span></div>
+      <div class="help-row"><span class="help-icon">📆</span><span><strong>Día de semana fijo</strong>: siempre el mismo día (ej: todos los martes)</span></div>
+      <div class="help-row"><span class="help-icon">📆</span><span><strong>Periódica</strong>: cada N días que vos configurás</span></div>
+      <div class="help-row"><span class="help-icon">🕐</span><span><strong>Flexible (A convenir)</strong>: sin fecha fija, con nota de referencia (ej: ~15 días con IAR)</span></div>
+    </div>
+
+    <div class="help-section">
+      <h3>📚 HISTORIAL (botón inferior)</h3>
+      <div class="help-row"><span class="help-icon">📊</span><span><strong>Stats</strong>: métricas clave y gráfico de los últimos 12 meses</span></div>
+      <div class="help-row"><span class="help-icon">✅</span><span><strong>Completadas</strong>: tareas y reuniones realizadas (podés restaurarlas)</span></div>
+      <div class="help-row"><span class="help-icon">⊘</span><span><strong>Canceladas</strong>: ítems cancelados por causas externas, con registro histórico</span></div>
+      <div class="help-row"><span class="help-icon">🗑️</span><span><strong>Papelera</strong>: eliminados internamente. Restaurables por 7 días</span></div>
+      <div class="help-row"><span class="help-icon">🗓️</span><span><strong>Cerrar mes</strong>: archiva completadas/canceladas y resetea el contador mensual</span></div>
+    </div>
+
+    <div class="help-section">
+      <h3>🐉 BIAN — Asistente IA</h3>
+      <div class="help-row"><span class="help-icon">🐉</span><span>Botón rojo abajo a la derecha. Podés escribirle o usar el micrófono 🎤</span></div>
+      <div class="help-row"><span class="help-icon">📊</span><span>Botón <strong>Informe</strong>: resumen inteligente de tareas y reuniones del día</span></div>
+      <div class="help-row"><span class="help-icon">🔑</span><span>Requiere API key de <strong>console.anthropic.com</strong> (se guarda una sola vez)</span></div>
+    </div>
+
+    <div class="help-section">
+      <h3>⚙️ MENÚ</h3>
+      <div class="help-row"><span class="help-icon">🔗</span><span><strong>Drive</strong>: sincronización entre PC y celular vía Google Apps Script (HMAC-SHA256)</span></div>
+      <div class="help-row"><span class="help-icon">🗂️</span><span><strong>Áreas</strong>: crear y eliminar áreas temáticas por categoría</span></div>
+      <div class="help-row"><span class="help-icon">📤</span><span><strong>Exportar</strong>: descarga un JSON con todos tus datos (backup o sincronización manual)</span></div>
+      <div class="help-row"><span class="help-icon">📥</span><span><strong>Importar</strong>: carga datos desde un backup JSON</span></div>
+    </div>
+
+    <div class="mbtns" style="margin-top:4px">
+      <button class="btn-cm" onclick="closeHelp()" style="width:100%">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

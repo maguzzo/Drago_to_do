@@ -10,3 +10,10 @@ Thumbs.db
 *.tmp
 *.bak
 *.orig
+
+# Archivos con secretos y configuración sensible
+dragon-config-*.json
+keys
+_tmp_resumen.txt
+_tmp_script_check.js
+*.docx

@@ -258,6 +258,11 @@ function deleteCalEvent(gcalEventId) {
   }
 }
 
+function testCalendarAccess() {
+  const cal = CalendarApp.getDefaultCalendar() || CalendarApp.getCalendarById(CALENDAR_ID);
+  return cal ? { ok: true, calendarId: cal.getId(), name: cal.getName() } : { ok: false, error: "No se pudo acceder al calendario" };
+}
+
 function buildDescription(data) {
   let desc = "";
   if (data.participants) desc += "👥 Participantes: " + data.participants + "\n";

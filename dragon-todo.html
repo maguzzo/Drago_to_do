@@ -1136,6 +1136,9 @@ function openDriveModal(){
   document.getElementById("drive-modal").style.display="flex";
 }
 function closeDriveModal(){document.getElementById("drive-modal").style.display="none";}
+function looksLikeAppsScriptDeploymentId(value){
+  return typeof value==="string"&&/^(AKfycb|AKfyca)/.test(value.trim());
+}
 async function testDriveConnection(){
   const url=document.getElementById("drive-url").value.trim();
   const statusEl=document.getElementById("drive-status");
@@ -1154,6 +1157,10 @@ function saveDriveConfig(){
   const key=keyInput||hmacKey;
   if(!url){showToast("⚠️ Ingresá la URL");return;}
   if(!key){showToast("⚠️ Ingresá la clave");return;}
+  if(looksLikeAppsScriptDeploymentId(key)||key.includes("script.google.com")){
+    showToast("⚠️ Eso parece una URL o deployment ID, no la clave secreta de Apps Script",5000);
+    return;
+  }
   scriptUrl=url;hmacKey=key;
   localStorage.setItem(DRIVE_URL,url);localStorage.setItem(DRIVE_KEY,key);
   const driveItem=document.getElementById("drive-menu-item");
@@ -1552,6 +1559,11 @@ function importConfig(e){
         localStorage.setItem(DRIVE_URL,cfg.driveUrl);
       }
       if(cfg.driveKey){
+        if(looksLikeAppsScriptDeploymentId(cfg.driveKey)||String(cfg.driveKey).includes("script.google.com")){
+          showToast("⚠️ El archivo trae una URL o deployment ID en lugar de la clave secreta",5000);
+          e.target.value="";
+          return;
+        }
         hmacKey=cfg.driveKey;
         localStorage.setItem(DRIVE_KEY,cfg.driveKey);
       }

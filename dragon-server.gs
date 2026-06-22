@@ -5,7 +5,7 @@
 //
 //  CONFIGURACIÓN: solo cambiar estas líneas
 //
-const SECRET_KEY  = "REEMPLAZAR_CON_TU_CLAVE";  // ← misma clave que en la app
+const SECRET_KEY  = "b0575643-2a8e-4d78-99fc-414f4c7945f2";  // ← misma clave que en la app
 const SHEET_NAME  = "DragonToDo";               // ← no cambiar
 const CALENDAR_ID = "martinaleguzzo@gmail.com"; // ← tu Gmail
 //

@@ -1,0 +1,7 @@
+_tmp_*.gs
+_tmp_*.js
+dragon-todo.html
+*.md
+keys/
+*.docx
+dragon-config-*.json

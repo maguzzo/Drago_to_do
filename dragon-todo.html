@@ -1004,6 +1004,10 @@ const LEGACY_KEYS={
   driveKey:["dtdl-drive-key","mcc-drive-key","dragon-drive-key"],
 };
 
+const KNOWN_GOOD_DRIVE_URLS=[
+  "https://script.google.com/macros/s/AKfycbz49tqVbrp-5kwZLJYzVeVSYGAtUnj-EgkVpUcBAdYntSJNNfA5JRzP-yEAKytwegHt/exec"
+];
+
 function getWithFallback(primary, legacyList){
   // Try primary key first
   const val=localStorage.getItem(primary);
@@ -1018,6 +1022,31 @@ function getWithFallback(primary, legacyList){
     }
   }
   return "";
+}
+
+async function probeDriveUrl(url){
+  try{
+    const resp=await fetch(url,{redirect:"follow"});
+    const text=await resp.text();
+    return resp.ok&&text.includes("Dragon Server activo v2");
+  }catch{return false;}
+}
+
+async function ensureWorkingDrive(){
+  if(!scriptUrl||!hmacKey)return false;
+  const candidates=[scriptUrl,...KNOWN_GOOD_DRIVE_URLS.filter(u=>u!==scriptUrl)];
+  for(const url of candidates){
+    if(await probeDriveUrl(url)){
+      if(url!==scriptUrl){
+        scriptUrl=url;
+        localStorage.setItem(DRIVE_URL,url);
+        const driveItem=document.getElementById("drive-menu-item");
+        if(driveItem)driveItem.style.color="var(--green)";
+      }
+      return true;
+    }
+  }
+  return false;
 }
 
 function load(){
@@ -1051,6 +1080,7 @@ async function computeHMAC(message,secret){
 // ════════════════════════════════════════════════════
 async function callServer(action,data=null){
   if(!scriptUrl||!hmacKey)throw new Error("Drive no configurado");
+  if(!(await ensureWorkingDrive()))throw new Error("Drive no responde v2");
   const ts=Date.now();
   let message=action+"|"+ts;
   let checksum=null;
@@ -1491,6 +1521,7 @@ async function testCalConnection(){
   if(progress){progress.style.display="block";progress.textContent="🧪 Probando...";}
   calDebugLog=[];
   try{
+    if(!(await ensureWorkingDrive()))throw new Error("Drive no responde v2");
     const resp=await fetch(scriptUrl,{redirect:"follow"});
     const text=await resp.text();
     let result;
@@ -2863,15 +2894,18 @@ load();
 fillAreaSel("m-area",Object.keys(AREAS)[0]||"");
 fillAreaSel("mt-area",Object.keys(AREAS)[0]||"");
 fillAreaSel("qc-area-sel",Object.keys(AREAS)[0]||"");
+if(scriptUrl&&hmacKey){
+  ensureWorkingDrive().then(ok=>{
+    const driveItem=document.getElementById("drive-menu-item");
+    if(driveItem)driveItem.style.color=ok?"var(--green)":"var(--red)";
+    setSyncBar(ok?"saved":"error",ok?"":"URL de Drive no responde v2");
+  });
+}
 if(Notification.permission==="granted"){
   const ni=document.getElementById("notif-menu-item");
   if(ni)ni.style.color="var(--green)";
 }
-if(scriptUrl&&hmacKey){
-  const driveItem=document.getElementById("drive-menu-item");
-  if(driveItem)driveItem.style.color="var(--green)";
-  setSyncBar("saved");
-}else{setSyncBar("offline");}
+if(!(scriptUrl&&hmacKey)){setSyncBar("offline");}
 render();
 checkMonthlyClose();
 setTimeout(checkNotif,2000);

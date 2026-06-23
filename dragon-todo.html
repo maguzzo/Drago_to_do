@@ -1454,7 +1454,7 @@ async function bulkSyncCalendar(){
     }catch(err){errors++;console.warn("Sync error:",c.title,err.message);}
   }
 
-  saveLocal();
+  saveC();
   render();
   if(progress){progress.style.display="none";}
 
@@ -2059,7 +2059,7 @@ function doneit(id){
       callCalServer("create",{
         type:"task",title:newTask.title,area:newTask.area,
         due:newTask.due,note:newTask.note||""
-      }).then(eventId=>{if(eventId){newTask.gcalEventId=eventId;saveLocal();}});
+      }).then(eventId=>{if(eventId){newTask.gcalEventId=eventId;saveC();}});
       cards.push(newTask);
       showToast("✅ Completada · próxima: "+nextDate+" · 📆 Cal actualizado");
     }else showToast("✅ ¡Completada!");
@@ -2406,7 +2406,7 @@ function saveCard(){
         gcalEventId:tc.gcalEventId||null
       }).then(eventId=>{
         if(eventId&&!tc.gcalEventId){
-          tc.gcalEventId=eventId;saveLocal();
+          tc.gcalEventId=eventId;saveC();
           showToast(editId?"✏️ Tarea actualizada · 📆 Cal sync":"🐉 Tarea agregada · 📆 Cal sync");
         }else showToast(editId?"✏️ Tarea actualizada":"🐉 Tarea agregada!");
       });
@@ -2414,7 +2414,7 @@ function saveCard(){
       // No due date — if had event, delete it
       if(tc.gcalEventId){
         callCalServer("delete",{gcalEventId:tc.gcalEventId});
-        tc.gcalEventId=null;saveLocal();
+        tc.gcalEventId=null;saveC();
       }
       showToast(editId?"✏️ Tarea actualizada":"🐉 Tarea agregada!");
     }

@@ -301,3 +301,8 @@ function respond(data) {
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+function autorizarCalendar() {
+  const cal = CalendarApp.getCalendarById("martinaleguzzo@gmail.com");
+  Logger.log("Calendario autorizado: " + cal.getName());
+}

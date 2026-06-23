@@ -1407,22 +1407,13 @@ async function bulkSyncCalendar(){
   const progress=document.getElementById("cal-progress");
   if(progress){progress.style.display="block";progress.textContent="🔄 Iniciando...";}
 
-  // Items to SYNC (active, with date, not flexible)
-  const toSync=cards.filter(c=>{
-    if(["done","cancelled","trash","archived"].includes(c.col))return false;
-    if(c.type==="meeting"&&!c.date)return false;
-    if(c.type!=="meeting"&&!c.due)return false;
-    if(c.recurrence&&c.recurrence.type==="flexible")return false;
-    return true;
-  });
-
   // Items to DELETE from Cal (done/cancelled/trash WITH gcalEventId)
   const toDelete=cards.filter(c=>
     ["done","cancelled","trash"].includes(c.col)&&c.gcalEventId
   );
 
-  const total=toSync.length+toDelete.length;
-  let synced=0,cleaned=0,errors=0;
+  const activeCards=cards.filter(c=>!["done","cancelled","trash","archived"].includes(c.col));
+  let created=0,updated=0,cleaned=0,skippedNoDate=0,skippedFlexible=0,errors=0;
 
   // Step 1: Clean up completed/cancelled events
   progress.textContent=`🔄 Limpiando eventos completados (0/${toDelete.length})...`;
@@ -1435,22 +1426,43 @@ async function bulkSyncCalendar(){
   }
 
   // Step 2: Create/update active items
-  progress.textContent=`🔄 Sincronizando ítems activos (0/${toSync.length})...`;
-  for(const c of toSync){
+  progress.textContent=`🔄 Sincronizando ítems activos (0/${activeCards.length})...`;
+  let processed=0;
+  for(const c of activeCards){
+    processed++;
     try{
+      if(c.recurrence&&c.recurrence.type==="flexible"){
+        skippedFlexible++;
+        progress.textContent=`🔄 Sincronizando (${processed}/${activeCards.length})...`;
+        continue;
+      }
+      if(c.type==="meeting"&&!c.date){
+        skippedNoDate++;
+        progress.textContent=`🔄 Sincronizando (${processed}/${activeCards.length})...`;
+        continue;
+      }
+      if(c.type!=="meeting"&&!c.due){
+        skippedNoDate++;
+        progress.textContent=`🔄 Sincronizando (${processed}/${activeCards.length})...`;
+        continue;
+      }
       const op=c.gcalEventId?"update":"create";
       const calData=buildCalData(c);
       const eventId=await callCalServer(op,calData);
       if(eventId){
-        if(!c.gcalEventId)c.gcalEventId=eventId;
-        synced++;
+        if(op==="create"||!c.gcalEventId){
+          c.gcalEventId=eventId;
+          created++;
+        }else{
+          updated++;
+        }
       }else if(op==="update"&&c.gcalEventId){
         // update returns null on success too sometimes — count it
-        synced++;
+        updated++;
       }else{
         errors++;
       }
-      progress.textContent=`🔄 Sincronizando (${synced}/${toSync.length})...`;
+      progress.textContent=`🔄 Sincronizando (${processed}/${activeCards.length})...`;
     }catch(err){errors++;console.warn("Sync error:",c.title,err.message);}
   }
 
@@ -1462,12 +1474,14 @@ async function bulkSyncCalendar(){
   const logBtn=document.getElementById("cal-log-btn");
   if(logBtn)logBtn.style.display=errors>0?"flex":"none";
 
-  const msg="✅ "+synced+" sincronizados · 🗑️ "+cleaned+" eliminados"
+  const msg="✅ "+created+" creados · ✏️ "+updated+" actualizados · 🗑️ "+cleaned+" eliminados"
+    +(skippedNoDate?" · ⏭️ "+skippedNoDate+" sin fecha":"")
+    +(skippedFlexible?" · ⏭️ "+skippedFlexible+" flexibles":"")
     +(errors?" · ⚠️ "+errors+' errores — tocá "Ver errores"' :"");
   showToast(msg,5000);
 
   // Auto-show log if all failed
-  if(synced===0&&errors>0){
+  if((created+updated)===0&&errors>0){
     setTimeout(()=>showCalLog(),500);
   }
 }

@@ -17,3 +17,6 @@ keys
 _tmp_resumen.txt
 _tmp_script_check.js
 *.docx
+# Inbox (mails/chats) y backups con datos de terceros
+inbox/
+datos/

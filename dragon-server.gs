@@ -3,9 +3,11 @@
 //  Servidor seguro HMAC-SHA256 + Google Calendar + Sheets
 // ═══════════════════════════════════════════════════════
 //
-//  CONFIGURACIÓN: solo cambiar estas líneas
+//  CONFIGURACIÓN: la clave va en Script Properties; acá solo hoja y calendario
 //
-const SECRET_KEY  = "b0575643-2a8e-4d78-99fc-414f4c7945f2";  // ← misma clave que en la app
+// SECRET_KEY: se lee de Script Properties (Configuración del proyecto → Propiedades del script).
+// Nunca escribirla en este archivo.
+const SECRET_KEY  = PropertiesService.getScriptProperties().getProperty("SECRET_KEY") || "";
 const SHEET_NAME  = "DragonToDo";               // ← no cambiar
 const CALENDAR_ID = "martinaleguzzo@gmail.com"; // ← tu Gmail
 //
@@ -17,6 +19,10 @@ const TOLERANCE_MS = 60000; // 60 segundos de tolerancia en timestamp
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
+
+    if (!SECRET_KEY || SECRET_KEY.length < 32) {
+      return respond({ error: "Servidor sin SECRET_KEY configurada" });
+    }
 
     if (!payload.ts || !payload.sig || !payload.action) {
       return respond({ error: "Petición incompleta" });

@@ -5,3 +5,7 @@ dragon-todo.html
 keys/
 *.docx
 dragon-config-*.json
+inbox/
+datos/
+scripts/
+.claude/

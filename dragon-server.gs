@@ -92,17 +92,55 @@ function getSheet() {
   return sheet;
 }
 
+// Una celda de Sheets admite hasta 50.000 caracteres. El JSON se reparte en
+// A1, A2, ... en trozos de CHUNK_SIZE; cada trozo lleva el prefijo "~" para
+// que Sheets lo guarde como texto (nunca como fórmula o número).
+// Formato viejo (JSON entero en A1, empieza con "{") se sigue leyendo.
+const CHUNK_SIZE   = 40000;
+const CHUNK_PREFIX = "~";
+
 function saveData(data) {
   const sheet = getSheet();
-  sheet.getRange("A1").setValue(JSON.stringify(data));
-  sheet.getRange("B1").setValue("Último guardado: " + new Date().toLocaleString("es-AR"));
+  const json = JSON.stringify(data);
+  const rows = [];
+  let i = 0;
+  while (i < json.length) {
+    let end = Math.min(i + CHUNK_SIZE, json.length);
+    // No partir un par sustituto (emojis) entre dos celdas
+    const c = json.charCodeAt(end - 1);
+    if (end < json.length && c >= 0xD800 && c <= 0xDBFF) end--;
+    rows.push([CHUNK_PREFIX + json.slice(i, end)]);
+    i = end;
+  }
+  const oldRows = Math.max(sheet.getLastRow(), 1);
+  if (oldRows > rows.length) {
+    sheet.getRange(rows.length + 1, 1, oldRows - rows.length, 1).clearContent();
+  }
+  sheet.getRange(1, 1, rows.length, 1).setValues(rows);
+  sheet.getRange("B1").setValue("Último guardado: " + new Date().toLocaleString("es-AR") +
+    " (" + rows.length + " celda" + (rows.length > 1 ? "s" : "") + ", " + json.length + " caracteres)");
+  // Forzar la escritura acá: si falla, el error lo atrapa doPost y vuelve como JSON
+  SpreadsheetApp.flush();
 }
 
 function loadData() {
   const sheet = getSheet();
-  const val = sheet.getRange("A1").getValue();
-  if (!val || val === "" || val === "{}") return null;
-  try   { return JSON.parse(val); }
+  const first = String(sheet.getRange("A1").getValue() || "");
+  if (!first || first === "{}") return null;
+  let json;
+  if (first.charAt(0) === CHUNK_PREFIX) {
+    const n = Math.max(sheet.getLastRow(), 1);
+    const vals = sheet.getRange(1, 1, n, 1).getValues();
+    json = "";
+    for (let r = 0; r < vals.length; r++) {
+      const v = String(vals[r][0] || "");
+      if (!v) break;
+      json += v.slice(CHUNK_PREFIX.length);
+    }
+  } else {
+    json = first; // formato viejo: todo en A1
+  }
+  try   { return JSON.parse(json); }
   catch { return null; }
 }
 

@@ -1120,7 +1120,7 @@ async function loadFromDrive(){
       cards=result.data.cards;
       if(result.data.areas)AREAS=result.data.areas;
       if(result.data.history)monthlyHistory=result.data.history;
-      saveLocal();saveAreas();saveHistory();cleanTrash();
+      saveLocal();saveAreas();saveHistory();cleanTrash(true);
       setSyncBar("saved");return true;
     }
     setSyncBar("saved");return false;
@@ -1342,10 +1342,10 @@ function closeMonth(){
 // ════════════════════════════════════════════════════
 //  PAPELERA
 // ════════════════════════════════════════════════════
-function cleanTrash(){
+function cleanTrash(syncDrive=false){
   const n=cards.length;
   cards=cards.filter(c=>c.col!=="trash"||(c.trashedAt&&(Date.now()-c.trashedAt)<TRASH_MS));
-  if(cards.length<n)saveLocal();
+  if(cards.length<n){if(syncDrive)saveC();else saveLocal();}
 }
 function daysLeft(c){if(!c.trashedAt)return 7;return Math.max(0,7-Math.floor((Date.now()-c.trashedAt)/86400000));}
 function askConfirmDel(id){
